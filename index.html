@@ -3,425 +3,540 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bingo Online - Jugador</title>
+    <title>Kit de IA: Humanizador y Detector</title>
+    <!-- Tailwind CSS para los estilos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons para los iconos -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* RESET Y FONDOS */
-        body { font-family: Arial, sans-serif; background-color: #121212; color: white; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
-        
-        /* LOGIN */
-        #login-section { background-color: #1e1e1e; padding: 30px; border-radius: 10px; text-align: center; margin-top: 50px; border: 2px solid #ffc107; width: 90%; max-width: 400px; box-sizing: border-box; }
-        #login-section input { padding: 12px; margin: 10px 0; width: 100%; border-radius: 5px; border: none; box-sizing: border-box; font-size: 16px; }
-        #login-section button { padding: 12px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; margin-top: 10px; }
-        
-        /* ENCABEZADO SUPERIOR (NORMAL - SIN STICKY) */
-        #encabezado-fijo {
-            width: 100%; z-index: 1000;
-            background: #f1f3f5; color: #333; padding: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            border-bottom: 3px solid #ccc; box-sizing: border-box;
-            display: none; /* Se muestra al loguearse */
-            flex-direction: column; gap: 10px;
+        /* Estilos personalizados sutiles */
+        body {
+            background-color: #f8fafc;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
-
-        /* FILA SUPERIOR DEL ENCABEZADO */
-        .top-info-row { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 800px; margin: 0 auto; }
-        
-        /* Figura */
-        .figura-box { display: flex; flex-direction: column; align-items: center; min-width: 70px; }
-        .figura-titulo { font-size: 10px; font-weight: 900; color: #555; text-transform: uppercase; margin-bottom: 3px; }
-        #figura-objetivo { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; width: 40px; background-color: #333; padding: 2px; border: 1px solid #777; }
-        .celda-figura { aspect-ratio: 1; background-color: #555; }
-        .celda-figura.activa { background-color: #ffeb3b; }
-        #nombre-figura-display { font-size: 9px; font-weight: bold; color: #666; margin-top: 3px; text-transform: uppercase; text-align: center; }
-
-        /* Centro (Balota y Reloj) */
-        .centro-box { display: flex; flex-direction: column; align-items: center; }
-        .balota-gigante {
-            width: 70px; height: 70px;
-            background: radial-gradient(circle at 30% 30%, #ff4d4d, #b71c1c);
-            border-radius: 50%; border: 3px solid #8e0000; color: white;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
-        #main-letra { font-size: 14px; font-weight: bold; line-height: 1; margin-bottom: 2px; }
-        #main-numero { font-size: 28px; font-weight: 900; line-height: 1; }
-        
-        .historial-bolas { display: flex; gap: 4px; margin-top: 5px; }
-        .bola-historial {
-            width: 22px; height: 22px; background: #495057; color: white; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;
+        /* Animación de carga */
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 3px solid #3b82f6;
+            width: 20px;
+            height: 20px;
+            -webkit-animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
         }
-
-        /* Contador */
-        .contador-box { font-size: clamp(24px, 6vw, 40px); font-weight: 900; color: #d32f2f; min-width: 70px; text-align: right; }
-
-        /* TABLERO 75 NÚMEROS */
-        .tablero-75-grid {
-            display: grid;
-            grid-template-columns: auto repeat(15, 1fr);
-            gap: 2px; width: 100%; max-width: 800px; margin: 0 auto;
-            align-items: center;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-        .letra-75 {
-            aspect-ratio: 1; border-radius: 50%; color: white;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 900; font-size: clamp(10px, 3vw, 18px); margin-right: 2px;
+        /* Transiciones suaves para las pestañas */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
         }
-        .num-75 {
-            aspect-ratio: 1; width: 100%; background: #e9ecef; border: 1px solid #adb5bd; border-radius: 3px;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: clamp(8px, 2.8vw, 16px); color: #333; box-sizing: border-box; transition: 0.2s;
+        .tab-content.active {
+            display: block;
         }
-        .num-75.activa { background: #ffeb3b; color: black; border: 2px solid #000; transform: scale(1.05); z-index: 2; }
-
-        /* ZONA DE JUEGO (CARTÓN) */
-        #game-section { display: none; width: 100%; max-width: 500px; text-align: center; padding: 20px 10px 50px 10px; box-sizing: border-box; }
-        .info-jugador { background: #222; padding: 10px; border-radius: 8px; border: 1px solid #444; margin-bottom: 15px; font-size: 14px; }
-        .info-jugador span { color: #ffc107; font-weight: bold; }
-        
-        .carton-container { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; background-color: black; padding: 5px; border: 5px solid black; user-select: none; width: 100%; box-sizing: border-box; }
-        .letra-bingo { background-color: #004080; color: white; font-size: 22px; font-weight: bold; padding: 10px 0; }
-        .numero-carton { background-color: white; color: black; font-size: clamp(18px, 5vw, 24px); font-weight: 900; padding: clamp(10px, 4vw, 20px) 0; cursor: pointer; transition: 0.1s; display: flex; align-items: center; justify-content: center; }
-        .numero-carton:active { transform: scale(0.95); }
-        .numero-carton.marcado { background-color: #ffeb3b; }
-        .numero-carton.centro { background-color: #ccc; font-size: 20px; }
-
-        #btn-bingo { background-color: #d32f2f; color: white; border: 4px solid white; border-radius: 15px; font-size: 26px; font-weight: 900; padding: 15px; width: 100%; margin-top: 25px; cursor: pointer; box-shadow: 0 5px 15px rgba(211, 47, 47, 0.5); animation: latido 1.5s infinite; }
-        #btn-bingo:active { transform: scale(0.95); }
-        @keyframes latido { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
-<body>
+<body class="min-h-screen text-slate-800 p-4 md:p-8">
 
-    <div id="pantalla-ganador" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding: 20px; box-sizing: border-box;">
-        <h1 style="color:#ffc107; font-size:50px; text-shadow: 0 0 20px #ffc107; margin-bottom:10px;">🏆 ¡BINGO! 🏆</h1>
-        <h2 style="color:white; font-size:24px;">TENEMOS UN GANADOR</h2>
-        <p id="texto-ganador" style="color:#28a745; font-size:35px; font-weight:900; margin:20px 0; text-transform: uppercase;">---</p>
-        <p style="color:white; font-size:20px; background: #333; padding: 10px 20px; border-radius: 10px;">Con el Cartón #<span id="texto-carton-ganador" style="color:#00ffff; font-weight:bold;">---</span></p>
-        
-        <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 40px; width: 100%; max-width: 300px;">
-            <button onclick="document.getElementById('pantalla-ganador').style.display='none'" style="padding:15px; font-size:16px; background:#004080; color:white; border:2px solid white; border-radius:10px; cursor:pointer; font-weight:bold;">JUGAR CON ESTE CARTÓN</button>
-            <button onclick="location.reload()" style="padding:15px; font-size:16px; background:#d32f2f; color:white; border:2px solid white; border-radius:10px; cursor:pointer; font-weight:bold;">🔄 INGRESAR OTRO CARTÓN</button>
-        </div>
-    </div>
+    <div class="max-w-4xl mx-auto">
+        <!-- Encabezado -->
+        <header class="text-center mb-8 mt-4">
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-3 tracking-tight flex items-center justify-center gap-3">
+                <i data-lucide="brain-circuit" class="text-blue-500 w-10 h-10"></i>
+                Kit de Texto con IA
+            </h1>
+            <p class="text-slate-500 text-lg max-w-2xl mx-auto">
+                Analiza textos para detectar Inteligencia Artificial y transfórmalos para que suenen 100% humanos.
+            </p>
+        </header>
 
-    <div id="login-section">
-        <h2 style="color:#ffc107; margin-top:0;">Entrar a la Sala</h2>
-        <input type="text" id="nombre-jugador" placeholder="Tu Nombre">
-        <input type="number" id="codigo-sala" placeholder="PIN de la Sala (6 dígitos)" style="font-size: 18px; font-weight: bold; text-align: center;">
-        <input type="number" id="numero-carton" placeholder="N° de Cartón (Ej: 15)">
-        <button onclick="entrarSala()">Ingresar al Juego</button>
-    </div>
-
-    <div id="encabezado-fijo">
-        <div class="top-info-row">
-            <div class="figura-box">
-                <div class="figura-titulo">FIGURA</div>
-                <div id="figura-objetivo"></div>
-                <div id="nombre-figura-display">BINGO</div>
-            </div>
-
-            <div class="centro-box">
-                <div class="balota-gigante">
-                    <span id="main-letra">-</span>
-                    <span id="main-numero">--</span>
-                </div>
-                <div id="historial-bolas" class="historial-bolas">
-                    <div class="bola-historial">-</div><div class="bola-historial">-</div><div class="bola-historial">-</div><div class="bola-historial">-</div>
-                </div>
-            </div>
-
-            <div class="contador-box" id="contador-balotas">0/75</div>
+        <!-- Navegación de Pestañas -->
+        <div class="flex justify-center gap-4 mb-6">
+            <button onclick="switchTab('humanizer')" id="btnHumanizer" class="flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-blue-600 text-white shadow-md transition-all">
+                <i data-lucide="wand-2" class="w-4 h-4"></i> Humanizador
+            </button>
+            <button onclick="switchTab('detector')" id="btnDetector" class="flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">
+                <i data-lucide="search" class="w-4 h-4"></i> Detector de IA
+            </button>
         </div>
 
-        <div id="tablero-75" class="tablero-75-grid"></div>
-    </div>
-
-    <div id="game-section">
-        <div class="info-jugador">
-            Sala: <span id="display-sala">---</span> &nbsp;|&nbsp; Jugador: <span id="display-nombre">---</span>
-        </div>
-
-        <div id="video-container" style="display:none; position: absolute; top: -9999px; left: -9999px; width: 300px; height: 300px; opacity: 0; pointer-events: none;">
-            <iframe id="video-envivo" width="300" height="300" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
-        <h3 style="margin: 0 0 10px 0; color: #ffc107; font-size: 24px;">CARTÓN #<span id="display-num-carton"></span></h3>
-
-        <div id="mi-carton" style="width: 100%; max-width: 450px; margin: 0 auto;"></div>
-
-        <button id="btn-bingo" onclick="cantarBingo()">¡BINGO!</button>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, onSnapshot, setDoc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDGlCcqIxjX3c_GustIB7_vjtyFwZ_q010",
-            authDomain: "bingo-sala-2-online.firebaseapp.com",
-            projectId: "bingo-sala-2-online",
-            storageBucket: "bingo-sala-2-online.firebasestorage.app",
-            messagingSenderId: "865001524589",
-            appId: "1:865001524589:web:45a97bd5231f16f4c01e64"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        let miCartonNumeros = [];
-        let numCartonOficial = "";
-
-        window.entrarSala = async () => {
-            const nombre = document.getElementById('nombre-jugador').value;
-            const sala = document.getElementById('codigo-sala').value.toUpperCase();
-            const numCarton = document.getElementById('numero-carton').value;
-
-            if (!nombre || !sala || !numCarton) { alert("Llena todos los campos."); return; }
-
-            const btnLogin = document.querySelector('#login-section button');
-            btnLogin.innerText = "Buscando cartón...";
-            btnLogin.disabled = true;
-
-            try {
-                const salaRef = doc(db, "salas", sala);
-                const salaDoc = await getDoc(salaRef);
-
-                if (salaDoc.exists()) {
-                    const datosSala = salaDoc.data();
+        <!-- Contenedor Principal -->
+        <main class="glass-panel rounded-2xl p-6 md:p-8 border border-slate-100">
+            
+            <!-- ========================================== -->
+            <!-- PESTAÑA 1: HUMANIZADOR DE TEXTO            -->
+            <!-- ========================================== -->
+            <div id="humanizerTab" class="tab-content active">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     
-                    // --- NUEVA LÓGICA DE DESEMPAQUETADO ---
-                    let todosLosCartones = null;
+                    <!-- Columna Izquierda: Entrada de datos -->
+                    <div class="flex flex-col gap-4">
+                        <div>
+                            <label for="inputText" class="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                                <i data-lucide="file-text" class="w-4 h-4"></i> Texto Original (IA)
+                            </label>
+                            <textarea id="inputText" rows="8" 
+                                class="w-full rounded-xl border border-slate-200 p-4 text-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none outline-none"
+                                placeholder="Pega aquí el texto que deseas humanizar..."></textarea>
+                        </div>
 
-                    // 1. Verificamos si los cartones vienen en el nuevo formato "empaquetado"
-                    if (datosSala.cartonesEmpaquetados) {
-                        try {
-                            todosLosCartones = JSON.parse(datosSala.cartonesEmpaquetados);
-                        } catch (e) {
-                            console.error("Error al desempaquetar cartones:", e);
-                        }
-                    } 
-                    // 2. Por si acaso, mantenemos compatibilidad con el formato viejo
-                    else if (datosSala.cartonesOficiales) {
-                        todosLosCartones = datosSala.cartonesOficiales;
-                    }
+                        <!-- Controles de Configuración -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="toneSelect" class="block text-sm font-semibold text-slate-700 mb-2">Tono</label>
+                                <select id="toneSelect" class="w-full rounded-lg border border-slate-200 p-2.5 text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                                    <option value="casual">Casual / Relajado</option>
+                                    <option value="profesional">Profesional</option>
+                                    <option value="blog">Estilo Blog / Artículo</option>
+                                    <option value="academico">Académico (Pero natural)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="levelSlider" class="block text-sm font-semibold text-slate-700 mb-2">
+                                    Nivel de Humanización: <span id="levelValue" class="text-blue-600 font-bold">8</span>
+                                </label>
+                                <input type="range" id="levelSlider" min="1" max="10" value="8" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer mt-2">
+                                <div class="flex justify-between text-xs text-slate-400 mt-1">
+                                    <span>Ligero</span>
+                                    <span>Extremo</span>
+                                </div>
+                            </div>
+                        </div>
 
-                    // 3. Si no hay cartones de ninguna forma, bloqueamos
-                    if (!todosLosCartones) {
-                        alert("El administrador aún no ha subido los cartones a esta sala.");
-                        btnLogin.innerText = "Ingresar al Juego";
-                        btnLogin.disabled = false;
-                        return;
-                    }
-
-                    // 4. Buscamos el cartón específico del jugador
-                    const cartonBuscado = todosLosCartones[numCarton];
-                    
-                    if (cartonBuscado) {
-                        miCartonNumeros = cartonBuscado;
-                        numCartonOficial = numCarton;
-
-                        // Cambios de UI
-                        document.getElementById('login-section').style.display = 'none';
-                        document.getElementById('encabezado-fijo').style.display = 'flex';
-                        document.getElementById('game-section').style.display = 'block';
+                        <!-- Botón de Acción -->
+                        <button id="humanizeBtn" onclick="procesarTexto()" 
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-xl transition-colors shadow-sm flex justify-center items-center gap-2 mt-2">
+                            <i data-lucide="wand-2" class="w-5 h-5"></i>
+                            <span>Humanizar Texto</span>
+                        </button>
                         
-                        document.getElementById('display-sala').innerText = sala;
-                        document.getElementById('display-nombre').innerText = nombre;
-                        document.getElementById('display-num-carton').innerText = numCarton;
-                        if (window.videoEnvivoID) {
-                            document.getElementById('video-container').style.display = 'block';
-                            document.getElementById('video-envivo').src = `https://www.youtube.com/embed/${window.videoEnvivoID}?autoplay=1`;
-                        }
-                        renderizarCarton();
-                        inicializarTablero75();
+                        <!-- Mensaje de error/estado -->
+                        <div id="statusMessage" class="hidden text-sm p-3 rounded-lg mt-2 text-center font-medium"></div>
+                    </div>
 
-                        // Registro Firebase
-                        const jugadorRef = doc(db, "salas", sala, "jugadores", nombre);
-                        await setDoc(jugadorRef, { nombre: nombre, numeroCarton: numCarton, conectadoEn: new Date() });
+                    <!-- Columna Derecha: Resultado -->
+                    <div class="flex flex-col gap-4">
+                        <div class="flex justify-between items-end mb-2">
+                            <label class="block text-sm font-semibold text-slate-700 flex items-center gap-2">
+                                <i data-lucide="user-check" class="w-4 h-4 text-green-500"></i> Texto Humanizado
+                            </label>
+                            <button onclick="copiarAlPortapapeles('outputText', 'copyBtn')" id="copyBtn" class="text-sm text-slate-500 hover:text-blue-600 flex items-center gap-1 transition-colors hidden">
+                                <i data-lucide="copy" class="w-4 h-4"></i> Copiar
+                            </button>
+                        </div>
+                        
+                        <!-- Área de Resultado -->
+                        <div id="resultArea" class="w-full h-full min-h-[250px] rounded-xl border border-slate-200 bg-slate-50 p-4 text-slate-700 relative overflow-y-auto">
+                            <p id="placeholderText" class="text-slate-400 italic text-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full">
+                                El resultado aparecerá aquí...
+                            </p>
+                            <div id="outputText" class="hidden whitespace-pre-wrap"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                        window.ultimoGanadorVisto = 0; 
-                        window.ultimoReinicioVisto = 0;
+            <!-- ========================================== -->
+            <!-- PESTAÑA 2: DETECTOR DE IA                  -->
+            <!-- ========================================== -->
+            <div id="detectorTab" class="tab-content">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <!-- Columna Izquierda: Entrada de datos -->
+                    <div class="flex flex-col gap-4">
+                        <div>
+                            <label for="detectorInput" class="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                                <i data-lucide="search" class="w-4 h-4"></i> Texto a Analizar
+                            </label>
+                            <textarea id="detectorInput" rows="10" 
+                                class="w-full rounded-xl border border-slate-200 p-4 text-slate-700 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all resize-none outline-none"
+                                placeholder="Pega el texto aquí para saber si fue escrito por IA o por un humano..."></textarea>
+                        </div>
 
-                        // Escucha en tiempo real
-                        onSnapshot(salaRef, (docSnapshot) => {
-                            if (docSnapshot.exists()) {
-                                const datos = docSnapshot.data();
-                                
-                                // 1. Gatillo de Reinicio
-                                if (datos.senalReinicio && window.ultimoReinicioVisto !== datos.senalReinicio) {
-                                    window.ultimoReinicioVisto = datos.senalReinicio;
-                                    limpiarPantallaJugador();
-                                }
+                        <!-- Botón de Acción -->
+                        <button id="detectBtn" onclick="analizarIA()" 
+                            class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3.5 px-6 rounded-xl transition-colors shadow-sm flex justify-center items-center gap-2 mt-2">
+                            <i data-lucide="scan-line" class="w-5 h-5"></i>
+                            <span>Escanear Texto</span>
+                        </button>
+                        
+                        <!-- Mensaje de error/estado -->
+                        <div id="detectorStatusMessage" class="hidden text-sm p-3 rounded-lg mt-2 text-center font-medium"></div>
+                    </div>
 
-                                // 2. Actualizar Balotas
-                                if (datos.balotasLlamadas && datos.balotasLlamadas.length > 0) {
-                                    actualizarDatosBalotas(datos.balotasLlamadas);
-                                } else if (!datos.balotasLlamadas || datos.balotasLlamadas.length === 0) {
-                                    limpiarPantallaJugador();
-                                }
-                                
-                                // 3. Actualizar Figura
-                                if (datos.figuraActual) {
-                                    document.getElementById('nombre-figura-display').innerText = datos.nombreFigura || "BINGO";
-                                    renderizarFigura(datos.figuraActual);
-                                }
+                    <!-- Columna Derecha: Resultado del Detector -->
+                    <div class="flex flex-col gap-4">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                            <i data-lucide="bar-chart-2" class="w-4 h-4 text-purple-500"></i> Resultados del Análisis
+                        </label>
+                        
+                        <!-- Área de Resultado -->
+                        <div id="detectorResultArea" class="w-full h-full min-h-[250px] rounded-xl border border-slate-200 bg-slate-50 p-6 flex flex-col justify-center items-center relative">
+                            
+                            <p id="detectorPlaceholder" class="text-slate-400 italic text-center">
+                                Esperando texto para escanear...
+                            </p>
 
-                                // 4. Ganador
-                                if (datos.ganadorConfirmado) {
-                                    if (window.ultimoGanadorVisto !== datos.ganadorConfirmado.timestamp) {
-                                        window.ultimoGanadorVisto = datos.ganadorConfirmado.timestamp;
-                                        document.getElementById('texto-ganador').innerText = datos.ganadorConfirmado.nombre;
-                                        document.getElementById('texto-carton-ganador').innerText = datos.ganadorConfirmado.carton;
-                                        document.getElementById('pantalla-ganador').style.display = 'flex';
-                                    }
-                                }
-                            }
-                        });
-                    } else {
-                        alert(`El Cartón #${numCarton} no existe en esta partida.`);
-                        btnLogin.innerText = "Ingresar al Juego";
-                        btnLogin.disabled = false;
-                    }
-                } else {
-                    alert("La sala no existe.");
-                    btnLogin.innerText = "Ingresar al Juego";
-                    btnLogin.disabled = false;
-                }
-            } catch (error) {
-                console.error("El error real es: ", error); // <- Agrega esta línea
-                alert("Error de conexión al buscar el cartón.");
-                btnLogin.innerText = "Ingresar al Juego";
-                btnLogin.disabled = false;
-            }
-        };
+                            <!-- Medidor de Resultados (Oculto por defecto) -->
+                            <div id="detectorGauge" class="hidden w-full flex flex-col items-center">
+                                <div class="text-center mb-4">
+                                    <span id="aiPercentage" class="text-6xl font-black text-slate-800">0%</span>
+                                    <p class="text-slate-500 font-medium uppercase tracking-wider text-sm mt-1">Probabilidad de IA</p>
+                                </div>
 
-        window.toggleMarca = (elemento) => { elemento.classList.toggle('marcado'); };
+                                <!-- Barra de progreso -->
+                                <div class="w-full bg-slate-200 rounded-full h-4 mb-2 overflow-hidden">
+                                    <div id="aiProgressBar" class="bg-red-500 h-4 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                                </div>
+                                <div class="w-full flex justify-between text-xs text-slate-400 font-medium mb-6">
+                                    <span>Humano</span>
+                                    <span>Mixto</span>
+                                    <span>IA</span>
+                                </div>
 
-        window.cantarBingo = async () => {
-            // En lugar de buscar en los inputs ocultos, leemos los textos que ya están en pantalla
-            const nombre = document.getElementById('display-nombre').innerText;
-            const sala = document.getElementById('display-sala').innerText;
-            const btn = document.getElementById('btn-bingo');
+                                <!-- Caja de explicación -->
+                                <div class="w-full bg-white p-4 rounded-lg border border-slate-100 shadow-sm">
+                                    <h4 class="text-sm font-bold text-slate-700 mb-1 flex items-center gap-1">
+                                        <i data-lucide="info" class="w-4 h-4"></i> Veredicto:
+                                    </h4>
+                                    <p id="aiExplanation" class="text-slate-600 text-sm leading-relaxed"></p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+        
+        <footer class="text-center mt-8 text-slate-400 text-sm">
+            <p>Impulsado por Gemini AI</p>
+        </footer>
+    </div>
+
+    <script>
+        // Inicializar iconos
+        lucide.createIcons();
+
+        // IMPORTANTE: Si descargas esto, asegúrate de pegar tu API Key de nuevo aquí
+        const apiKey = ""; 
+        const modeloIA = "gemini-2.5-flash-preview-09-2025";
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${modeloIA}:generateContent?key=${apiKey}`;
+
+        // ==========================================
+        // LÓGICA DE PESTAÑAS
+        // ==========================================
+        function switchTab(tabName) {
+            // Ocultar todas las pestañas
+            document.getElementById('humanizerTab').classList.remove('active');
+            document.getElementById('detectorTab').classList.remove('active');
             
-            btn.innerText = "ENVIANDO...";
-            try {
-                const salaRef = doc(db, "salas", sala);
-                // Intentamos escribir la alerta en la base de datos
-                await updateDoc(salaRef, {
-                    alertaBingo: { nombre: nombre, carton: numCartonOficial, timestamp: Date.now() }
-                });
-                
-                btn.innerText = "¡BINGO ENVIADO!";
-                btn.style.backgroundColor = "#28a745"; 
-                alert(`¡Has cantado BINGO con el Cartón #${numCartonOficial}!`);
-                setTimeout(() => { btn.innerText = "¡BINGO!"; btn.style.backgroundColor = "#d32f2f"; }, 5000);
-            } catch (error) {
-                // AQUÍ ESTÁ LA MAGIA PARA VER EL ERROR REAL
-                console.error("Error exacto al enviar el Bingo a Firebase:", error);
-                alert("Error al cantar Bingo. Revisa la consola (F12) para ver el motivo.");
-                btn.innerText = "¡BINGO!";
-            }
-        };
-
-        function limpiarPantallaJugador() {
-            document.getElementById('main-letra').innerText = "-";
-            document.getElementById('main-numero').innerText = "--";
-            document.getElementById('contador-balotas').innerText = "0/75";
-            document.getElementById('historial-bolas').innerHTML = '<div class="bola-historial">-</div>'.repeat(4);
-            document.getElementById('pantalla-ganador').style.display = 'none';
-            actualizarTablero75([]);
-            document.querySelectorAll('.numero-carton').forEach(celda => {
-                if(!celda.classList.contains('centro')) celda.classList.remove('marcado');
-            });
-        }
-
-        function actualizarDatosBalotas(balotas) {
-            // Ultima balota, letra y contador
-            const ultima = balotas[balotas.length - 1];
-            document.getElementById('main-numero').innerText = ultima;
-            document.getElementById('main-letra').innerText = (ultima <= 15 ? 'B' : ultima <= 30 ? 'I' : ultima <= 45 ? 'N' : ultima <= 60 ? 'G' : 'O');
-            document.getElementById('contador-balotas').innerText = balotas.length + "/75";
-
-            // Historial de las 4 anteriores
-            const ultimas = balotas.slice(-5, -1).reverse();
-            let hHtml = "";
-            for(let i=0; i<4; i++) hHtml += `<div class="bola-historial">${ultimas[i] || '-'}</div>`;
-            document.getElementById('historial-bolas').innerHTML = hHtml;
-
-            // Pintar la grilla de 75
-            actualizarTablero75(balotas);
-        }
-
-        function renderizarCarton() {
-            const container = document.getElementById('mi-carton');
-            let html = '<div class="carton-container">';
-            ['B', 'I', 'N', 'G', 'O'].forEach(l => html += `<div class="letra-bingo">${l}</div>`);
+            // Resetear estilos de los botones
+            const btnHumanizer = document.getElementById('btnHumanizer');
+            const btnDetector = document.getElementById('btnDetector');
             
-            const mapeoCarton = [0,5,10,15,20, 1,6,11,16,21, 2,7,12,17,22, 3,8,13,18,23, 4,9,14,19,24];
-            mapeoCarton.forEach((idx) => {
-                let num = miCartonNumeros[idx];
-                if (num === 0) html += `<div class="numero-carton centro marcado">X</div>`;
-                else html += `<div class="numero-carton" onclick="toggleMarca(this)">${num}</div>`;
-            });
-            container.innerHTML = html + '</div>';
-        }
+            btnHumanizer.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all";
+            btnDetector.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all";
 
-        function renderizarFigura(figuraArray) {
-             const container = document.getElementById('figura-objetivo');
-             container.innerHTML = '';
-             for(let i=0; i<25; i++) {
-                 let div = document.createElement('div');
-                 div.className = 'celda-figura' + (figuraArray[i] ? ' activa' : '');
-                 container.appendChild(div);
-             }
-        }
-
-        function inicializarTablero75() {
-            const tablero = document.getElementById('tablero-75');
-            let html = '';
-            const filas = [
-                { l: 'B', min: 1, max: 15, c: '#004080' },
-                { l: 'I', min: 16, max: 30, c: '#d32f2f' },
-                { l: 'N', min: 31, max: 45, c: '#757575' },
-                { l: 'G', min: 46, max: 60, c: '#28a745' },
-                { l: 'O', min: 61, max: 75, c: '#fbc02d' }
-            ];
-            filas.forEach(f => {
-                html += `<div class="letra-75" style="background:${f.c}">${f.l}</div>`;
-                for(let i=f.min; i<=f.max; i++) html += `<div class="num-75" id="mini-${i}">${i}</div>`;
-            });
-            tablero.innerHTML = html;
-        }
-
-        function actualizarTablero75(balotas) {
-            for(let i=1; i<=75; i++) {
-                const celda = document.getElementById(`mini-${i}`);
-                if(celda) {
-                    if(balotas.includes(i)) celda.classList.add('activa');
-                    else celda.classList.remove('activa');
-                }
+            // Activar la pestaña seleccionada
+            if (tabName === 'humanizer') {
+                document.getElementById('humanizerTab').classList.add('active');
+                btnHumanizer.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-blue-600 text-white shadow-md transition-all";
+            } else {
+                document.getElementById('detectorTab').classList.add('active');
+                btnDetector.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-slate-800 text-white shadow-md transition-all";
             }
         }
-       // --- CÓDIGO PARA PRECARGAR SALA, CARTÓN Y VIDEO DESDE LA URL ---
-        window.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            
-            const salaQuery = urlParams.get('sala');
-            const cartonQuery = urlParams.get('carton');
-            const videoQuery = urlParams.get('video'); // Leemos el video
 
-            const salaHash = window.location.hash.substring(1);
-            const codigoDetectado = salaQuery || salaHash;
-
-            if (codigoDetectado) document.getElementById('codigo-sala').value = codigoDetectado.toUpperCase();
-            if (cartonQuery) document.getElementById('numero-carton').value = cartonQuery;
-            
-            // Guardamos el ID del video temporalmente para usarlo al darle "Ingresar"
-            // Si no pones nada en la URL, cargará el tuyo por defecto.
-            window.videoEnvivoID = videoQuery || "E_MHOm8Lv1A"; 
-
-            if (codigoDetectado && cartonQuery) document.getElementById('nombre-jugador').focus();
+        // ==========================================
+        // LÓGICA DEL HUMANIZADOR (Pestaña 1)
+        // ==========================================
+        const levelSlider = document.getElementById('levelSlider');
+        const levelValue = document.getElementById('levelValue');
+        
+        levelSlider.addEventListener('input', function() {
+            levelValue.textContent = this.value;
         });
+
+        async function procesarTexto() {
+            const inputText = document.getElementById('inputText').value.trim();
+            const toneSelect = document.getElementById('toneSelect');
+            const tono = toneSelect.options[toneSelect.selectedIndex].text;
+            const nivel = document.getElementById('levelSlider').value;
+
+            if (inputText.length < 10) {
+                mostrarMensaje('statusMessage', "El texto es demasiado corto. Por favor, escribe un poco más.", "error");
+                return;
+            }
+
+            estadoCargando(true, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', 'Analizando y humanizando tu texto...', 'blue');
+            mostrarMensaje('statusMessage', "", "none");
+
+            // ¡NUEVO PROMPT SUPER AGRESIVO PARA EVADIR DETECTORES!
+            const systemPrompt = `Eres un experto redactor humano y "ghostwriter". Tu objetivo absoluto es reescribir este texto para que sea IMPOSIBLE que un detector de IA (como GPTZero o Turnitin) sepa que fue generado por máquina.
+            
+            Reglas CRÍTICAS de evasión:
+            1. TONO Y ESTILO: '${tono}'. Actúa 100% como un humano escribiendo en este tono.
+            2. CAOS ESTRUCTURAL (Burstiness): Alterna drásticamente. Escribe una oración de 3 palabras. Luego una de 30. Crea párrafos de una sola línea. A los detectores de IA les asusta el formato irregular.
+            3. PALABRAS PROHIBIDAS: NUNCA uses "En resumen", "En conclusión", "Es importante destacar", "Un tapiz", "Vertiginoso", "Sin embargo", "Además", "Crucial".
+            4. DEFECTOS HUMANOS: Los humanos divagan. Usa conectores naturales ("Mira,", "O sea,", "La verdad es que", "Y bueno,", "De hecho,"). Usa preguntas retóricas.
+            5. NIVEL DE EXPRESIÓN: Nivel ${nivel}/10. Si es mayor a 7, rompe las reglas tradicionales de redacción de ensayos, sé muy conversacional y ligeramente asimétrico.
+            
+            Devuelve ÚNICAMENTE el texto reescrito, sin comillas, introducciones ni comentarios.`;
+
+            const payload = {
+                contents: [{ parts: [{ text: `Reescribe esto:\n\n${inputText}` }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            try {
+                const responseData = await fetchConReintentos(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const textoFinal = responseData.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (textoFinal) {
+                    mostrarResultado(textoFinal, 'resultArea', 'placeholderText', 'outputText', 'copyBtn');
+                    mostrarMensaje('statusMessage', "¡Texto humanizado con éxito!", "success");
+                } else {
+                    throw new Error("Respuesta inválida de la IA.");
+                }
+            } catch (error) {
+                mostrarMensaje('statusMessage', `⚠️ Error al procesar: ${error.message}`, "error");
+            } finally {
+                estadoCargando(false, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', '', 'blue', 'Humanizar Texto', 'wand-2');
+            }
+        }
+
+        // ==========================================
+        // LÓGICA DEL DETECTOR DE IA (Pestaña 2)
+        // ==========================================
+        async function analizarIA() {
+            const inputText = document.getElementById('detectorInput').value.trim();
+
+            if (inputText.length < 20) {
+                mostrarMensaje('detectorStatusMessage', "El texto es demasiado corto para analizar. Pega al menos un párrafo.", "error");
+                return;
+            }
+
+            // Preparar UI del detector
+            estadoCargando(true, 'detectBtn', 'detectorResultArea', 'detectorPlaceholder', 'detectorGauge', null, 'Escaneando patrones de IA...', 'slate');
+            mostrarMensaje('detectorStatusMessage', "", "none");
+            document.getElementById('detectorGauge').classList.add('hidden'); // Ocultar gráfica previa
+
+            // PROMPT DEL DETECTOR CALIBRADO PARA EVITAR FALSOS POSITIVOS
+            const systemPrompt = `Eres un detector avanzado de Inteligencia Artificial. Analiza el texto y determina la probabilidad exacta de que haya sido generado por IA.
+            
+            Busca:
+            - Baja "Burstiness" (oraciones casi todas de la misma longitud).
+            - Baja "Perplexity" (uso de palabras extremadamente predecibles).
+            - Clichés de IA ("en conclusión", "es crucial notar", "un tapiz").
+            
+            ATENCIÓN (Regla contra falsos positivos): Los humanos también pueden escribir textos profesionales, con excelente ortografía y estructura lógica. NO penalices un texto solo porque está bien escrito. Penalízalo si es "robóticamente neutral", predecible o aburrido.
+            
+            Debes responder ESTRICTAMENTE con un objeto JSON válido, con esta estructura:
+            {"porcentaje_ia": <numero del 0 al 100>, "explicacion": "<Breve explicación directa>"}
+            
+            NO incluyas texto fuera del JSON.`;
+
+            const payload = {
+                contents: [{ parts: [{ text: `Analiza este texto:\n\n${inputText}` }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            try {
+                const responseData = await fetchConReintentos(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                let respuestaTexto = responseData.candidates?.[0]?.content?.parts?.[0]?.text || "";
+                
+                // Limpiar posibles etiquetas markdown que la IA a veces añade (```json ... ```)
+                respuestaTexto = respuestaTexto.replace(/```json/gi, '').replace(/```/g, '').trim();
+                
+                let resultadoJSON;
+                try {
+                    resultadoJSON = JSON.parse(respuestaTexto);
+                } catch (e) {
+                    throw new Error("No se pudo interpretar el análisis de la IA.");
+                }
+
+                if (resultadoJSON && typeof resultadoJSON.porcentaje_ia !== 'undefined') {
+                    mostrarResultadoDetector(resultadoJSON.porcentaje_ia, resultadoJSON.explicacion);
+                } else {
+                    throw new Error("La estructura de la respuesta no es válida.");
+                }
+
+            } catch (error) {
+                document.getElementById('detectorPlaceholder').classList.remove('hidden');
+                document.getElementById('detectorPlaceholder').textContent = "Esperando texto para escanear...";
+                mostrarMensaje('detectorStatusMessage', `⚠️ Error al escanear: ${error.message}`, "error");
+            } finally {
+                estadoCargando(false, 'detectBtn', 'detectorResultArea', 'detectorPlaceholder', 'detectorGauge', null, '', 'slate', 'Escanear Texto', 'scan-line');
+            }
+        }
+
+        function mostrarResultadoDetector(porcentaje, explicacion) {
+            document.getElementById('detectorPlaceholder').classList.add('hidden');
+            document.getElementById('detectorGauge').classList.remove('hidden');
+            
+            const numPercentage = parseInt(porcentaje);
+            const spanPercentage = document.getElementById('aiPercentage');
+            const progressBar = document.getElementById('aiProgressBar');
+            const textExplicacion = document.getElementById('aiExplanation');
+
+            // Actualizar textos
+            spanPercentage.textContent = `${numPercentage}%`;
+            textExplicacion.textContent = explicacion;
+
+            // Animar barra
+            setTimeout(() => {
+                progressBar.style.width = `${numPercentage}%`;
+            }, 100);
+
+            // Cambiar colores según el riesgo
+            progressBar.className = "h-4 rounded-full transition-all duration-1000 ease-out";
+            spanPercentage.className = "text-6xl font-black";
+            
+            if (numPercentage <= 20) {
+                // Humano
+                progressBar.classList.add('bg-green-500');
+                spanPercentage.classList.add('text-green-600');
+            } else if (numPercentage <= 60) {
+                // Mixto / Dudoso
+                progressBar.classList.add('bg-orange-400');
+                spanPercentage.classList.add('text-orange-500');
+            } else {
+                // Altamente IA
+                progressBar.classList.add('bg-red-500');
+                spanPercentage.classList.add('text-red-600');
+            }
+        }
+
+        // ==========================================
+        // FUNCIONES COMPARTIDAS
+        // ==========================================
+        async function fetchConReintentos(url, options, maxReintentos = 3) {
+            const tiemposDeEspera = [1000, 2000, 4000];
+            for (let i = 0; i < maxReintentos; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) {
+                        let errorMsg = `HTTP Error ${response.status}`;
+                        try {
+                            const errorData = await response.json();
+                            if (errorData.error && errorData.error.message) errorMsg = errorData.error.message;
+                        } catch (e) {}
+                        throw new Error(errorMsg);
+                    }
+                    return await response.json();
+                } catch (error) {
+                    if (i === maxReintentos - 1) throw error;
+                    await new Promise(resolve => setTimeout(resolve, tiemposDeEspera[i]));
+                }
+            }
+        }
+
+        // Función dinámica para manejar los estados de carga de ambas pestañas
+        function estadoCargando(cargando, btnId, areaId, placeholderId, contentId, copyBtnId, msjCarga, color, originalText, originalIcon) {
+            const btn = document.getElementById(btnId);
+            const area = document.getElementById(areaId);
+            const placeholder = document.getElementById(placeholderId);
+            const content = document.getElementById(contentId);
+            const copyBtn = copyBtnId ? document.getElementById(copyBtnId) : null;
+
+            if (cargando) {
+                btn.disabled = true;
+                btn.innerHTML = `<span class="loader"></span><span>Procesando...</span>`;
+                btn.classList.replace(`bg-${color}-600`, `bg-${color}-400`);
+                if(color === 'slate') btn.classList.replace('bg-slate-800', 'bg-slate-500');
+                
+                placeholder.classList.remove('hidden');
+                placeholder.textContent = msjCarga;
+                content.classList.add('hidden');
+                if(copyBtn) copyBtn.classList.add('hidden');
+                area.classList.remove('bg-white');
+                area.classList.add('bg-slate-50');
+            } else {
+                btn.disabled = false;
+                btn.innerHTML = `<i data-lucide="${originalIcon}" class="w-5 h-5"></i><span>${originalText}</span>`;
+                btn.classList.replace(`bg-${color}-400`, `bg-${color}-600`);
+                if(color === 'slate') btn.classList.replace('bg-slate-500', 'bg-slate-800');
+                lucide.createIcons();
+            }
+        }
+
+        function mostrarResultado(texto, areaId, placeholderId, contentId, copyBtnId) {
+            document.getElementById(placeholderId).classList.add('hidden');
+            document.getElementById(contentId).textContent = texto;
+            document.getElementById(contentId).classList.remove('hidden');
+            document.getElementById(copyBtnId).classList.remove('hidden');
+            document.getElementById(areaId).classList.remove('bg-slate-50');
+            document.getElementById(areaId).classList.add('bg-white');
+        }
+
+        function mostrarMensaje(elementId, texto, tipo) {
+            const el = document.getElementById(elementId);
+            if (tipo === "none") {
+                el.classList.add('hidden');
+                return;
+            }
+            
+            el.textContent = texto;
+            el.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700');
+            
+            if (tipo === "error") {
+                el.classList.add('bg-red-100', 'text-red-700');
+            } else if (tipo === "success") {
+                el.classList.add('bg-green-100', 'text-green-700');
+                setTimeout(() => {
+                    if(el.textContent === texto) el.classList.add('hidden');
+                }, 5000);
+            }
+        }
+
+        function copiarAlPortapapeles(sourceId, btnId) {
+            const textoCopia = document.getElementById(sourceId).textContent;
+            const areaTemporal = document.createElement("textarea");
+            areaTemporal.value = textoCopia;
+            document.body.appendChild(areaTemporal);
+            areaTemporal.select();
+            
+            const copyBtn = document.getElementById(btnId);
+            try {
+                document.execCommand('copy');
+                const originalHTML = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-green-600"></i> <span class="text-green-600">¡Copiado!</span>';
+                lucide.createIcons();
+                
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalHTML;
+                    lucide.createIcons();
+                }, 2000);
+            } catch (err) {
+                alert("No se pudo copiar el texto");
+            }
+            document.body.removeChild(areaTemporal);
+        }
     </script>
 </body>
 </html>
