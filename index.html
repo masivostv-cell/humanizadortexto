@@ -3,324 +3,425 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Humanizador de Texto con IA</title>
-    <!-- Tailwind CSS para los estilos -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons para los iconos -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Bingo Online - Jugador</title>
     <style>
-        /* Estilos personalizados sutiles */
-        body {
-            background-color: #f8fafc;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        /* RESET Y FONDOS */
+        body { font-family: Arial, sans-serif; background-color: #121212; color: white; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
+        
+        /* LOGIN */
+        #login-section { background-color: #1e1e1e; padding: 30px; border-radius: 10px; text-align: center; margin-top: 50px; border: 2px solid #ffc107; width: 90%; max-width: 400px; box-sizing: border-box; }
+        #login-section input { padding: 12px; margin: 10px 0; width: 100%; border-radius: 5px; border: none; box-sizing: border-box; font-size: 16px; }
+        #login-section button { padding: 12px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; margin-top: 10px; }
+        
+        /* ENCABEZADO SUPERIOR (NORMAL - SIN STICKY) */
+        #encabezado-fijo {
+            width: 100%; z-index: 1000;
+            background: #f1f3f5; color: #333; padding: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            border-bottom: 3px solid #ccc; box-sizing: border-box;
+            display: none; /* Se muestra al loguearse */
+            flex-direction: column; gap: 10px;
         }
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+
+        /* FILA SUPERIOR DEL ENCABEZADO */
+        .top-info-row { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 800px; margin: 0 auto; }
+        
+        /* Figura */
+        .figura-box { display: flex; flex-direction: column; align-items: center; min-width: 70px; }
+        .figura-titulo { font-size: 10px; font-weight: 900; color: #555; text-transform: uppercase; margin-bottom: 3px; }
+        #figura-objetivo { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; width: 40px; background-color: #333; padding: 2px; border: 1px solid #777; }
+        .celda-figura { aspect-ratio: 1; background-color: #555; }
+        .celda-figura.activa { background-color: #ffeb3b; }
+        #nombre-figura-display { font-size: 9px; font-weight: bold; color: #666; margin-top: 3px; text-transform: uppercase; text-align: center; }
+
+        /* Centro (Balota y Reloj) */
+        .centro-box { display: flex; flex-direction: column; align-items: center; }
+        .balota-gigante {
+            width: 70px; height: 70px;
+            background: radial-gradient(circle at 30% 30%, #ff4d4d, #b71c1c);
+            border-radius: 50%; border: 3px solid #8e0000; color: white;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         }
-        /* Animación de carga */
-        .loader {
-            border: 3px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 3px solid #3b82f6;
-            width: 20px;
-            height: 20px;
-            -webkit-animation: spin 1s linear infinite; /* Safari */
-            animation: spin 1s linear infinite;
-            display: inline-block;
-            vertical-align: middle;
+        #main-letra { font-size: 14px; font-weight: bold; line-height: 1; margin-bottom: 2px; }
+        #main-numero { font-size: 28px; font-weight: 900; line-height: 1; }
+        
+        .historial-bolas { display: flex; gap: 4px; margin-top: 5px; }
+        .bola-historial {
+            width: 22px; height: 22px; background: #495057; color: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+
+        /* Contador */
+        .contador-box { font-size: clamp(24px, 6vw, 40px); font-weight: 900; color: #d32f2f; min-width: 70px; text-align: right; }
+
+        /* TABLERO 75 NÚMEROS */
+        .tablero-75-grid {
+            display: grid;
+            grid-template-columns: auto repeat(15, 1fr);
+            gap: 2px; width: 100%; max-width: 800px; margin: 0 auto;
+            align-items: center;
         }
+        .letra-75 {
+            aspect-ratio: 1; border-radius: 50%; color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 900; font-size: clamp(10px, 3vw, 18px); margin-right: 2px;
+        }
+        .num-75 {
+            aspect-ratio: 1; width: 100%; background: #e9ecef; border: 1px solid #adb5bd; border-radius: 3px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: clamp(8px, 2.8vw, 16px); color: #333; box-sizing: border-box; transition: 0.2s;
+        }
+        .num-75.activa { background: #ffeb3b; color: black; border: 2px solid #000; transform: scale(1.05); z-index: 2; }
+
+        /* ZONA DE JUEGO (CARTÓN) */
+        #game-section { display: none; width: 100%; max-width: 500px; text-align: center; padding: 20px 10px 50px 10px; box-sizing: border-box; }
+        .info-jugador { background: #222; padding: 10px; border-radius: 8px; border: 1px solid #444; margin-bottom: 15px; font-size: 14px; }
+        .info-jugador span { color: #ffc107; font-weight: bold; }
+        
+        .carton-container { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; background-color: black; padding: 5px; border: 5px solid black; user-select: none; width: 100%; box-sizing: border-box; }
+        .letra-bingo { background-color: #004080; color: white; font-size: 22px; font-weight: bold; padding: 10px 0; }
+        .numero-carton { background-color: white; color: black; font-size: clamp(18px, 5vw, 24px); font-weight: 900; padding: clamp(10px, 4vw, 20px) 0; cursor: pointer; transition: 0.1s; display: flex; align-items: center; justify-content: center; }
+        .numero-carton:active { transform: scale(0.95); }
+        .numero-carton.marcado { background-color: #ffeb3b; }
+        .numero-carton.centro { background-color: #ccc; font-size: 20px; }
+
+        #btn-bingo { background-color: #d32f2f; color: white; border: 4px solid white; border-radius: 15px; font-size: 26px; font-weight: 900; padding: 15px; width: 100%; margin-top: 25px; cursor: pointer; box-shadow: 0 5px 15px rgba(211, 47, 47, 0.5); animation: latido 1.5s infinite; }
+        #btn-bingo:active { transform: scale(0.95); }
+        @keyframes latido { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
     </style>
 </head>
-<body class="min-h-screen text-slate-800 p-4 md:p-8">
+<body>
 
-    <div class="max-w-4xl mx-auto">
-        <!-- Encabezado -->
-        <header class="text-center mb-10 mt-6">
-            <h1 class="text-4xl font-extrabold text-slate-900 mb-3 tracking-tight flex items-center justify-center gap-3">
-                <i data-lucide="sparkles" class="text-blue-500 w-8 h-8"></i>
-                Humanizador de Texto
-            </h1>
-            <p class="text-slate-500 text-lg max-w-2xl mx-auto">
-                Transforma textos robóticos generados por IA en contenido natural, fluido y 100% humano.
-            </p>
-        </header>
-
-        <!-- Contenedor Principal -->
-        <main class="glass-panel rounded-2xl p-6 md:p-8 border border-slate-100">
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                
-                <!-- Columna Izquierda: Entrada de datos -->
-                <div class="flex flex-col gap-4">
-                    <div>
-                        <label for="inputText" class="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
-                            <i data-lucide="file-text" class="w-4 h-4"></i> Texto Original (IA)
-                        </label>
-                        <textarea id="inputText" rows="8" 
-                            class="w-full rounded-xl border border-slate-200 p-4 text-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none outline-none"
-                            placeholder="Pega aquí el texto generado por ChatGPT, Gemini, etc..."></textarea>
-                    </div>
-
-                    <!-- Controles de Configuración -->
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label for="toneSelect" class="block text-sm font-semibold text-slate-700 mb-2">Tono</label>
-                            <select id="toneSelect" class="w-full rounded-lg border border-slate-200 p-2.5 text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none bg-white">
-                                <option value="casual">Casual / Relajado</option>
-                                <option value="profesional">Profesional</option>
-                                <option value="blog">Estilo Blog / Artículo</option>
-                                <option value="academico">Académico (Pero natural)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="levelSlider" class="block text-sm font-semibold text-slate-700 mb-2">
-                                Nivel de Humanización: <span id="levelValue" class="text-blue-600 font-bold">8</span>
-                            </label>
-                            <input type="range" id="levelSlider" min="1" max="10" value="8" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer mt-2">
-                            <div class="flex justify-between text-xs text-slate-400 mt-1">
-                                <span>Ligero</span>
-                                <span>Extremo</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Botón de Acción -->
-                    <button id="humanizeBtn" onclick="procesarTexto()" 
-                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-xl transition-colors shadow-sm flex justify-center items-center gap-2 mt-2">
-                        <i data-lucide="wand-2" class="w-5 h-5"></i>
-                        <span>Humanizar Texto</span>
-                    </button>
-                    
-                    <!-- Mensaje de error/estado -->
-                    <div id="statusMessage" class="hidden text-sm p-3 rounded-lg mt-2 text-center font-medium"></div>
-                </div>
-
-                <!-- Columna Derecha: Resultado -->
-                <div class="flex flex-col gap-4">
-                    <div class="flex justify-between items-end mb-2">
-                        <label class="block text-sm font-semibold text-slate-700 flex items-center gap-2">
-                            <i data-lucide="user-check" class="w-4 h-4 text-green-500"></i> Texto Humanizado
-                        </label>
-                        <button onclick="copiarAlPortapapeles()" id="copyBtn" class="text-sm text-slate-500 hover:text-blue-600 flex items-center gap-1 transition-colors hidden">
-                            <i data-lucide="copy" class="w-4 h-4"></i> Copiar
-                        </button>
-                    </div>
-                    
-                    <!-- Área de Resultado -->
-                    <div id="resultArea" class="w-full h-full min-h-[250px] rounded-xl border border-slate-200 bg-slate-50 p-4 text-slate-700 relative overflow-y-auto">
-                        <p id="placeholderText" class="text-slate-400 italic text-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full">
-                            El resultado aparecerá aquí...
-                        </p>
-                        <div id="outputText" class="hidden whitespace-pre-wrap"></div>
-                    </div>
-                </div>
-                
-            </div>
-        </main>
+    <div id="pantalla-ganador" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding: 20px; box-sizing: border-box;">
+        <h1 style="color:#ffc107; font-size:50px; text-shadow: 0 0 20px #ffc107; margin-bottom:10px;">🏆 ¡BINGO! 🏆</h1>
+        <h2 style="color:white; font-size:24px;">TENEMOS UN GANADOR</h2>
+        <p id="texto-ganador" style="color:#28a745; font-size:35px; font-weight:900; margin:20px 0; text-transform: uppercase;">---</p>
+        <p style="color:white; font-size:20px; background: #333; padding: 10px 20px; border-radius: 10px;">Con el Cartón #<span id="texto-carton-ganador" style="color:#00ffff; font-weight:bold;">---</span></p>
         
-        <footer class="text-center mt-8 text-slate-400 text-sm">
-            <p>Impulsado por Gemini AI</p>
-        </footer>
+        <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 40px; width: 100%; max-width: 300px;">
+            <button onclick="document.getElementById('pantalla-ganador').style.display='none'" style="padding:15px; font-size:16px; background:#004080; color:white; border:2px solid white; border-radius:10px; cursor:pointer; font-weight:bold;">JUGAR CON ESTE CARTÓN</button>
+            <button onclick="location.reload()" style="padding:15px; font-size:16px; background:#d32f2f; color:white; border:2px solid white; border-radius:10px; cursor:pointer; font-weight:bold;">🔄 INGRESAR OTRO CARTÓN</button>
+        </div>
     </div>
 
-    <script>
-        // Inicializar iconos
-        lucide.createIcons();
+    <div id="login-section">
+        <h2 style="color:#ffc107; margin-top:0;">Entrar a la Sala</h2>
+        <input type="text" id="nombre-jugador" placeholder="Tu Nombre">
+        <input type="number" id="codigo-sala" placeholder="PIN de la Sala (6 dígitos)" style="font-size: 18px; font-weight: bold; text-align: center;">
+        <input type="number" id="numero-carton" placeholder="N° de Cartón (Ej: 15)">
+        <button onclick="entrarSala()">Ingresar al Juego</button>
+    </div>
 
-        // En el entorno de Canvas, la clave se provee automáticamente.
-        // Si descargas esto para tu propio servidor, aquí va tu clave generada en Google AI Studio.
-        const apiKey = ""; 
-        const modeloIA = "gemini-2.5-flash-preview-09-2025";
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${modeloIA}:generateContent?key=${apiKey}`;
+    <div id="encabezado-fijo">
+        <div class="top-info-row">
+            <div class="figura-box">
+                <div class="figura-titulo">FIGURA</div>
+                <div id="figura-objetivo"></div>
+                <div id="nombre-figura-display">BINGO</div>
+            </div>
 
-        // Elementos del DOM
-        const levelSlider = document.getElementById('levelSlider');
-        const levelValue = document.getElementById('levelValue');
-        const inputText = document.getElementById('inputText');
-        const toneSelect = document.getElementById('toneSelect');
-        const humanizeBtn = document.getElementById('humanizeBtn');
-        const outputText = document.getElementById('outputText');
-        const placeholderText = document.getElementById('placeholderText');
-        const copyBtn = document.getElementById('copyBtn');
-        const statusMessage = document.getElementById('statusMessage');
-        const resultArea = document.getElementById('resultArea');
+            <div class="centro-box">
+                <div class="balota-gigante">
+                    <span id="main-letra">-</span>
+                    <span id="main-numero">--</span>
+                </div>
+                <div id="historial-bolas" class="historial-bolas">
+                    <div class="bola-historial">-</div><div class="bola-historial">-</div><div class="bola-historial">-</div><div class="bola-historial">-</div>
+                </div>
+            </div>
 
-        // Actualizar el valor numérico del slider
-        levelSlider.addEventListener('input', function() {
-            levelValue.textContent = this.value;
-        });
+            <div class="contador-box" id="contador-balotas">0/75</div>
+        </div>
 
-        // Función principal
-        async function procesarTexto() {
-            const textoOriginal = inputText.value.trim();
-            const tono = toneSelect.options[toneSelect.selectedIndex].text;
-            const nivel = levelSlider.value;
+        <div id="tablero-75" class="tablero-75-grid"></div>
+    </div>
 
-            if (textoOriginal.length < 10) {
-                mostrarMensaje("El texto es demasiado corto. Por favor, escribe un poco más.", "error");
-                return;
-            }
+    <div id="game-section">
+        <div class="info-jugador">
+            Sala: <span id="display-sala">---</span> &nbsp;|&nbsp; Jugador: <span id="display-nombre">---</span>
+        </div>
 
-            // Preparar UI para carga
-            estadoCargando(true);
-            mostrarMensaje("", "none");
+        <div id="video-container" style="display:none; position: absolute; top: -9999px; left: -9999px; width: 300px; height: 300px; opacity: 0; pointer-events: none;">
+            <iframe id="video-envivo" width="300" height="300" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+        <h3 style="margin: 0 0 10px 0; color: #ffc107; font-size: 24px;">CARTÓN #<span id="display-num-carton"></span></h3>
 
-            // Configurar el prompt del sistema
-            const systemPrompt = `Eres un experto redactor humano y copywriter. Tu tarea es reescribir el texto generado por IA para que suene 100% escrito por una persona real, evadiendo cualquier detector de inteligencia artificial.
+        <div id="mi-carton" style="width: 100%; max-width: 450px; margin: 0 auto;"></div>
 
-Aplica las siguientes reglas estrictas:
-1. TONO: El tono debe ser '${tono}'.
-2. VARIACIÓN (Burstiness): Varía drásticamente la longitud de las oraciones. Usa oraciones cortas. Luego usa oraciones más largas y fluidas.
-3. IMPREVISIBILIDAD (Perplexity): Usa sinónimos poco comunes pero naturales. Evita transiciones robóticas o cliché de IA como "En conclusión", "En resumen", "Es importante destacar", "Por lo tanto", "En el vertiginoso mundo de".
-4. NATURALIDAD: Introduce ligeras imperfecciones conversacionales o conectores naturales ("Bueno,", "La verdad es que", "Y sí,").
-5. NIVEL DE EXPRESIÓN: Nivel ${nivel}/10 de libertad creativa.
+        <button id="btn-bingo" onclick="cantarBingo()">¡BINGO!</button>
+    </div>
 
-Devuelve ÚNICAMENTE el texto reescrito.`;
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, onSnapshot, setDoc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-            const userQuery = `Reescribe el siguiente texto basándote en las instrucciones:\n\n${textoOriginal}`;
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGlCcqIxjX3c_GustIB7_vjtyFwZ_q010",
+            authDomain: "bingo-sala-2-online.firebaseapp.com",
+            projectId: "bingo-sala-2-online",
+            storageBucket: "bingo-sala-2-online.firebasestorage.app",
+            messagingSenderId: "865001524589",
+            appId: "1:865001524589:web:45a97bd5231f16f4c01e64"
+        };
 
-            const payload = {
-                contents: [{ parts: [{ text: userQuery }] }],
-                systemInstruction: { parts: [{ text: systemPrompt }] }
-            };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let miCartonNumeros = [];
+        let numCartonOficial = "";
+
+        window.entrarSala = async () => {
+            const nombre = document.getElementById('nombre-jugador').value;
+            const sala = document.getElementById('codigo-sala').value.toUpperCase();
+            const numCarton = document.getElementById('numero-carton').value;
+
+            if (!nombre || !sala || !numCarton) { alert("Llena todos los campos."); return; }
+
+            const btnLogin = document.querySelector('#login-section button');
+            btnLogin.innerText = "Buscando cartón...";
+            btnLogin.disabled = true;
 
             try {
-                // Ejecutamos la petición con la lógica de reintentos recomendada
-                const responseData = await fetchConReintentos(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
+                const salaRef = doc(db, "salas", sala);
+                const salaDoc = await getDoc(salaRef);
 
-                // Extraer el texto de la respuesta
-                const textoFinal = responseData.candidates?.[0]?.content?.parts?.[0]?.text;
-
-                if (textoFinal) {
-                    mostrarResultado(textoFinal);
-                    mostrarMensaje("¡Texto humanizado con éxito!", "success");
-                } else {
-                    throw new Error("Respuesta inválida o vacía de la IA.");
-                }
-
-            } catch (error) {
-                estadoCargando(false);
-                mostrarMensaje(`⚠️ Error al procesar: ${error.message}`, "error");
-            }
-        }
-
-        // Función para reintentos exponenciales con extracción de error precisa
-        async function fetchConReintentos(url, options, maxReintentos = 5) {
-            const tiemposDeEspera = [1000, 2000, 4000, 8000, 16000];
-            
-            for (let i = 0; i < maxReintentos; i++) {
-                try {
-                    const response = await fetch(url, options);
+                if (salaDoc.exists()) {
+                    const datosSala = salaDoc.data();
                     
-                    if (!response.ok) {
-                        let errorMsg = `HTTP Error ${response.status}`;
+                    // --- NUEVA LÓGICA DE DESEMPAQUETADO ---
+                    let todosLosCartones = null;
+
+                    // 1. Verificamos si los cartones vienen en el nuevo formato "empaquetado"
+                    if (datosSala.cartonesEmpaquetados) {
                         try {
-                            const errorData = await response.json();
-                            if (errorData.error && errorData.error.message) {
-                                errorMsg = errorData.error.message;
-                            }
+                            todosLosCartones = JSON.parse(datosSala.cartonesEmpaquetados);
                         } catch (e) {
-                            // Si no se puede parsear como JSON, usar el texto genérico
+                            console.error("Error al desempaquetar cartones:", e);
                         }
-                        throw new Error(errorMsg);
+                    } 
+                    // 2. Por si acaso, mantenemos compatibilidad con el formato viejo
+                    else if (datosSala.cartonesOficiales) {
+                        todosLosCartones = datosSala.cartonesOficiales;
                     }
+
+                    // 3. Si no hay cartones de ninguna forma, bloqueamos
+                    if (!todosLosCartones) {
+                        alert("El administrador aún no ha subido los cartones a esta sala.");
+                        btnLogin.innerText = "Ingresar al Juego";
+                        btnLogin.disabled = false;
+                        return;
+                    }
+
+                    // 4. Buscamos el cartón específico del jugador
+                    const cartonBuscado = todosLosCartones[numCarton];
                     
-                    return await response.json();
-                    
-                } catch (error) {
-                    if (i === maxReintentos - 1) throw error;
-                    // Esperar antes del siguiente reintento
-                    await new Promise(resolve => setTimeout(resolve, tiemposDeEspera[i]));
+                    if (cartonBuscado) {
+                        miCartonNumeros = cartonBuscado;
+                        numCartonOficial = numCarton;
+
+                        // Cambios de UI
+                        document.getElementById('login-section').style.display = 'none';
+                        document.getElementById('encabezado-fijo').style.display = 'flex';
+                        document.getElementById('game-section').style.display = 'block';
+                        
+                        document.getElementById('display-sala').innerText = sala;
+                        document.getElementById('display-nombre').innerText = nombre;
+                        document.getElementById('display-num-carton').innerText = numCarton;
+                        if (window.videoEnvivoID) {
+                            document.getElementById('video-container').style.display = 'block';
+                            document.getElementById('video-envivo').src = `https://www.youtube.com/embed/${window.videoEnvivoID}?autoplay=1`;
+                        }
+                        renderizarCarton();
+                        inicializarTablero75();
+
+                        // Registro Firebase
+                        const jugadorRef = doc(db, "salas", sala, "jugadores", nombre);
+                        await setDoc(jugadorRef, { nombre: nombre, numeroCarton: numCarton, conectadoEn: new Date() });
+
+                        window.ultimoGanadorVisto = 0; 
+                        window.ultimoReinicioVisto = 0;
+
+                        // Escucha en tiempo real
+                        onSnapshot(salaRef, (docSnapshot) => {
+                            if (docSnapshot.exists()) {
+                                const datos = docSnapshot.data();
+                                
+                                // 1. Gatillo de Reinicio
+                                if (datos.senalReinicio && window.ultimoReinicioVisto !== datos.senalReinicio) {
+                                    window.ultimoReinicioVisto = datos.senalReinicio;
+                                    limpiarPantallaJugador();
+                                }
+
+                                // 2. Actualizar Balotas
+                                if (datos.balotasLlamadas && datos.balotasLlamadas.length > 0) {
+                                    actualizarDatosBalotas(datos.balotasLlamadas);
+                                } else if (!datos.balotasLlamadas || datos.balotasLlamadas.length === 0) {
+                                    limpiarPantallaJugador();
+                                }
+                                
+                                // 3. Actualizar Figura
+                                if (datos.figuraActual) {
+                                    document.getElementById('nombre-figura-display').innerText = datos.nombreFigura || "BINGO";
+                                    renderizarFigura(datos.figuraActual);
+                                }
+
+                                // 4. Ganador
+                                if (datos.ganadorConfirmado) {
+                                    if (window.ultimoGanadorVisto !== datos.ganadorConfirmado.timestamp) {
+                                        window.ultimoGanadorVisto = datos.ganadorConfirmado.timestamp;
+                                        document.getElementById('texto-ganador').innerText = datos.ganadorConfirmado.nombre;
+                                        document.getElementById('texto-carton-ganador').innerText = datos.ganadorConfirmado.carton;
+                                        document.getElementById('pantalla-ganador').style.display = 'flex';
+                                    }
+                                }
+                            }
+                        });
+                    } else {
+                        alert(`El Cartón #${numCarton} no existe en esta partida.`);
+                        btnLogin.innerText = "Ingresar al Juego";
+                        btnLogin.disabled = false;
+                    }
+                } else {
+                    alert("La sala no existe.");
+                    btnLogin.innerText = "Ingresar al Juego";
+                    btnLogin.disabled = false;
+                }
+            } catch (error) {
+                console.error("El error real es: ", error); // <- Agrega esta línea
+                alert("Error de conexión al buscar el cartón.");
+                btnLogin.innerText = "Ingresar al Juego";
+                btnLogin.disabled = false;
+            }
+        };
+
+        window.toggleMarca = (elemento) => { elemento.classList.toggle('marcado'); };
+
+        window.cantarBingo = async () => {
+            // En lugar de buscar en los inputs ocultos, leemos los textos que ya están en pantalla
+            const nombre = document.getElementById('display-nombre').innerText;
+            const sala = document.getElementById('display-sala').innerText;
+            const btn = document.getElementById('btn-bingo');
+            
+            btn.innerText = "ENVIANDO...";
+            try {
+                const salaRef = doc(db, "salas", sala);
+                // Intentamos escribir la alerta en la base de datos
+                await updateDoc(salaRef, {
+                    alertaBingo: { nombre: nombre, carton: numCartonOficial, timestamp: Date.now() }
+                });
+                
+                btn.innerText = "¡BINGO ENVIADO!";
+                btn.style.backgroundColor = "#28a745"; 
+                alert(`¡Has cantado BINGO con el Cartón #${numCartonOficial}!`);
+                setTimeout(() => { btn.innerText = "¡BINGO!"; btn.style.backgroundColor = "#d32f2f"; }, 5000);
+            } catch (error) {
+                // AQUÍ ESTÁ LA MAGIA PARA VER EL ERROR REAL
+                console.error("Error exacto al enviar el Bingo a Firebase:", error);
+                alert("Error al cantar Bingo. Revisa la consola (F12) para ver el motivo.");
+                btn.innerText = "¡BINGO!";
+            }
+        };
+
+        function limpiarPantallaJugador() {
+            document.getElementById('main-letra').innerText = "-";
+            document.getElementById('main-numero').innerText = "--";
+            document.getElementById('contador-balotas').innerText = "0/75";
+            document.getElementById('historial-bolas').innerHTML = '<div class="bola-historial">-</div>'.repeat(4);
+            document.getElementById('pantalla-ganador').style.display = 'none';
+            actualizarTablero75([]);
+            document.querySelectorAll('.numero-carton').forEach(celda => {
+                if(!celda.classList.contains('centro')) celda.classList.remove('marcado');
+            });
+        }
+
+        function actualizarDatosBalotas(balotas) {
+            // Ultima balota, letra y contador
+            const ultima = balotas[balotas.length - 1];
+            document.getElementById('main-numero').innerText = ultima;
+            document.getElementById('main-letra').innerText = (ultima <= 15 ? 'B' : ultima <= 30 ? 'I' : ultima <= 45 ? 'N' : ultima <= 60 ? 'G' : 'O');
+            document.getElementById('contador-balotas').innerText = balotas.length + "/75";
+
+            // Historial de las 4 anteriores
+            const ultimas = balotas.slice(-5, -1).reverse();
+            let hHtml = "";
+            for(let i=0; i<4; i++) hHtml += `<div class="bola-historial">${ultimas[i] || '-'}</div>`;
+            document.getElementById('historial-bolas').innerHTML = hHtml;
+
+            // Pintar la grilla de 75
+            actualizarTablero75(balotas);
+        }
+
+        function renderizarCarton() {
+            const container = document.getElementById('mi-carton');
+            let html = '<div class="carton-container">';
+            ['B', 'I', 'N', 'G', 'O'].forEach(l => html += `<div class="letra-bingo">${l}</div>`);
+            
+            const mapeoCarton = [0,5,10,15,20, 1,6,11,16,21, 2,7,12,17,22, 3,8,13,18,23, 4,9,14,19,24];
+            mapeoCarton.forEach((idx) => {
+                let num = miCartonNumeros[idx];
+                if (num === 0) html += `<div class="numero-carton centro marcado">X</div>`;
+                else html += `<div class="numero-carton" onclick="toggleMarca(this)">${num}</div>`;
+            });
+            container.innerHTML = html + '</div>';
+        }
+
+        function renderizarFigura(figuraArray) {
+             const container = document.getElementById('figura-objetivo');
+             container.innerHTML = '';
+             for(let i=0; i<25; i++) {
+                 let div = document.createElement('div');
+                 div.className = 'celda-figura' + (figuraArray[i] ? ' activa' : '');
+                 container.appendChild(div);
+             }
+        }
+
+        function inicializarTablero75() {
+            const tablero = document.getElementById('tablero-75');
+            let html = '';
+            const filas = [
+                { l: 'B', min: 1, max: 15, c: '#004080' },
+                { l: 'I', min: 16, max: 30, c: '#d32f2f' },
+                { l: 'N', min: 31, max: 45, c: '#757575' },
+                { l: 'G', min: 46, max: 60, c: '#28a745' },
+                { l: 'O', min: 61, max: 75, c: '#fbc02d' }
+            ];
+            filas.forEach(f => {
+                html += `<div class="letra-75" style="background:${f.c}">${f.l}</div>`;
+                for(let i=f.min; i<=f.max; i++) html += `<div class="num-75" id="mini-${i}">${i}</div>`;
+            });
+            tablero.innerHTML = html;
+        }
+
+        function actualizarTablero75(balotas) {
+            for(let i=1; i<=75; i++) {
+                const celda = document.getElementById(`mini-${i}`);
+                if(celda) {
+                    if(balotas.includes(i)) celda.classList.add('activa');
+                    else celda.classList.remove('activa');
                 }
             }
         }
-
-        // Utilidades de la Interfaz de Usuario
-        function estadoCargando(cargando) {
-            if (cargando) {
-                humanizeBtn.disabled = true;
-                humanizeBtn.innerHTML = '<span class="loader"></span><span>Procesando...</span>';
-                humanizeBtn.classList.replace('bg-blue-600', 'bg-blue-400');
-                placeholderText.classList.remove('hidden');
-                placeholderText.textContent = "Analizando y humanizando tu texto...";
-                outputText.classList.add('hidden');
-                copyBtn.classList.add('hidden');
-                resultArea.classList.remove('bg-white');
-                resultArea.classList.add('bg-slate-50');
-            } else {
-                humanizeBtn.disabled = false;
-                humanizeBtn.innerHTML = '<i data-lucide="wand-2" class="w-5 h-5"></i><span>Humanizar Texto</span>';
-                humanizeBtn.classList.replace('bg-blue-400', 'bg-blue-600');
-                lucide.createIcons();
-            }
-        }
-
-        function mostrarResultado(texto) {
-            estadoCargando(false);
-            placeholderText.classList.add('hidden');
-            outputText.textContent = texto;
-            outputText.classList.remove('hidden');
-            copyBtn.classList.remove('hidden');
-            resultArea.classList.remove('bg-slate-50');
-            resultArea.classList.add('bg-white');
-        }
-
-        function mostrarMensaje(texto, tipo) {
-            if (tipo === "none") {
-                statusMessage.classList.add('hidden');
-                return;
-            }
+       // --- CÓDIGO PARA PRECARGAR SALA, CARTÓN Y VIDEO DESDE LA URL ---
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
             
-            statusMessage.textContent = texto;
-            statusMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700', 'bg-orange-100', 'text-orange-700');
-            
-            if (tipo === "error") {
-                statusMessage.classList.add('bg-red-100', 'text-red-700');
-            } else if (tipo === "success") {
-                statusMessage.classList.add('bg-green-100', 'text-green-700');
-                setTimeout(() => {
-                    if(statusMessage.textContent === texto) {
-                        statusMessage.classList.add('hidden');
-                    }
-                }, 5000);
-            } else if (tipo === "warning") {
-                statusMessage.classList.add('bg-orange-100', 'text-orange-700');
-            }
-        }
+            const salaQuery = urlParams.get('sala');
+            const cartonQuery = urlParams.get('carton');
+            const videoQuery = urlParams.get('video'); // Leemos el video
 
-        function copiarAlPortapapeles() {
-            const textoCopia = outputText.textContent;
-            const areaTemporal = document.createElement("textarea");
-            areaTemporal.value = textoCopia;
-            document.body.appendChild(areaTemporal);
-            areaTemporal.select();
+            const salaHash = window.location.hash.substring(1);
+            const codigoDetectado = salaQuery || salaHash;
+
+            if (codigoDetectado) document.getElementById('codigo-sala').value = codigoDetectado.toUpperCase();
+            if (cartonQuery) document.getElementById('numero-carton').value = cartonQuery;
             
-            try {
-                document.execCommand('copy');
-                const originalHTML = copyBtn.innerHTML;
-                copyBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-green-600"></i> <span class="text-green-600">¡Copiado!</span>';
-                lucide.createIcons();
-                
-                setTimeout(() => {
-                    copyBtn.innerHTML = originalHTML;
-                    lucide.createIcons();
-                }, 2000);
-            } catch (err) {
-                mostrarMensaje("No se pudo copiar el texto", "error");
-            }
-            
-            document.body.removeChild(areaTemporal);
-        }
+            // Guardamos el ID del video temporalmente para usarlo al darle "Ingresar"
+            // Si no pones nada en la URL, cargará el tuyo por defecto.
+            window.videoEnvivoID = videoQuery || "E_MHOm8Lv1A"; 
+
+            if (codigoDetectado && cartonQuery) document.getElementById('nombre-jugador').focus();
+        });
     </script>
 </body>
 </html>
