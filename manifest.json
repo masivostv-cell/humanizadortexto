@@ -1,0 +1,50 @@
+{
+  "name": "Kit de Texto con IA - JA Producciones",
+  "short_name": "Kit IA",
+  "description": "Herramienta para humanizar y detectar textos con IA.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#3b82f6",
+  "icons": [
+    {
+      "src": "Logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "Logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+
+### 2. Crea el archivo `sw.js`
+Este es el *Service Worker* que tú me estabas pidiendo. Su trabajo es registrar la aplicación en el navegador para que pueda instalarse. Crea un archivo llamado `sw.js` y pégale esto:
+
+```javascript
+const CACHE_NAME = 'kit-ia-v1';
+const urlsToCache = [
+  './',
+  './index.html',
+  './manifest.json',
+  './Logo.png'
+];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(urlsToCache))
+  );
+  self.skipWaiting();
+});
+
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => response || fetch(event.request))
+  );
+});
+
+Una vez que tengas esos **tres archivos** (`index.html` actualizado, `manifest.json` y `sw.js`) subidos a GitHub, recarga tu página un par de veces y el navegador desbloqueará por completo el botón para que la puedas instalar a nivel nativo. ¡Confírmame si lograste subirlo!

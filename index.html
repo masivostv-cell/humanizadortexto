@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kit de IA: Humanizador y Detector</title>
+    <!-- Enlaces para la PWA en GitHub -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="apple-touch-icon" href="Logo.png">
     <!-- Tailwind CSS para los estilos -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons para los iconos -->
@@ -541,71 +545,49 @@
         // ==========================================
         // LÓGICA DE INSTALACIÓN (PWA)
         // ==========================================
-        const manifest = {
-            name: "Kit de Texto con IA - JA Producciones",
-            short_name: "Kit IA",
-            description: "Herramienta para humanizar y detectar textos con IA.",
-            start_url: window.location.href,
-            display: "standalone",
-            background_color: "#f8fafc",
-            theme_color: "#3b82f6",
-            icons: [{
-                src: "Logo.png", 
-                sizes: "512x512",
-                type: "image/png"
-            }]
-        };
-        const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-        const manifestUrl = URL.createObjectURL(manifestBlob);
-        const manifestLink = document.createElement('link');
-        manifestLink.rel = 'manifest';
-        manifestLink.href = manifestUrl;
-        document.head.appendChild(manifestLink);
-
-        const swCode = `
-            self.addEventListener('install', (e) => { self.skipWaiting(); });
-            self.addEventListener('activate', (e) => { e.waitUntil(clients.claim()); });
-            self.addEventListener('fetch', (e) => { }); 
-        `;
-        const swBlob = new Blob([swCode], { type: 'text/javascript' });
-        const swUrl = URL.createObjectURL(swBlob);
-
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register(swUrl).catch(err => console.log("SW Error:", err));
-        }
-
-        let deferredPrompt = null;
-        const installBtn = document.getElementById('installBtn');
-
-        // Escucha el evento oficial del navegador para instalar la app
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
+    // LÓGICA DE INSTALACIÓN (PWA)
+    // ==========================================
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('Service Worker registrado', reg))
+                .catch(err => console.log('Error SW:', err));
         });
+    }
 
-        // Configuración manual del botón para que te avise si falta algún requisito
-        installBtn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    console.log('El usuario instaló la app');
-                    installBtn.classList.add('hidden'); // Lo ocultamos si se instala con éxito
-                }
-                deferredPrompt = null;
-            } else {
-                // Mensaje si no se cumplen las reglas del navegador
-                alert("⚠️ Para instalar la aplicación necesitas:\n1. Abrir esta página en Chrome o Edge (no en Safari modo incógnito).\n2. Tener la página alojada en un servidor web seguro (HTTPS) o localhost.\n3. No tenerla ya instalada.");
+    let deferredPrompt = null;
+    const installBtn = document.getElementById('installBtn');
+
+    // Escucha el evento oficial del navegador para instalar la app
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBtn.classList.remove('hidden'); // Aparece el botón de instalar
+    });
+
+    // Configuración manual del botón
+    installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                console.log('El usuario instaló la app');
+                installBtn.classList.add('hidden'); // Lo ocultamos si se instala con éxito
             }
-        });
-
-        // Cuando la instalación finaliza, lo ocultamos definitivamente
-        window.addEventListener('appinstalled', () => {
-            installBtn.classList.add('hidden');
             deferredPrompt = null;
-            console.log('PWA instalada correctamente');
-        });
+        } else {
+            // Mensaje si no se cumplen las reglas del navegador
+            alert("⚠️ Para instalar la aplicación necesitas:\n1. Abrir esta página en Chrome o Edge (no en Safari modo incógnito).\n2. Tener la página alojada en un servidor web seguro (HTTPS) o localhost.\n3. Asegurarte de que GitHub haya cargado los archivos manifest.json y sw.js.");
+        }
+    });
 
-    </script>
+    // Cuando la instalación finaliza, lo ocultamos definitivamente
+    window.addEventListener('appinstalled', () => {
+        installBtn.classList.add('hidden');
+        deferredPrompt = null;
+        console.log('PWA instalada correctamente');
+    });
+
+</script>
 </body>
 </html>
