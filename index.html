@@ -52,10 +52,13 @@
 <body class="min-h-screen text-slate-800 p-4 md:p-8">
 
     <div class="max-w-4xl mx-auto">
-        <!-- Encabezado -->
-        <header class="text-center mb-8 mt-4">
+        <!-- Encabezado con Logo -->
+        <header class="text-center mb-8 mt-4 flex flex-col items-center">
+            
+            <!-- Logo de la empresa con esquinas redondeadas -->
+            <img src="Logo.png" alt="JA Producciones Logo" class="w-32 h-32 object-cover rounded-3xl shadow-xl mb-5 border-4 border-white" onerror="this.style.display='none'">
+
             <h1 class="text-4xl font-extrabold text-slate-900 mb-3 tracking-tight flex items-center justify-center gap-3">
-                <i data-lucide="brain-circuit" class="text-blue-500 w-10 h-10"></i>
                 Kit de Texto con IA
             </h1>
             <p class="text-slate-500 text-lg max-w-2xl mx-auto">
@@ -106,9 +109,10 @@
                             </div>
                             <div>
                                 <label for="levelSlider" class="block text-sm font-semibold text-slate-700 mb-2">
-                                    Nivel de Humanización: <span id="levelValue" class="text-blue-600 font-bold">8</span>
+                                    Nivel de Humanización: <span id="levelValue" class="text-blue-600 font-bold">10</span>
                                 </label>
-                                <input type="range" id="levelSlider" min="1" max="10" value="8" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer mt-2">
+                                <!-- Nivel inicial cambiado a 10 por defecto -->
+                                <input type="range" id="levelSlider" min="1" max="10" value="10" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer mt-2">
                                 <div class="flex justify-between text-xs text-slate-400 mt-1">
                                     <span>Ligero</span>
                                     <span>Extremo</span>
@@ -223,8 +227,8 @@
 
         </main>
         
-        <footer class="text-center mt-8 text-slate-400 text-sm">
-            <p>Impulsado por Gemini AI</p>
+        <footer class="text-center mt-8 text-slate-400 text-sm font-medium">
+            <p>Impulsado por Gemini AI | JA Producciones</p>
         </footer>
     </div>
 
@@ -286,7 +290,7 @@
             estadoCargando(true, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', 'Analizando y humanizando tu texto...', 'blue');
             mostrarMensaje('statusMessage', "", "none");
 
-            // ¡NUEVO PROMPT SUPER AGRESIVO PARA EVADIR DETECTORES!
+            // PROMPT SUPER AGRESIVO PARA EVADIR DETECTORES
             const systemPrompt = `Eres un experto redactor humano y "ghostwriter". Tu objetivo absoluto es reescribir este texto para que sea IMPOSIBLE que un detector de IA (como GPTZero o Turnitin) sepa que fue generado por máquina.
             
             Reglas CRÍTICAS de evasión:
