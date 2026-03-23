@@ -51,7 +51,7 @@
 </head>
 <body class="min-h-screen text-slate-800 p-4 md:p-8">
 
-    <!-- Botón de Instalar App (Oculto por defecto, se muestra si el navegador lo permite) -->
+    <!-- Botón de Instalar App -->
     <button id="installBtn" class="hidden fixed top-4 right-4 z-50 bg-slate-900 text-white px-5 py-2.5 rounded-full font-bold shadow-lg hover:bg-slate-800 transition-all flex items-center gap-2 border-2 border-slate-700">
         <i data-lucide="download" class="w-4 h-4"></i> Instalar App
     </button>
@@ -60,7 +60,7 @@
         <!-- Encabezado con Logo -->
         <header class="text-center mb-8 mt-4 flex flex-col items-center">
             
-            <!-- Logo de la empresa con esquinas redondeadas -->
+            <!-- Logo de la empresa -->
             <img src="Logo.png" alt="JA Producciones Logo" class="w-32 h-32 object-cover rounded-3xl shadow-xl mb-5 border-4 border-white" onerror="this.style.display='none'">
 
             <h1 class="text-4xl font-extrabold text-slate-900 mb-3 tracking-tight flex items-center justify-center gap-3">
@@ -90,7 +90,7 @@
             <div id="humanizerTab" class="tab-content active">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     
-                    <!-- Columna Izquierda: Entrada de datos -->
+                    <!-- Columna Izquierda -->
                     <div class="flex flex-col gap-4">
                         <div>
                             <label for="inputText" class="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
@@ -101,7 +101,7 @@
                                 placeholder="Pega aquí el texto que deseas humanizar..."></textarea>
                         </div>
 
-                        <!-- Controles de Configuración -->
+                        <!-- Controles -->
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label for="toneSelect" class="block text-sm font-semibold text-slate-700 mb-2">Tono</label>
@@ -116,7 +116,6 @@
                                 <label for="levelSlider" class="block text-sm font-semibold text-slate-700 mb-2">
                                     Nivel de Humanización: <span id="levelValue" class="text-blue-600 font-bold">10</span>
                                 </label>
-                                <!-- Nivel inicial cambiado a 10 por defecto -->
                                 <input type="range" id="levelSlider" min="1" max="10" value="10" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer mt-2">
                                 <div class="flex justify-between text-xs text-slate-400 mt-1">
                                     <span>Ligero</span>
@@ -125,18 +124,17 @@
                             </div>
                         </div>
 
-                        <!-- Botón de Acción -->
+                        <!-- Botón -->
                         <button id="humanizeBtn" onclick="procesarTexto()" 
                             class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-xl transition-colors shadow-sm flex justify-center items-center gap-2 mt-2">
                             <i data-lucide="wand-2" class="w-5 h-5"></i>
                             <span>Humanizar Texto</span>
                         </button>
                         
-                        <!-- Mensaje de error/estado -->
                         <div id="statusMessage" class="hidden text-sm p-3 rounded-lg mt-2 text-center font-medium"></div>
                     </div>
 
-                    <!-- Columna Derecha: Resultado -->
+                    <!-- Columna Derecha -->
                     <div class="flex flex-col gap-4">
                         <div class="flex justify-between items-end mb-2">
                             <label class="block text-sm font-semibold text-slate-700 flex items-center gap-2">
@@ -147,7 +145,6 @@
                             </button>
                         </div>
                         
-                        <!-- Área de Resultado -->
                         <div id="resultArea" class="w-full h-full min-h-[250px] rounded-xl border border-slate-200 bg-slate-50 p-4 text-slate-700 relative overflow-y-auto">
                             <p id="placeholderText" class="text-slate-400 italic text-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full">
                                 El resultado aparecerá aquí...
@@ -164,7 +161,7 @@
             <div id="detectorTab" class="tab-content">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     
-                    <!-- Columna Izquierda: Entrada de datos -->
+                    <!-- Columna Izquierda -->
                     <div class="flex flex-col gap-4">
                         <div>
                             <label for="detectorInput" class="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
@@ -175,38 +172,36 @@
                                 placeholder="Pega el texto aquí para saber si fue escrito por IA o por un humano..."></textarea>
                         </div>
 
-                        <!-- Botón de Acción -->
+                        <!-- Botón -->
                         <button id="detectBtn" onclick="analizarIA()" 
                             class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3.5 px-6 rounded-xl transition-colors shadow-sm flex justify-center items-center gap-2 mt-2">
                             <i data-lucide="scan-line" class="w-5 h-5"></i>
                             <span>Escanear Texto</span>
                         </button>
                         
-                        <!-- Mensaje de error/estado -->
                         <div id="detectorStatusMessage" class="hidden text-sm p-3 rounded-lg mt-2 text-center font-medium"></div>
                     </div>
 
-                    <!-- Columna Derecha: Resultado del Detector -->
+                    <!-- Columna Derecha -->
                     <div class="flex flex-col gap-4">
                         <label class="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
                             <i data-lucide="bar-chart-2" class="w-4 h-4 text-purple-500"></i> Resultados del Análisis
                         </label>
                         
-                        <!-- Área de Resultado -->
                         <div id="detectorResultArea" class="w-full h-full min-h-[250px] rounded-xl border border-slate-200 bg-slate-50 p-6 flex flex-col justify-center items-center relative">
                             
                             <p id="detectorPlaceholder" class="text-slate-400 italic text-center">
                                 Esperando texto para escanear...
                             </p>
 
-                            <!-- Medidor de Resultados (Oculto por defecto) -->
+                            <!-- Medidor -->
                             <div id="detectorGauge" class="hidden w-full flex flex-col items-center">
                                 <div class="text-center mb-4">
                                     <span id="aiPercentage" class="text-6xl font-black text-slate-800">0%</span>
                                     <p class="text-slate-500 font-medium uppercase tracking-wider text-sm mt-1">Probabilidad de IA</p>
                                 </div>
 
-                                <!-- Barra de progreso -->
+                                <!-- Barra -->
                                 <div class="w-full bg-slate-200 rounded-full h-4 mb-2 overflow-hidden">
                                     <div id="aiProgressBar" class="bg-red-500 h-4 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
                                 </div>
@@ -216,7 +211,7 @@
                                     <span>IA</span>
                                 </div>
 
-                                <!-- Caja de explicación -->
+                                <!-- Explicación -->
                                 <div class="w-full bg-white p-4 rounded-lg border border-slate-100 shadow-sm">
                                     <h4 class="text-sm font-bold text-slate-700 mb-1 flex items-center gap-1">
                                         <i data-lucide="info" class="w-4 h-4"></i> Veredicto:
@@ -242,34 +237,56 @@
         lucide.createIcons();
 
         // ==========================================
-        // CONFIGURACIÓN DE LA API (Pre-configurada)
+        // CONFIGURACIÓN DE LA API
         // ==========================================
-        // Tu clave exacta ya está aquí incrustada.
-        const apiKey = "AIzaSyC_6L3wRekCriDBaQy0BKlxsxvbZbwET4"; 
-        
-        // Usamos el modelo estable que es 100% compatible con claves personales
-        const modeloIA = "gemini-1.5-flash";
-        
-        // Construimos la URL y usamos el limpiador para evitar errores 404 por espacios ocultos al copiar
-        let API_URL = "https://generativelanguage.googleapis.com/v1beta/models/" + modeloIA + ":generateContent?key=" + apiKey;
-        API_URL = API_URL.replace(/\s+/g, '');
+        // Dejamos la clave vacía para que funcione mágicamente en esta ventana de prueba.
+        // NOTA: Para usarlo en tu propio servidor web, deberás poner aquí la API Key de
+        // una cuenta de Google que tenga la facturación validada (para evitar el bloqueo regional).
+        const apiKey = "AIzaSyDrNLSVDhZruIzkReKE27iRjQtWQg4QeYM"; 
+        const modeloIA = "gemini-2.5-flash";
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${modeloIA}:generateContent?key=${apiKey}`;
+
+        // Función con reintentos exponenciales para mayor estabilidad
+        async function hacerPeticionIA(payload) {
+            const tiemposDeEspera = [1000, 2000, 4000, 8000, 16000];
+            let ultimoError = new Error("Error de red");
+
+            for (let i = 0; i < 5; i++) {
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.ok) {
+                        return await response.json();
+                    }
+
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || `HTTP Error ${response.status}`);
+                } catch (error) {
+                    ultimoError = error;
+                    if (i === 4) break; // Si fallan los 5 intentos, salimos del ciclo
+                    await new Promise(resolve => setTimeout(resolve, tiemposDeEspera[i]));
+                }
+            }
+            throw ultimoError; // Lanzamos el último error capturado
+        }
 
         // ==========================================
         // LÓGICA DE PESTAÑAS
         // ==========================================
         function switchTab(tabName) {
-            // Ocultar todas las pestañas
             document.getElementById('humanizerTab').classList.remove('active');
             document.getElementById('detectorTab').classList.remove('active');
             
-            // Resetear estilos de los botones
             const btnHumanizer = document.getElementById('btnHumanizer');
             const btnDetector = document.getElementById('btnDetector');
             
             btnHumanizer.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all";
             btnDetector.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all";
 
-            // Activar la pestaña seleccionada
             if (tabName === 'humanizer') {
                 document.getElementById('humanizerTab').classList.add('active');
                 btnHumanizer.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-blue-600 text-white shadow-md transition-all";
@@ -280,7 +297,7 @@
         }
 
         // ==========================================
-        // LÓGICA DEL HUMANIZADOR (Pestaña 1)
+        // LÓGICA DEL HUMANIZADOR
         // ==========================================
         const levelSlider = document.getElementById('levelSlider');
         const levelValue = document.getElementById('levelValue');
@@ -303,7 +320,6 @@
             estadoCargando(true, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', 'Analizando y humanizando tu texto...', 'blue');
             mostrarMensaje('statusMessage', "", "none");
 
-            // PROMPT SUPER AGRESIVO PARA EVADIR DETECTORES
             const systemPrompt = `Eres un experto redactor humano y "ghostwriter". Tu objetivo absoluto es reescribir este texto para que sea IMPOSIBLE que un detector de IA (como GPTZero o Turnitin) sepa que fue generado por máquina.
             
             Reglas CRÍTICAS de evasión:
@@ -321,12 +337,7 @@
             };
 
             try {
-                const responseData = await fetchConReintentos(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
+                const responseData = await hacerPeticionIA(payload);
                 const textoFinal = responseData.candidates?.[0]?.content?.parts?.[0]?.text;
 
                 if (textoFinal) {
@@ -343,7 +354,7 @@
         }
 
         // ==========================================
-        // LÓGICA DEL DETECTOR DE IA (Pestaña 2)
+        // LÓGICA DEL DETECTOR DE IA
         // ==========================================
         async function analizarIA() {
             const inputText = document.getElementById('detectorInput').value.trim();
@@ -353,12 +364,10 @@
                 return;
             }
 
-            // Preparar UI del detector
             estadoCargando(true, 'detectBtn', 'detectorResultArea', 'detectorPlaceholder', 'detectorGauge', null, 'Escaneando patrones de IA...', 'slate');
             mostrarMensaje('detectorStatusMessage', "", "none");
-            document.getElementById('detectorGauge').classList.add('hidden'); // Ocultar gráfica previa
+            document.getElementById('detectorGauge').classList.add('hidden'); 
 
-            // PROMPT DEL DETECTOR CALIBRADO PARA EVITAR FALSOS POSITIVOS
             const systemPrompt = `Eres un detector avanzado de Inteligencia Artificial. Analiza el texto y determina la probabilidad exacta de que haya sido generado por IA.
             
             Busca:
@@ -379,15 +388,9 @@
             };
 
             try {
-                const responseData = await fetchConReintentos(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
+                const responseData = await hacerPeticionIA(payload);
 
                 let respuestaTexto = responseData.candidates?.[0]?.content?.parts?.[0]?.text || "";
-                
-                // Limpiar posibles etiquetas markdown que la IA a veces añade (```json ... ```)
                 respuestaTexto = respuestaTexto.replace(/```json/gi, '').replace(/```/g, '').trim();
                 
                 let resultadoJSON;
@@ -421,59 +424,31 @@
             const progressBar = document.getElementById('aiProgressBar');
             const textExplicacion = document.getElementById('aiExplanation');
 
-            // Actualizar textos
             spanPercentage.textContent = `${numPercentage}%`;
             textExplicacion.textContent = explicacion;
 
-            // Animar barra
             setTimeout(() => {
                 progressBar.style.width = `${numPercentage}%`;
             }, 100);
 
-            // Cambiar colores según el riesgo
             progressBar.className = "h-4 rounded-full transition-all duration-1000 ease-out";
             spanPercentage.className = "text-6xl font-black";
             
             if (numPercentage <= 20) {
-                // Humano
                 progressBar.classList.add('bg-green-500');
                 spanPercentage.classList.add('text-green-600');
             } else if (numPercentage <= 60) {
-                // Mixto / Dudoso
                 progressBar.classList.add('bg-orange-400');
                 spanPercentage.classList.add('text-orange-500');
             } else {
-                // Altamente IA
                 progressBar.classList.add('bg-red-500');
                 spanPercentage.classList.add('text-red-600');
             }
         }
 
         // ==========================================
-        // FUNCIONES COMPARTIDAS
+        // FUNCIONES COMPARTIDAS (UI)
         // ==========================================
-        async function fetchConReintentos(url, options, maxReintentos = 3) {
-            const tiemposDeEspera = [1000, 2000, 4000];
-            for (let i = 0; i < maxReintentos; i++) {
-                try {
-                    const response = await fetch(url, options);
-                    if (!response.ok) {
-                        let errorMsg = `HTTP Error ${response.status}`;
-                        try {
-                            const errorData = await response.json();
-                            if (errorData.error && errorData.error.message) errorMsg = errorData.error.message;
-                        } catch (e) {}
-                        throw new Error(errorMsg);
-                    }
-                    return await response.json();
-                } catch (error) {
-                    if (i === maxReintentos - 1) throw error;
-                    await new Promise(resolve => setTimeout(resolve, tiemposDeEspera[i]));
-                }
-            }
-        }
-
-        // Función dinámica para manejar los estados de carga de ambas pestañas
         function estadoCargando(cargando, btnId, areaId, placeholderId, contentId, copyBtnId, msjCarga, color, originalText, originalIcon) {
             const btn = document.getElementById(btnId);
             const area = document.getElementById(areaId);
@@ -533,33 +508,39 @@
 
         function copiarAlPortapapeles(sourceId, btnId) {
             const textoCopia = document.getElementById(sourceId).textContent;
-            const areaTemporal = document.createElement("textarea");
-            areaTemporal.value = textoCopia;
-            document.body.appendChild(areaTemporal);
-            areaTemporal.select();
             
-            const copyBtn = document.getElementById(btnId);
-            try {
-                document.execCommand('copy');
-                const originalHTML = copyBtn.innerHTML;
-                copyBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-green-600"></i> <span class="text-green-600">¡Copiado!</span>';
-                lucide.createIcons();
-                
-                setTimeout(() => {
-                    copyBtn.innerHTML = originalHTML;
-                    lucide.createIcons();
-                }, 2000);
-            } catch (err) {
-                alert("No se pudo copiar el texto");
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(textoCopia).then(() => animarCopiado(btnId));
+            } else {
+                const areaTemporal = document.createElement("textarea");
+                areaTemporal.value = textoCopia;
+                document.body.appendChild(areaTemporal);
+                areaTemporal.select();
+                try {
+                    document.execCommand('copy');
+                    animarCopiado(btnId);
+                } catch (err) {
+                    mostrarMensaje('statusMessage', "No se pudo copiar el texto", "error");
+                }
+                document.body.removeChild(areaTemporal);
             }
-            document.body.removeChild(areaTemporal);
+        }
+
+        function animarCopiado(btnId) {
+            const copyBtn = document.getElementById(btnId);
+            const originalHTML = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-green-600"></i> <span class="text-green-600">¡Copiado!</span>';
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                copyBtn.innerHTML = originalHTML;
+                lucide.createIcons();
+            }, 2000);
         }
 
         // ==========================================
         // LÓGICA DE INSTALACIÓN (PWA)
         // ==========================================
-        
-        // 1. Crear Manifiesto Dinámico (para que sea instalable sin archivos extra)
         const manifest = {
             name: "Kit de Texto con IA - JA Producciones",
             short_name: "Kit IA",
@@ -581,7 +562,6 @@
         manifestLink.href = manifestUrl;
         document.head.appendChild(manifestLink);
 
-        // 2. Crear Service Worker Dinámico (Requisito estricto para instalar)
         const swCode = `
             self.addEventListener('install', (e) => { self.skipWaiting(); });
             self.addEventListener('activate', (e) => { e.waitUntil(clients.claim()); });
@@ -594,30 +574,23 @@
             navigator.serviceWorker.register(swUrl).catch(err => console.log("SW Error:", err));
         }
 
-        // 3. Lógica del Botón de Instalación
         let deferredPrompt;
         const installBtn = document.getElementById('installBtn');
 
         window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevenir que Chrome muestre el prompt nativo inmediatamente
             e.preventDefault();
-            // Guardar el evento para dispararlo cuando el usuario haga clic
             deferredPrompt = e;
-            // Mostrar nuestro botón negro y elegante en la esquina superior
             installBtn.classList.remove('hidden');
         });
 
         installBtn.addEventListener('click', async () => {
             if (deferredPrompt) {
-                // Mostrar el cuadro de instalación nativo del sistema
                 deferredPrompt.prompt();
-                // Esperar a que el usuario responda
                 const { outcome } = await deferredPrompt.userChoice;
                 if (outcome === 'accepted') {
                     console.log('El usuario instaló la app');
                 }
                 deferredPrompt = null;
-                // Ocultar el botón después de la decisión
                 installBtn.classList.add('hidden');
             }
         });
