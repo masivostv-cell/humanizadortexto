@@ -239,7 +239,7 @@
         // Inicializar iconos
         lucide.createIcons();
 
-        // ==========================================
+     // ==========================================
         // CONFIGURACIÓN DE LA API (MÉTODO ANTI-BLOQUEO GITHUB)
         // ==========================================
         // Los robots de Google escanean GitHub buscando textos que empiecen con "AIza...".
@@ -261,8 +261,8 @@
 
         // Función con reintentos exponenciales para mayor estabilidad
         async function hacerPeticionIA(payload) {
-            if (!apiKey || apiKey.length < 20) {
-                throw new Error("⚠️ Falta la API Key o está incompleta. Por favor, genera una nueva y divídela en las 3 variables (parte1, parte2, parte3).");
+            if (!apiKey) {
+                throw new Error("⚠️ Falta la API Key. Por favor, genera una nueva en Google AI Studio y pégala en el código.");
             }
 
             const tiemposDeEspera = [1000, 2000, 4000, 8000, 16000];
@@ -340,15 +340,19 @@
             estadoCargando(true, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', 'Analizando y humanizando tu texto...', 'blue');
             mostrarMensaje('statusMessage', "", "none");
 
-            const systemPrompt = `Eres un experto redactor humano, periodista y "ghostwriter" COLOMBIANO. Tu objetivo es reescribir este texto para que sea IMPOSIBLE que un detector de IA sepa que fue generado por máquina, dándole un toque humano, natural y con español neutro de Colombia.
+            const systemPrompt = `Eres un estudiante universitario colombiano de últimos semestres redactando un ensayo. Tu objetivo es reescribir este texto evadiendo al 100% los detectores de IA (debes sacar 5% o menos).
+
+            Para lograrlo, DEBES usar el mismo estilo conversacional y asimétrico que engaña a los detectores, pero manteniendo un vocabulario apto para un trabajo universitario.
+
+            Reglas CRÍTICAS para lograr el 5%:
+            1. CONVERSACIONAL PERO ACADÉMICO: Usa el tono didáctico y directo ("uno como profesional", "la realidad práctica es que", "hay que tener en cuenta que"). SIN EMBARGO, están PROHIBIDAS las analogías infantiles o de comida (nada de "tortas") y la jerga informal (nada de "lío", "ojo", "chévere"). Usa un tono de exposición universitaria.
+            2. IMPERFECCIÓN ESTILÍSTICA (EL SECRETO): El detector te atrapa si tu flujo es impecable. Escribe de forma un poco más "atropellada" o natural. Haz una oración un poco más larga de lo normal donde divagues un poco explicando el punto, y luego córtala de golpe con una frase corta. Los humanos damos rodeos.
+            3. PREGUNTAS RETÓRICAS: Hazte al menos una o dos preguntas en el texto y respóndelas tú mismo (Ej: "¿Qué implica esto realmente en la auditoría? Básicamente que..."). 
+            4. ESTRUCTURA CAÓTICA: Nada de listas ordenadas. Nada de un párrafo perfecto por concepto. Mezcla dos ideas en un párrafo largo, y si es necesario usa frases de transición como "Volviendo al punto anterior..." o "Para entender esto mejor...".
+            5. CERO FORMATO: Solo prosa fluida. Cero asteriscos, cero viñetas, cero títulos como "Conclusión" o numerales (##). 
             
-            Reglas CRÍTICAS de evasión y estilo:
-            1. TONO Y ACENTO: '${tono}'. Usa un español neutro pero con claro ritmo y vocabulario colombiano (usa "ustedes" o "tú", evita el "vosotros" a toda costa, usa "computador" no "ordenador", "celular" no "móvil").
-            2. CAOS ESTRUCTURAL (Burstiness): Alterna drásticamente. Escribe una oración de 3 palabras. Luego una de 30. Crea párrafos de una sola línea. A los detectores les asusta el formato irregular.
-            3. PALABRAS PROHIBIDAS (Clichés de IA): NUNCA uses "En resumen", "En conclusión", "Es importante destacar", "Un tapiz", "Vertiginoso", "Sin embargo", "Además", "Crucial", "Adentrémonos".
-            4. CONECTORES COLOMBIANOS Y DEFECTOS: Usa transiciones súper naturales que usaría un escritor colombiano ("Pues,", "La verdad es que,", "Es que,", "De hecho,", "Fíjate que,", "Total que,"). Los humanos a veces divagan un poco. Usa preguntas retóricas.
-            5. NIVEL DE EXPRESIÓN: Nivel ${nivel}/10. Si es mayor a 7, rompe las reglas tradicionales, sé muy conversacional, ligeramente asimétrico y cercano.
-            
+            Nivel de humanización: ${nivel}/10.
+
             Devuelve ÚNICAMENTE el texto reescrito, sin comillas, introducciones ni comentarios.`;
 
             const payload = {
