@@ -6,7 +6,7 @@
     <link rel="apple-touch-icon" href="Logo.png">    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kit de IA: Humanizador y Detector</title>
+    <title>Kit de IA: Profesional y Avanzado</title>
     <!-- Tailwind CSS para los estilos -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons para los iconos -->
@@ -69,17 +69,20 @@
             <img src="Logo.png" alt="JA Producciones Logo" class="w-32 h-32 object-cover rounded-3xl shadow-xl mb-5 border-4 border-white" onerror="this.style.display='none'">
 
             <h1 class="text-4xl font-extrabold text-slate-900 mb-3 tracking-tight flex items-center justify-center gap-3">
-                Kit de Texto con IA
+                Kit de IA Profesional
             </h1>
             <p class="text-slate-500 text-lg max-w-2xl mx-auto">
-                Analiza textos para detectar Inteligencia Artificial y transfórmalos para que suenen 100% humanos.
+                Humaniza, detecta IA y resuelve documentos con un nivel académico y profesional avanzado.
             </p>
         </header>
 
         <!-- Navegación de Pestañas -->
-        <div class="flex justify-center gap-4 mb-6">
+        <div class="flex justify-center gap-4 mb-6 flex-wrap">
             <button onclick="switchTab('humanizer')" id="btnHumanizer" class="flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-blue-600 text-white shadow-md transition-all">
                 <i data-lucide="wand-2" class="w-4 h-4"></i> Humanizador
+            </button>
+            <button onclick="switchTab('docs')" id="btnDocs" class="flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">
+                <i data-lucide="book-open" class="w-4 h-4"></i> Asistente de Tareas
             </button>
             <button onclick="switchTab('detector')" id="btnDetector" class="flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">
                 <i data-lucide="search" class="w-4 h-4"></i> Detector de IA
@@ -103,19 +106,19 @@
                             </label>
                             <textarea id="inputText" rows="8" 
                                 class="w-full rounded-xl border border-slate-200 p-4 text-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none outline-none"
-                                placeholder="Pega aquí el texto que deseas humanizar..."></textarea>
+                                placeholder="Pega aquí el texto que deseas elevar a nivel profesional..."></textarea>
                         </div>
 
                         <!-- Controles de Configuración -->
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                            <!-- Selector de Motor (AHORA CON GROQ) -->
+                            <!-- Selector de Motor -->
                             <div>
                                 <label for="aiEngineSelect" class="block text-sm font-semibold text-blue-700 mb-2 flex items-center gap-1">
                                     <i data-lucide="cpu" class="w-4 h-4"></i> Motor IA
                                 </label>
                                 <select id="aiEngineSelect" class="w-full rounded-lg border border-slate-200 p-2.5 text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none bg-white font-medium">
                                     <option value="gemini">Gemini 2.5</option>
-                                    <option value="groq">Llama 3 (Gratis)</option>
+                                    <option value="groq">Llama 3.3 (Gratis)</option>
                                 </select>
                             </div>
                             
@@ -123,10 +126,9 @@
                             <div>
                                 <label for="toneSelect" class="block text-sm font-semibold text-slate-700 mb-2">Tono</label>
                                 <select id="toneSelect" class="w-full rounded-lg border border-slate-200 p-2.5 text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none bg-white">
-                                    <option value="casual">Casual / Relajado</option>
-                                    <option value="profesional">Profesional</option>
-                                    <option value="blog">Estilo Blog</option>
-                                    <option value="academico">Académico</option>
+                                    <option value="avanzado">Profesional Avanzado</option>
+                                    <option value="academico">Académico Riguroso</option>
+                                    <option value="ejecutivo">Resumen Ejecutivo</option>
                                 </select>
                             </div>
 
@@ -157,7 +159,7 @@
                     <div class="flex flex-col gap-4">
                         <div class="flex justify-between items-end mb-2">
                             <label class="block text-sm font-semibold text-slate-700 flex items-center gap-2">
-                                <i data-lucide="user-check" class="w-4 h-4 text-green-500"></i> Texto Humanizado
+                                <i data-lucide="user-check" class="w-4 h-4 text-green-500"></i> Texto Humanizado (Nivel Experto)
                             </label>
                             <button onclick="copiarAlPortapapeles('outputText', 'copyBtn')" id="copyBtn" class="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1 transition-colors hidden bg-blue-50 px-3 py-1 rounded-lg">
                                 <i data-lucide="copy" class="w-4 h-4"></i> Copiar
@@ -166,7 +168,7 @@
                         
                         <div id="resultArea" class="w-full h-full min-h-[250px] rounded-xl border border-slate-200 bg-slate-50 p-6 text-slate-700 relative overflow-y-auto leading-relaxed text-lg">
                             <p id="placeholderText" class="text-slate-400 italic text-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full">
-                                El resultado aparecerá aquí...
+                                El resultado intelectualmente elevado aparecerá aquí...
                             </p>
                             <div id="outputText" class="hidden whitespace-pre-wrap"></div>
                         </div>
@@ -174,9 +176,88 @@
                 </div>
             </div>
 
-            <!-- ========================================== -->
-            <!-- PESTAÑA 2: DETECTOR DE IA                  -->
-            <!-- ========================================== -->
+            <!-- ============================================== -->
+            <!-- PESTAÑA 2: ASISTENTE DE DOCUMENTOS             -->
+            <!-- ============================================== -->
+            <div id="docsTab" class="tab-content">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <div class="flex flex-col gap-5">
+                        <!-- Subida de Archivo -->
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                                <i data-lucide="file-up" class="w-4 h-4 text-indigo-500"></i> Sube tu Documento
+                            </label>
+                            <div class="flex items-center justify-center w-full">
+                                <label for="fileInput" class="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-300 border-dashed rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100 transition-all">
+                                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                        <i data-lucide="upload-cloud" class="w-8 h-8 text-slate-400 mb-2"></i>
+                                        <p class="mb-1 text-sm text-slate-500 font-semibold">Clic para subir (PDF, DOCX, TXT)</p>
+                                        <p class="text-xs text-slate-400" id="fileNameDisplay">Ningún archivo seleccionado</p>
+                                    </div>
+                                    <input id="fileInput" type="file" class="hidden" accept=".pdf,.docx,.txt" onchange="actualizarNombreArchivo()" />
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Configuración -->
+                        <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label for="docEngineSelect" class="block text-sm font-semibold text-indigo-900 mb-2">🧠 Motor de IA</label>
+                                    <select id="docEngineSelect" class="w-full rounded-lg border border-indigo-200 p-2.5 text-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none bg-white shadow-sm font-medium">
+                                        <option value="gemini">Gemini (Soporta Todo)</option>
+                                        <option value="groq">Llama 3.3 (Solo Word/TXT)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="docAction" class="block text-sm font-semibold text-indigo-900 mb-2">Acción</label>
+                                    <select id="docAction" onchange="toggleDocOptions()" class="w-full rounded-lg border border-indigo-200 p-2.5 text-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none bg-white shadow-sm font-medium">
+                                        <option value="resolver">✅ Resolver Nivel Experto</option>
+                                        <option value="resumir">📝 Resumen Profesional</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div id="summaryOptions" class="hidden animation-fadeIn">
+                                <label for="summaryLength" class="block text-sm font-semibold text-indigo-900 mb-2">¿De qué tamaño quieres el resumen?</label>
+                                <input type="text" id="summaryLength" class="w-full rounded-lg border border-indigo-200 p-3 text-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none shadow-sm" placeholder="Ej: 500 palabras, 2 páginas...">
+                            </div>
+                        </div>
+
+                        <button id="docBtn" onclick="procesarDocumento()" 
+                            class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-md hover:shadow-lg flex justify-center items-center gap-2 transform hover:-translate-y-0.5">
+                            <i data-lucide="sparkles" class="w-5 h-5"></i>
+                            <span>Magia: Procesar Archivo</span>
+                        </button>
+                        
+                        <div id="docStatusMessage" class="hidden text-sm p-3 rounded-lg text-center font-medium"></div>
+                    </div>
+
+                    <div class="flex flex-col gap-4">
+                        <div class="flex justify-between items-end mb-2">
+                            <label class="block text-sm font-semibold text-slate-700 flex items-center gap-2">
+                                <i data-lucide="file-check-2" class="w-4 h-4 text-indigo-500"></i> Análisis de la IA
+                            </label>
+                            <button onclick="copiarAlPortapapeles('docOutputText', 'docCopyBtn')" id="docCopyBtn" class="text-sm font-medium text-indigo-600 hover:text-indigo-800 flex items-center gap-1 transition-colors hidden bg-indigo-50 px-3 py-1 rounded-lg">
+                                <i data-lucide="copy" class="w-4 h-4"></i> Copiar
+                            </button>
+                        </div>
+                        
+                        <div id="docResultArea" class="w-full h-full min-h-[400px] rounded-xl border border-slate-200 bg-white shadow-sm p-6 text-slate-800 relative overflow-y-auto leading-relaxed">
+                            <p id="docPlaceholder" class="text-slate-400 italic text-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full">
+                                Tu resumen o las respuestas del taller aparecerán aquí...
+                            </p>
+                            <div id="docOutputText" class="hidden whitespace-pre-wrap"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- PESTAÑA 3: DETECTOR DE IA                  -->
+            <!-- ============================================== -->
             <div id="detectorTab" class="tab-content">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     
@@ -196,7 +277,7 @@
                             <label for="detectorEngineSelect" class="text-sm font-semibold text-slate-700">Analista:</label>
                             <select id="detectorEngineSelect" class="rounded-lg border border-slate-200 p-1.5 text-slate-700 focus:ring-2 focus:ring-purple-500 outline-none bg-white text-sm font-medium">
                                 <option value="gemini">Gemini 2.5</option>
-                                <option value="groq">Llama 3 (Gratis)</option>
+                                <option value="groq">Llama 3.3 (Gratis)</option>
                             </select>
                         </div>
 
@@ -256,7 +337,7 @@
         </main>
         
         <footer class="text-center mt-8 text-slate-400 text-sm font-medium">
-            <p>Impulsado por Gemini & Llama 3 | JA Producciones</p>
+            <p>Impulsado por Gemini & Llama 3.3 | JA Producciones</p>
         </footer>
     </div>
 
@@ -299,7 +380,7 @@
                     ultimoError = error;
                     
                     if (error.message.toLowerCase().includes("quota") || error.message.includes("429")) {
-                        throw new Error("⏳ Superaste el límite gratuito de Gemini. Cambia al motor 'Llama 3 (Gratis)' en las opciones.");
+                        throw new Error("⏳ Superaste el límite gratuito de Gemini. Cambia al motor 'Llama 3.3 (Gratis)' en las opciones.");
                     }
                     if (error.message.includes("leaked")) {
                         throw new Error("❌ Esta clave de API de Gemini ha sido bloqueada. Genera una NUEVA.");
@@ -312,23 +393,21 @@
         }
 
         // ==========================================
-        // 2. CONFIGURACIÓN DE GROQ (Llama 3 - 100% Gratis)
+        // 2. CONFIGURACIÓN DE GROQ (Llama 3.3 - 100% Gratis)
         // ==========================================
-        // Clave dividida en 3 partes para evadir bots de GitHub
         const groqP1 = "gsk_0iH9JXHE487bsE";
         const groqP2 = "h4gx3MWGdyb3FY01br";
         const groqP3 = "pllXCFqyJXTwynyw9Cpo";
-        
         const groqApiKey = groqP1 + groqP2 + groqP3; 
 
         async function hacerPeticionGroq(userPrompt, systemPrompt, temperature, isJson = false) {
             if (!groqApiKey || groqApiKey === "TU_CLAVE_GROQ_AQUI") {
-                throw new Error("⚠️ Aún no has puesto tu clave de Groq. Abre console.groq.com, crea una gratis y pégala en el código.");
+                throw new Error("⚠️ Aún no has puesto tu clave de Groq.");
             }
             
             const endpoint = "https://api.groq.com/openai/v1/chat/completions";
             const body = {
-                model: "llama3-70b-8192", // Modelo súper potente y gratuito
+                model: "llama-3.3-70b-versatile",
                 messages: [
                     { role: "system", content: systemPrompt },
                     { role: "user", content: userPrompt }
@@ -361,31 +440,30 @@
             return data.choices[0].message.content;
         }
 
-
         // ==========================================
         // LÓGICA DE PESTAÑAS
         // ==========================================
         function switchTab(tabName) {
-            document.getElementById('humanizerTab').classList.remove('active');
-            document.getElementById('detectorTab').classList.remove('active');
-            
-            const btnHumanizer = document.getElementById('btnHumanizer');
-            const btnDetector = document.getElementById('btnDetector');
-            
-            btnHumanizer.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all";
-            btnDetector.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all";
+            ['humanizer', 'docs', 'detector'].forEach(tab => {
+                document.getElementById(tab + 'Tab').classList.remove('active');
+                const btn = document.getElementById('btn' + tab.charAt(0).toUpperCase() + tab.slice(1));
+                btn.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all";
+            });
+
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            const activeBtn = document.getElementById('btn' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
 
             if (tabName === 'humanizer') {
-                document.getElementById('humanizerTab').classList.add('active');
-                btnHumanizer.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-blue-600 text-white shadow-md transition-all";
-            } else {
-                document.getElementById('detectorTab').classList.add('active');
-                btnDetector.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-slate-800 text-white shadow-md transition-all";
+                activeBtn.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-blue-600 text-white shadow-md transition-all";
+            } else if (tabName === 'docs') {
+                activeBtn.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-indigo-600 text-white shadow-md transition-all";
+            } else if (tabName === 'detector') {
+                activeBtn.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-slate-800 text-white shadow-md transition-all";
             }
         }
 
         // ==========================================
-        // LÓGICA DEL HUMANIZADOR
+        // LÓGICA DEL HUMANIZADOR (TONO PROFESIONAL + HUMANO)
         // ==========================================
         const levelSlider = document.getElementById('levelSlider');
         const levelValue = document.getElementById('levelValue');
@@ -406,29 +484,34 @@
                 return;
             }
 
-            estadoCargando(true, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', `Invocando a ${engine === 'groq' ? 'Llama 3' : 'Gemini'}...`, 'blue');
+            estadoCargando(true, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', `Invocando a ${engine === 'groq' ? 'Llama 3.3' : 'Gemini'}...`, 'blue', 'Humanizar Texto', 'wand-2');
             mostrarMensaje('statusMessage', "", "none");
 
-            const systemPrompt = `Eres un estudiante universitario colombiano de últimos semestres redactando un texto normal. Objetivo: 0% de detección de IA.
-            REGLAS CRÍTICAS DE SUPERVIVENCIA:
-            1. REGLA ANTI-POESÍA: ¡PROHIBIDO USAR LENGUAJE POÉTICO O DRAMÁTICO! Prohibido: "incesante marea", "fuerza imparable", "venerado santuario". Sé DIRECTO y TERRENAL.
-            2. SIMPLICIDAD: Ve al grano. No adornes cada palabra.
-            3. CERO MARKDOWN: 100% texto plano sin asteriscos (**).
-            4. BURSTINESS: Alterna oraciones largas con oraciones muy cortas de 3 palabras.
-            5. LISTA NEGRA: Prohibido: "En conclusión", "Crucial", "Vital", "Además", "Sin embargo", "En la era digital".
-            Estilo: ${tono}. Caos: ${nivel}. ENTREGA SOLO EL TEXTO REESCRITO SIN COMILLAS.`;
+            // PROMPT OPTIMIZADO PARA LLAMA Y GEMINI CON RETENCIÓN DE ESTRUCTURA
+            const systemPrompt = `Eres un profesional experto y analista senior. Tu ÚNICA misión es reescribir el texto proporcionado para que tenga 0% de detección de IA, elevando la calidad técnica pero sonando 100% como un humano real.
 
-            const temperature = 0.25 + (nivel * 0.045); 
+            EL GRAN ERROR DE LAS IA: Cuando se les pide ser "profesionales", empiezan a escribir con jerga corporativa aburrida y predecible. Los detectores marcan esto como 100% IA. TÚ NO HARÁS ESTO.
+
+            REGLAS CRÍTICAS DE SUPERVIVENCIA:
+            1. HABLA DIRECTO Y EN VOZ ACTIVA: Escribe como un consultor directo y práctico, no como un libro de texto anticuado.
+            2. BURSTINESS (ASIMETRÍA ORGÁNICA): Intercala una explicación técnica con una afirmación contundente y corta. 
+            3. ANTI-CLICHÉS: Prohibido usar: "En conclusión", "Crucial", "Vital", "Cabe destacar", "Además", "Sin embargo". Usa conectores naturales: "Pero", "Ahora bien", "La realidad es que".
+            4. ESTRUCTURA Y FORMATO (¡NUEVO Y VITAL!): ESTÁ ESTRICTAMENTE PROHIBIDO usar código Markdown para negritas (nada de asteriscos **), ni usar guiones (-) para listas. SIN EMBARGO, DEBES CONSERVAR LA ESTRUCTURA ORIGINAL. Si el texto original tiene párrafos separados o una lista numerada (1., 2., 3.), MANTÉN LOS PÁRRAFOS Y LOS NÚMEROS. Respeta los saltos de línea para que el texto siga ordenado.
+            
+            Estilo solicitado: ${tono}.
+            Nivel de imprevisibilidad humana: ${nivel}/10.
+            ENTREGA ÚNICAMENTE EL TEXTO REESCRITO SIN COMILLAS NI INTRODUCCIONES.`;
+
+            // Llama 3 necesita un poco más de temperatura para romper sus propios patrones predecibles
+            const temperature = 0.4 + (nivel * 0.05); 
             let textoFinal = "";
 
             try {
                 if (engine === 'groq') {
-                    // Llamada a Llama 3 (Groq API)
-                    textoFinal = await hacerPeticionGroq(`Reescribe esto aplicando las reglas de humanización:\n\n${inputText}`, systemPrompt, temperature);
+                    textoFinal = await hacerPeticionGroq(`Reescribe esto aplicando las reglas de experto pero CONSERVA LOS PÁRRAFOS Y LISTAS:\n\n${inputText}`, systemPrompt, temperature);
                 } else {
-                    // Llamada a Google Gemini
                     const payload = {
-                        contents: [{ parts: [{ text: `Reescribe esto:\n\n${inputText}` }] }],
+                        contents: [{ parts: [{ text: `Reescribe esto aplicando las reglas de experto pero CONSERVA LOS PÁRRAFOS Y LISTAS:\n\n${inputText}` }] }],
                         systemInstruction: { parts: [{ text: systemPrompt }] },
                         generationConfig: { temperature: temperature, topP: 0.95 }
                     };
@@ -437,9 +520,10 @@
                 }
 
                 if (textoFinal) {
-                    textoFinal = textoFinal.replace(/(\*\*|\*|#|`|_)/g, '').replace(/  +/g, ' ').trim();
+                    // Cuidamos de no eliminar los saltos de línea (\n) durante la limpieza de Markdown
+                    textoFinal = textoFinal.replace(/(\*\*|\*|#|`|_)/g, '').trim();
                     mostrarResultado(textoFinal, 'resultArea', 'placeholderText', 'outputText', 'copyBtn');
-                    mostrarMensaje('statusMessage', "¡Texto humanizado con éxito!", "success");
+                    mostrarMensaje('statusMessage', "¡Análisis profesional y humano generado!", "success");
                 }
             } catch (error) {
                 mostrarMensaje('statusMessage', `Error: ${error.message}`, "error");
@@ -447,6 +531,105 @@
                 estadoCargando(false, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', '', 'blue', 'Humanizar Texto', 'wand-2');
             }
         }
+
+        // ==========================================
+        // LÓGICA DEL ASISTENTE DE DOCUMENTOS
+        // ==========================================
+        function actualizarNombreArchivo() {
+            const input = document.getElementById('fileInput');
+            const display = document.getElementById('fileNameDisplay');
+            if (input.files.length > 0) {
+                display.textContent = `📎 ${input.files[0].name}`;
+                display.classList.replace('text-slate-400', 'text-indigo-600');
+                display.classList.add('font-bold');
+            } else {
+                display.textContent = "Ningún archivo seleccionado";
+                display.classList.replace('text-indigo-600', 'text-slate-400');
+                display.classList.remove('font-bold');
+            }
+        }
+
+        function toggleDocOptions() {
+            const action = document.getElementById('docAction').value;
+            document.getElementById('summaryOptions').style.display = action === 'resumir' ? 'block' : 'none';
+        }
+
+        const leerBase64 = (file) => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result.split(',')[1]); r.onerror = rej; r.readAsDataURL(file); });
+        const leerArrayBuffer = (file) => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsArrayBuffer(file); });
+        const leerTexto = (file) => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsText(file); });
+
+        async function procesarDocumento() {
+            const fileInput = document.getElementById('fileInput');
+            const action = document.getElementById('docAction').value;
+            const lengthInput = document.getElementById('summaryLength').value;
+            const engine = document.getElementById('docEngineSelect').value;
+
+            if (fileInput.files.length === 0) {
+                mostrarMensaje('docStatusMessage', "¡Hey! Olvidaste subir un documento.", "error"); return;
+            }
+
+            const file = fileInput.files[0];
+            
+            if (engine === 'groq' && file.type === "application/pdf") {
+                mostrarMensaje('docStatusMessage', "Llama 3 no soporta PDFs directos aquí. Cambia el motor a Gemini o sube un documento Word (.docx).", "error"); return;
+            }
+
+            estadoCargando(true, 'docBtn', 'docResultArea', 'docPlaceholder', 'docOutputText', 'docCopyBtn', `Procesando con ${engine === 'groq' ? 'Llama 3.3' : 'Gemini'}...`, 'indigo', 'Magia: Procesar Archivo', 'sparkles');
+            mostrarMensaje('docStatusMessage', "", "none");
+
+            try {
+                // PROMPT OPTIMIZADO PARA DOCUMENTOS
+                let prompt = action === 'resolver' 
+                    ? "Analiza el documento adjunto. El documento contiene un cuestionario, taller o requerimiento. Tu ÚNICA TAREA es resolverlo de principio a fin entregando respuestas de nivel experto y profesionales, PERO sonando como un analista humano brillante, no como un robot corporativo. Ve directo a las respuestas, sin saludos ni introducciones innecesarias."
+                    : `Elabora un resumen ejecutivo y análisis del documento adjunto. Longitud requerida: **${lengthInput || 'análisis conciso'}**. Extrae los datos relevantes y preséntalos con un vocabulario avanzado pero directo, evitando la jerga robótica y aburrida.`;
+
+                const systemPrompt = "Eres un consultor experto y analista intelectual. Hablas con voz activa y directa.";
+                let textoOriginal = "";
+                let textoFinal = "";
+
+                if (engine === 'gemini' && file.type === "application/pdf") {
+                    const base64Data = await leerBase64(file);
+                    const payload = {
+                        contents: [{ parts: [{ text: prompt }, { inlineData: { mimeType: "application/pdf", data: base64Data } }] }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] }
+                    };
+                    const responseData = await hacerPeticionGemini(payload);
+                    textoFinal = responseData.candidates?.[0]?.content?.parts?.[0]?.text;
+                } else {
+                    if (file.name.endsWith(".docx")) {
+                        const arrayBuffer = await leerArrayBuffer(file);
+                        textoOriginal = (await mammoth.extractRawText({ arrayBuffer: arrayBuffer })).value;
+                    } else if (file.type === "text/plain") {
+                        textoOriginal = await leerTexto(file);
+                    } else {
+                        throw new Error("Formato no soportado para este motor.");
+                    }
+
+                    const promptCompleto = `${prompt}\n\n--- TEXTO DEL DOCUMENTO ---\n${textoOriginal}`;
+
+                    if (engine === 'groq') {
+                        textoFinal = await hacerPeticionGroq(promptCompleto, systemPrompt, 0.4);
+                    } else {
+                        const payload = {
+                            contents: [{ parts: [{ text: promptCompleto }] }],
+                            systemInstruction: { parts: [{ text: systemPrompt }] }
+                        };
+                        const responseData = await hacerPeticionGemini(payload);
+                        textoFinal = responseData.candidates?.[0]?.content?.parts?.[0]?.text;
+                    }
+                }
+
+                if (textoFinal) {
+                    mostrarResultado(textoFinal, 'docResultArea', 'docPlaceholder', 'docOutputText', 'docCopyBtn');
+                    mostrarMensaje('docStatusMessage', "¡Documento procesado con nivel experto!", "success");
+                }
+            } catch (error) {
+                mostrarMensaje('docStatusMessage', `Error: ${error.message}`, "error");
+            } finally {
+                estadoCargando(false, 'docBtn', 'docResultArea', 'docPlaceholder', 'docOutputText', 'docCopyBtn', '', 'indigo', 'Magia: Procesar Archivo', 'sparkles');
+            }
+        }
+
 
         // ==========================================
         // LÓGICA DEL DETECTOR DE IA
@@ -460,20 +643,18 @@
                 return;
             }
 
-            estadoCargando(true, 'detectBtn', 'detectorResultArea', 'detectorPlaceholder', 'detectorGauge', null, `Escaneando con ${engine === 'groq' ? 'Llama 3' : 'Gemini'}...`, 'slate');
+            estadoCargando(true, 'detectBtn', 'detectorResultArea', 'detectorPlaceholder', 'detectorGauge', null, `Escaneando con ${engine === 'groq' ? 'Llama 3.3' : 'Gemini'}...`, 'slate', 'Escanear Texto', 'scan-line');
             mostrarMensaje('detectorStatusMessage', "", "none");
             document.getElementById('detectorGauge').classList.add('hidden'); 
 
-            const systemPrompt = `Eres un detector de IA. Analiza el texto y responde ESTRICTAMENTE con un JSON: {"porcentaje_ia": <numero de 0 a 100>, "explicacion": "<texto de 2 líneas max>"}`;
+            const systemPrompt = `Eres un detector de IA analizando patrones de perplejidad y burstiness. Analiza el texto y responde ESTRICTAMENTE con un JSON: {"porcentaje_ia": <numero de 0 a 100>, "explicacion": "<texto técnico de 2 líneas max>"}`;
             let resultadoJSON = null;
 
             try {
                 if (engine === 'groq') {
-                    // Llamada a Groq API
                     const respuestaTexto = await hacerPeticionGroq(`Analiza este texto:\n\n${inputText}`, systemPrompt, 0.1, true);
                     resultadoJSON = JSON.parse(respuestaTexto);
                 } else {
-                    // Llamada a Google Gemini
                     const payload = {
                         contents: [{ parts: [{ text: `Analiza:\n\n${inputText}` }] }],
                         systemInstruction: { parts: [{ text: systemPrompt }] },
@@ -560,7 +741,6 @@
         function copiarAlPortapapeles(sourceId, btnId) {
             const textoCopia = document.getElementById(sourceId).textContent;
             
-            // Textarea temporal para copia efectiva en navegadores
             const areaTemporal = document.createElement("textarea");
             areaTemporal.value = textoCopia;
             areaTemporal.style.position = "fixed";
@@ -597,7 +777,7 @@
         }
 
         // ==========================================
-        // LÓGICA DE INSTALACIÓN (PWA) - ESTÁNDAR
+        // LÓGICA DE INSTALACIÓN (PWA)
         // ==========================================
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
