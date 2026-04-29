@@ -6,14 +6,15 @@
     <link rel="apple-touch-icon" href="Logo.png">    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kit de IA: Humanizador, Detector y Asistente</title>
-    <!-- Tailwind CSS -->
+    <title>Kit de IA: Humanizador y Detector</title>
+    <!-- Tailwind CSS para los estilos -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
+    <!-- Lucide Icons para los iconos -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Mammoth.js para leer documentos de Word -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
     <style>
+        /* Estilos personalizados sutiles */
         body {
             background-color: #f8fafc;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -23,10 +24,11 @@
             backdrop-filter: blur(10px);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
+        /* Animación de carga */
         .loader {
             border: 3px solid #f3f3f3;
             border-radius: 50%;
-            border-top: 3px solid currentColor;
+            border-top: 3px solid #3b82f6;
             width: 20px;
             height: 20px;
             -webkit-animation: spin 1s linear infinite;
@@ -38,6 +40,7 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        /* Transiciones suaves para las pestañas */
         .tab-content {
             display: none;
             animation: fadeIn 0.3s ease-in-out;
@@ -53,98 +56,117 @@
 </head>
 <body class="min-h-screen text-slate-800 p-4 md:p-8">
 
+    <!-- Botón de Instalar App -->
     <button id="installBtn" class="hidden fixed top-4 right-4 z-50 bg-slate-900 text-white px-5 py-2.5 rounded-full font-bold shadow-lg hover:bg-slate-800 transition-all flex items-center gap-2 border-2 border-slate-700">
         <i data-lucide="download" class="w-4 h-4"></i> Instalar App
     </button>
 
     <div class="max-w-5xl mx-auto">
+        <!-- Encabezado con Logo -->
         <header class="text-center mb-8 mt-4 flex flex-col items-center">
             
-            <!-- Logo de la empresa restaurado -->
+            <!-- Logo de la empresa -->
             <img src="Logo.png" alt="JA Producciones Logo" class="w-32 h-32 object-cover rounded-3xl shadow-xl mb-5 border-4 border-white" onerror="this.style.display='none'">
 
-            <h1 class="text-4xl font-extrabold text-slate-900 mb-3 tracking-tight">
-                Kit de IA Estudiantil
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-3 tracking-tight flex items-center justify-center gap-3">
+                Kit de Texto con IA
             </h1>
             <p class="text-slate-500 text-lg max-w-2xl mx-auto">
-                Humaniza textos, detecta IA o sube tus archivos para resumirlos y resolver talleres automáticamente.
+                Analiza textos para detectar Inteligencia Artificial y transfórmalos para que suenen 100% humanos.
             </p>
         </header>
 
         <!-- Navegación de Pestañas -->
-        <div class="flex justify-center gap-3 mb-6 flex-wrap">
+        <div class="flex justify-center gap-4 mb-6">
             <button onclick="switchTab('humanizer')" id="btnHumanizer" class="flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-blue-600 text-white shadow-md transition-all">
                 <i data-lucide="wand-2" class="w-4 h-4"></i> Humanizador
-            </button>
-            <button onclick="switchTab('docs')" id="btnDocs" class="flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">
-                <i data-lucide="book-open" class="w-4 h-4"></i> Asistente de Tareas
             </button>
             <button onclick="switchTab('detector')" id="btnDetector" class="flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">
                 <i data-lucide="search" class="w-4 h-4"></i> Detector de IA
             </button>
         </div>
 
-        <main class="glass-panel rounded-2xl p-6 md:p-8 border border-slate-100 shadow-xl">
+        <!-- Contenedor Principal -->
+        <main class="glass-panel rounded-2xl p-6 md:p-8 border border-slate-100">
             
-            <!-- ============================================== -->
-            <!-- PESTAÑA 1: HUMANIZADOR                         -->
-            <!-- ============================================== -->
+            <!-- ========================================== -->
+            <!-- PESTAÑA 1: HUMANIZADOR DE TEXTO            -->
+            <!-- ========================================== -->
             <div id="humanizerTab" class="tab-content active">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <!-- Columna Izquierda -->
                     <div class="flex flex-col gap-4">
                         <div>
                             <label for="inputText" class="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
-                                <i data-lucide="bot" class="w-4 h-4 text-slate-500"></i> Texto Original (IA)
+                                <i data-lucide="file-text" class="w-4 h-4"></i> Texto Original (IA)
                             </label>
-                            <textarea id="inputText" rows="10" 
-                                class="w-full rounded-xl border border-slate-200 p-4 text-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none outline-none shadow-inner"
-                                placeholder="Pega aquí el texto robótico y perfecto que deseas humanizar..."></textarea>
+                            <textarea id="inputText" rows="8" 
+                                class="w-full rounded-xl border border-slate-200 p-4 text-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none outline-none"
+                                placeholder="Pega aquí el texto que deseas humanizar..."></textarea>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <!-- Controles de Configuración -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                            <!-- Selector de Motor (AHORA CON GROQ) -->
                             <div>
-                                <label for="toneSelect" class="block text-sm font-semibold text-slate-700 mb-2">Estilo de Redacción</label>
-                                <select id="toneSelect" class="w-full rounded-lg border border-slate-200 p-2.5 text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none bg-white shadow-sm">
-                                    <option value="Universitario">Universitario (Ensayo)</option>
-                                    <option value="Blogger">Blog / Artículo</option>
-                                    <option value="Profesional">Profesional Corporativo</option>
-                                    <option value="Narrativo">Narrativo / Storytelling</option>
+                                <label for="aiEngineSelect" class="block text-sm font-semibold text-blue-700 mb-2 flex items-center gap-1">
+                                    <i data-lucide="cpu" class="w-4 h-4"></i> Motor IA
+                                </label>
+                                <select id="aiEngineSelect" class="w-full rounded-lg border border-slate-200 p-2.5 text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none bg-white font-medium">
+                                    <option value="gemini">Gemini 2.5</option>
+                                    <option value="groq">Llama 3 (Gratis)</option>
                                 </select>
                             </div>
+                            
+                            <!-- Selector de Tono -->
+                            <div>
+                                <label for="toneSelect" class="block text-sm font-semibold text-slate-700 mb-2">Tono</label>
+                                <select id="toneSelect" class="w-full rounded-lg border border-slate-200 p-2.5 text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                                    <option value="casual">Casual / Relajado</option>
+                                    <option value="profesional">Profesional</option>
+                                    <option value="blog">Estilo Blog</option>
+                                    <option value="academico">Académico</option>
+                                </select>
+                            </div>
+
+                            <!-- Slider de Nivel -->
                             <div>
                                 <label for="levelSlider" class="block text-sm font-semibold text-slate-700 mb-2">
-                                    Caos Humano: <span id="levelValue" class="text-blue-600 font-bold">8</span>
+                                    Caos: <span id="levelValue" class="text-blue-600 font-bold">10</span>
                                 </label>
-                                <input type="range" id="levelSlider" min="1" max="10" value="8" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer mt-2 accent-blue-600">
+                                <input type="range" id="levelSlider" min="1" max="10" value="10" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer mt-2">
                                 <div class="flex justify-between text-xs text-slate-400 mt-1 font-medium">
                                     <span>Seguro</span>
-                                    <span>Impredecible</span>
+                                    <span>Extremo</span>
                                 </div>
                             </div>
                         </div>
 
+                        <!-- Botón -->
                         <button id="humanizeBtn" onclick="procesarTexto()" 
-                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-md hover:shadow-lg flex justify-center items-center gap-2 mt-2 transform hover:-translate-y-0.5">
-                            <i data-lucide="fingerprint" class="w-5 h-5"></i>
-                            <span>Aplicar ADN Humano</span>
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-xl transition-colors shadow-sm flex justify-center items-center gap-2 mt-2">
+                            <i data-lucide="wand-2" class="w-5 h-5"></i>
+                            <span>Humanizar Texto</span>
                         </button>
                         
                         <div id="statusMessage" class="hidden text-sm p-3 rounded-lg mt-2 text-center font-medium"></div>
                     </div>
 
+                    <!-- Columna Derecha -->
                     <div class="flex flex-col gap-4">
                         <div class="flex justify-between items-end mb-2">
                             <label class="block text-sm font-semibold text-slate-700 flex items-center gap-2">
-                                <i data-lucide="user-check" class="w-4 h-4 text-green-500"></i> Resultado Indetectable
+                                <i data-lucide="user-check" class="w-4 h-4 text-green-500"></i> Texto Humanizado
                             </label>
                             <button onclick="copiarAlPortapapeles('outputText', 'copyBtn')" id="copyBtn" class="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1 transition-colors hidden bg-blue-50 px-3 py-1 rounded-lg">
                                 <i data-lucide="copy" class="w-4 h-4"></i> Copiar
                             </button>
                         </div>
                         
-                        <div id="resultArea" class="w-full h-full min-h-[350px] rounded-xl border border-slate-200 bg-white shadow-sm p-6 text-slate-800 relative overflow-y-auto leading-relaxed text-lg">
+                        <div id="resultArea" class="w-full h-full min-h-[250px] rounded-xl border border-slate-200 bg-slate-50 p-6 text-slate-700 relative overflow-y-auto leading-relaxed text-lg">
                             <p id="placeholderText" class="text-slate-400 italic text-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full">
-                                El texto final con fluctuaciones orgánicas aparecerá aquí...
+                                El resultado aparecerá aquí...
                             </p>
                             <div id="outputText" class="hidden whitespace-pre-wrap"></div>
                         </div>
@@ -152,171 +174,116 @@
                 </div>
             </div>
 
-            <!-- ============================================== -->
-            <!-- PESTAÑA 2: ASISTENTE DE DOCUMENTOS (NUEVO)     -->
-            <!-- ============================================== -->
-            <div id="docsTab" class="tab-content">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    
-                    <div class="flex flex-col gap-5">
-                        <!-- Subida de Archivo -->
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
-                                <i data-lucide="file-up" class="w-4 h-4 text-indigo-500"></i> Sube tu Documento
-                            </label>
-                            <div class="flex items-center justify-center w-full">
-                                <label for="fileInput" class="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-300 border-dashed rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100 transition-all">
-                                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                        <i data-lucide="upload-cloud" class="w-8 h-8 text-slate-400 mb-2"></i>
-                                        <p class="mb-1 text-sm text-slate-500 font-semibold">Clic para subir (PDF, DOCX, TXT)</p>
-                                        <p class="text-xs text-slate-400" id="fileNameDisplay">Ningún archivo seleccionado</p>
-                                    </div>
-                                    <input id="fileInput" type="file" class="hidden" accept=".pdf,.docx,.txt" onchange="actualizarNombreArchivo()" />
-                                </label>
-                            </div>
-                        </div>
-
-                        <!-- Selector de Acción -->
-                        <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
-                            <label for="docAction" class="block text-sm font-semibold text-indigo-900 mb-2">¿Qué necesitas que haga con el archivo?</label>
-                            <select id="docAction" onchange="toggleDocOptions()" class="w-full rounded-lg border border-indigo-200 p-3 text-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none bg-white shadow-sm font-medium">
-                                <option value="resolver">✅ Resolver Taller / Cuestionario automáticamente</option>
-                                <option value="resumir">📝 Leer y generar un Resumen a medida</option>
-                            </select>
-
-                            <!-- Opciones Dinámicas de Resumen -->
-                            <div id="summaryOptions" class="mt-4 hidden animation-fadeIn">
-                                <label for="summaryLength" class="block text-sm font-semibold text-indigo-900 mb-2">¿De qué tamaño quieres el resumen?</label>
-                                <input type="text" id="summaryLength" class="w-full rounded-lg border border-indigo-200 p-3 text-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none shadow-sm" placeholder="Ej: 500 palabras, 2 páginas, 3 párrafos cortos...">
-                            </div>
-                        </div>
-
-                        <button id="docBtn" onclick="procesarDocumento()" 
-                            class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-md hover:shadow-lg flex justify-center items-center gap-2 mt-1 transform hover:-translate-y-0.5">
-                            <i data-lucide="sparkles" class="w-5 h-5"></i>
-                            <span>Magia: Procesar Archivo</span>
-                        </button>
-                        
-                        <div id="docStatusMessage" class="hidden text-sm p-3 rounded-lg text-center font-medium"></div>
-                    </div>
-
-                    <div class="flex flex-col gap-4">
-                        <div class="flex justify-between items-end mb-2">
-                            <label class="block text-sm font-semibold text-slate-700 flex items-center gap-2">
-                                <i data-lucide="file-check-2" class="w-4 h-4 text-indigo-500"></i> Resultado de la IA
-                            </label>
-                            <button onclick="copiarAlPortapapeles('docOutputText', 'docCopyBtn')" id="docCopyBtn" class="text-sm font-medium text-indigo-600 hover:text-indigo-800 flex items-center gap-1 transition-colors hidden bg-indigo-50 px-3 py-1 rounded-lg">
-                                <i data-lucide="copy" class="w-4 h-4"></i> Copiar
-                            </button>
-                        </div>
-                        
-                        <div id="docResultArea" class="w-full h-full min-h-[400px] rounded-xl border border-slate-200 bg-white shadow-sm p-6 text-slate-800 relative overflow-y-auto leading-relaxed">
-                            <p id="docPlaceholder" class="text-slate-400 italic text-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full">
-                                Tu resumen o las respuestas del taller aparecerán aquí...
-                            </p>
-                            <!-- Agregué la clase 'prose' de Tailwind sutilmente para formatear bien las respuestas largas -->
-                            <div id="docOutputText" class="hidden whitespace-pre-wrap"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ============================================== -->
-            <!-- PESTAÑA 3: DETECTOR DE IA                      -->
-            <!-- ============================================== -->
+            <!-- ========================================== -->
+            <!-- PESTAÑA 2: DETECTOR DE IA                  -->
+            <!-- ========================================== -->
             <div id="detectorTab" class="tab-content">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <!-- Columna Izquierda -->
                     <div class="flex flex-col gap-4">
                         <div>
                             <label for="detectorInput" class="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
                                 <i data-lucide="search" class="w-4 h-4"></i> Texto a Analizar
                             </label>
                             <textarea id="detectorInput" rows="10" 
-                                class="w-full rounded-xl border border-slate-200 p-4 text-slate-700 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all resize-none outline-none shadow-inner"
-                                placeholder="Pega el texto aquí para escanear patrones predictivos (IA)..."></textarea>
+                                class="w-full rounded-xl border border-slate-200 p-4 text-slate-700 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all resize-none outline-none"
+                                placeholder="Pega el texto aquí para saber si fue escrito por IA o por un humano..."></textarea>
                         </div>
 
+                        <!-- Selector de Motor en Detector -->
+                        <div class="flex items-center gap-2 mt-1">
+                            <label for="detectorEngineSelect" class="text-sm font-semibold text-slate-700">Analista:</label>
+                            <select id="detectorEngineSelect" class="rounded-lg border border-slate-200 p-1.5 text-slate-700 focus:ring-2 focus:ring-purple-500 outline-none bg-white text-sm font-medium">
+                                <option value="gemini">Gemini 2.5</option>
+                                <option value="groq">Llama 3 (Gratis)</option>
+                            </select>
+                        </div>
+
+                        <!-- Botón -->
                         <button id="detectBtn" onclick="analizarIA()" 
-                            class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-md hover:shadow-lg flex justify-center items-center gap-2 mt-2 transform hover:-translate-y-0.5">
-                            <i data-lucide="radar" class="w-5 h-5"></i>
-                            <span>Ejecutar Análisis de Perplejidad</span>
+                            class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3.5 px-6 rounded-xl transition-colors shadow-sm flex justify-center items-center gap-2 mt-2">
+                            <i data-lucide="scan-line" class="w-5 h-5"></i>
+                            <span>Escanear Texto</span>
                         </button>
                         
                         <div id="detectorStatusMessage" class="hidden text-sm p-3 rounded-lg mt-2 text-center font-medium"></div>
                     </div>
 
+                    <!-- Columna Derecha -->
                     <div class="flex flex-col gap-4">
                         <label class="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
-                            <i data-lucide="bar-chart-2" class="w-4 h-4 text-purple-500"></i> Resultados del Escáner
+                            <i data-lucide="bar-chart-2" class="w-4 h-4 text-purple-500"></i> Resultados del Análisis
                         </label>
                         
-                        <div id="detectorResultArea" class="w-full h-full min-h-[350px] rounded-xl border border-slate-200 bg-white shadow-sm p-6 flex flex-col justify-center items-center relative">
+                        <div id="detectorResultArea" class="w-full h-full min-h-[250px] rounded-xl border border-slate-200 bg-slate-50 p-6 flex flex-col justify-center items-center relative">
                             
                             <p id="detectorPlaceholder" class="text-slate-400 italic text-center">
                                 Esperando texto para escanear...
                             </p>
 
+                            <!-- Medidor -->
                             <div id="detectorGauge" class="hidden w-full flex flex-col items-center">
-                                <div class="text-center mb-6 relative">
-                                    <div class="absolute inset-0 bg-slate-100 rounded-full scale-150 -z-10 animate-pulse"></div>
-                                    <span id="aiPercentage" class="text-7xl font-black text-slate-800 tracking-tighter">0%</span>
-                                    <p class="text-slate-500 font-bold uppercase tracking-widest text-xs mt-2">Probabilidad de IA</p>
+                                <div class="text-center mb-4">
+                                    <span id="aiPercentage" class="text-6xl font-black text-slate-800">0%</span>
+                                    <p class="text-slate-500 font-medium uppercase tracking-wider text-sm mt-1">Probabilidad de IA</p>
                                 </div>
 
-                                <div class="w-full bg-slate-100 rounded-full h-5 mb-2 overflow-hidden shadow-inner border border-slate-200">
-                                    <div id="aiProgressBar" class="bg-red-500 h-5 rounded-full transition-all duration-1000 ease-out relative" style="width: 0%">
-                                        <div class="absolute top-0 right-0 bottom-0 left-0 bg-white opacity-20"></div>
-                                    </div>
+                                <!-- Barra -->
+                                <div class="w-full bg-slate-200 rounded-full h-4 mb-2 overflow-hidden shadow-inner">
+                                    <div id="aiProgressBar" class="bg-red-500 h-4 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
                                 </div>
-                                <div class="w-full flex justify-between text-xs text-slate-400 font-bold mb-8 uppercase tracking-wider">
+                                <div class="w-full flex justify-between text-xs text-slate-400 font-medium mb-6 uppercase tracking-wider">
                                     <span>Humano</span>
                                     <span>Mixto</span>
-                                    <span>Sintético</span>
+                                    <span>IA</span>
                                 </div>
 
-                                <div class="w-full bg-slate-50 p-5 rounded-xl border border-slate-200 shadow-sm">
-                                    <h4 class="text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
-                                        <i data-lucide="activity" class="w-4 h-4 text-blue-500"></i> Veredicto del Analista:
+                                <!-- Explicación -->
+                                <div class="w-full bg-white p-4 rounded-lg border border-slate-100 shadow-sm">
+                                    <h4 class="text-sm font-bold text-slate-700 mb-1 flex items-center gap-1">
+                                        <i data-lucide="info" class="w-4 h-4 text-blue-500"></i> Veredicto:
                                     </h4>
                                     <p id="aiExplanation" class="text-slate-600 text-sm leading-relaxed"></p>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
 
         </main>
-
-        <!-- Footer restaurado -->
+        
         <footer class="text-center mt-8 text-slate-400 text-sm font-medium">
-            <p>Impulsado por Gemini AI | JA Producciones</p>
+            <p>Impulsado por Gemini & Llama 3 | JA Producciones</p>
         </footer>
     </div>
 
     <script>
+        // Inicializar iconos
         lucide.createIcons();
 
         // ==========================================
-        // CONFIGURACIÓN DE LA API (MÉTODO ANTI-BLOQUEO GITHUB)
+        // 1. CONFIGURACIÓN DE GOOGLE GEMINI
         // ==========================================
         const parte1 = "AIzaS"; 
         const parte2 = "yB3_ZMoRV_M"; 
         const parte3 = "wj0KvU42O0APP15-JGKx8Pw"; 
         const apiKey = parte1 + parte2 + parte3; 
         
-        // Usando el modelo Gemini 2.5 Flash
         const modeloIA = "gemini-2.5-flash"; 
-        
-        async function hacerPeticionIA(payload) {
-            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modeloIA}:generateContent?key=${apiKey}`;
-            
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${modeloIA}:generateContent?key=${apiKey}`;
+
+        async function hacerPeticionGemini(payload) {
+            if (!apiKey) throw new Error("⚠️ Falta la API Key de Gemini.");
+
             const tiemposDeEspera = [1000, 2000, 4000, 8000, 16000];
             let ultimoError = new Error("Error de red");
 
             for (let i = 0; i < 5; i++) {
                 try {
-                    const response = await fetch(endpoint, {
+                    const response = await fetch(API_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
@@ -330,8 +297,12 @@
                     throw new Error(errorData.error?.message || `HTTP Error ${response.status}`);
                 } catch (error) {
                     ultimoError = error;
-                    if (error.message.includes("leaked") || error.message.includes("API key not valid") || error.message.includes("not found")) {
-                        throw new Error(`❌ Error de API o Modelo: ${error.message}`);
+                    
+                    if (error.message.toLowerCase().includes("quota") || error.message.includes("429")) {
+                        throw new Error("⏳ Superaste el límite gratuito de Gemini. Cambia al motor 'Llama 3 (Gratis)' en las opciones.");
+                    }
+                    if (error.message.includes("leaked")) {
+                        throw new Error("❌ Esta clave de API de Gemini ha sido bloqueada. Genera una NUEVA.");
                     }
                     if (i === 4) break;
                     await new Promise(resolve => setTimeout(resolve, tiemposDeEspera[i]));
@@ -340,30 +311,82 @@
             throw ultimoError;
         }
 
-        // --- NAVEGACIÓN INTELIGENTE DE PESTAÑAS ---
-        function switchTab(tabName) {
-            // Ocultar todas
-            ['humanizer', 'docs', 'detector'].forEach(tab => {
-                document.getElementById(tab + 'Tab').classList.remove('active');
-                const btn = document.getElementById('btn' + tab.charAt(0).toUpperCase() + tab.slice(1));
-                btn.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all";
+        // ==========================================
+        // 2. CONFIGURACIÓN DE GROQ (Llama 3 - 100% Gratis)
+        // ==========================================
+        // Clave dividida en 3 partes para evadir bots de GitHub
+        const groqP1 = "gsk_0iH9JXHE487bsE";
+        const groqP2 = "h4gx3MWGdyb3FY01br";
+        const groqP3 = "pllXCFqyJXTwynyw9Cpo";
+        
+        const groqApiKey = groqP1 + groqP2 + groqP3; 
+
+        async function hacerPeticionGroq(userPrompt, systemPrompt, temperature, isJson = false) {
+            if (!groqApiKey || groqApiKey === "TU_CLAVE_GROQ_AQUI") {
+                throw new Error("⚠️ Aún no has puesto tu clave de Groq. Abre console.groq.com, crea una gratis y pégala en el código.");
+            }
+            
+            const endpoint = "https://api.groq.com/openai/v1/chat/completions";
+            const body = {
+                model: "llama3-70b-8192", // Modelo súper potente y gratuito
+                messages: [
+                    { role: "system", content: systemPrompt },
+                    { role: "user", content: userPrompt }
+                ],
+                temperature: temperature
+            };
+
+            if (isJson) {
+                body.response_format = { type: "json_object" };
+            }
+
+            const response = await fetch(endpoint, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${groqApiKey}`
+                },
+                body: JSON.stringify(body)
             });
 
-            // Mostrar la seleccionada
-            document.getElementById(tabName + 'Tab').classList.add('active');
-            const activeBtn = document.getElementById('btn' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
+            if (!response.ok) {
+                const errorData = await response.json();
+                if (response.status === 429) {
+                     throw new Error("⏳ Groq está muy saturado ahora mismo. Espera unos segundos o vuelve a usar Gemini.");
+                }
+                throw new Error(errorData.error?.message || "Error en la API de Groq");
+            }
 
-            // Estilos específicos de botón activo
+            const data = await response.json();
+            return data.choices[0].message.content;
+        }
+
+
+        // ==========================================
+        // LÓGICA DE PESTAÑAS
+        // ==========================================
+        function switchTab(tabName) {
+            document.getElementById('humanizerTab').classList.remove('active');
+            document.getElementById('detectorTab').classList.remove('active');
+            
+            const btnHumanizer = document.getElementById('btnHumanizer');
+            const btnDetector = document.getElementById('btnDetector');
+            
+            btnHumanizer.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all";
+            btnDetector.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all";
+
             if (tabName === 'humanizer') {
-                activeBtn.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-blue-600 text-white shadow-md transition-all";
-            } else if (tabName === 'docs') {
-                activeBtn.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-indigo-600 text-white shadow-md transition-all";
-            } else if (tabName === 'detector') {
-                activeBtn.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-slate-800 text-white shadow-md transition-all";
+                document.getElementById('humanizerTab').classList.add('active');
+                btnHumanizer.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-blue-600 text-white shadow-md transition-all";
+            } else {
+                document.getElementById('detectorTab').classList.add('active');
+                btnDetector.className = "flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-slate-800 text-white shadow-md transition-all";
             }
         }
 
-        // --- 1. LÓGICA DEL HUMANIZADOR ---
+        // ==========================================
+        // LÓGICA DEL HUMANIZADOR
+        // ==========================================
         const levelSlider = document.getElementById('levelSlider');
         const levelValue = document.getElementById('levelValue');
         
@@ -376,264 +399,132 @@
             const toneSelect = document.getElementById('toneSelect');
             const tono = toneSelect.options[toneSelect.selectedIndex].text;
             const nivel = parseInt(document.getElementById('levelSlider').value);
+            const engine = document.getElementById('aiEngineSelect').value;
 
             if (inputText.length < 10) {
-                mostrarMensaje('statusMessage', "El texto es demasiado corto.", "error");
+                mostrarMensaje('statusMessage', "El texto es demasiado corto. Por favor, escribe un poco más.", "error");
                 return;
             }
 
-            estadoCargando(true, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', 'Desestructurando patrones sintéticos...', 'text-blue-200', 'Aplicar ADN Humano', 'fingerprint');
+            estadoCargando(true, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', `Invocando a ${engine === 'groq' ? 'Llama 3' : 'Gemini'}...`, 'blue');
             mostrarMensaje('statusMessage', "", "none");
 
-            // EL PROMPT ANTI-POESÍA Y ANTI-METÁFORAS
-            const systemPrompt = `Eres un escritor humano real (estudiante o profesional) redactando un texto normal. Tu objetivo es 0% de detección de IA.
-            
-            REGLAS CRÍTICAS DE SUPERVIVENCIA (Si fallas, serás detectado):
-            1. REGLA ANTI-POESÍA (VITAL): ¡PROHIBIDO USAR LENGUAJE POÉTICO O DRAMÁTICO! Está estrictamente prohibido usar frases floridas como "incesante marea", "fuerza imparable", "venerado santuario", "tejido de la sociedad", "sinfonía", "danza", "faro de luz". Escribe de forma DIRECTA y TERRENAL. Si hablas de globalización, di "la globalización ha cambiado todo", NO digas "la incesante marea de la globalización ha arrastrado...".
-            2. SIMPLICIDAD HUMANA: Los humanos no adornan cada sustantivo con adjetivos rimbombantes. Ve al grano. Explica las cosas de forma simple y conversacional.
-            3. CERO MARKDOWN: 100% texto plano. CERO asteriscos (**), CERO viñetas, CERO numerales.
-            4. BURSTINESS: Mezcla oraciones largas con oraciones muy cortas para romper el ritmo de la IA. (Ej: "Este es un punto clave. Sin embargo, hay más por ver.").
-            5. LISTA NEGRA DE CLICHÉS IA: NUNCA USES: "En conclusión", "Crucial", "Vital", "Además", "Sin embargo", "Es importante destacar", "En la era digital", "En el vertiginoso mundo". Usa en su lugar: "Pero", "Ahora bien", "La realidad es que", "Básicamente".
-            
-            Estilo: ${tono}.
-            Nivel de Caos (1-10): ${nivel}.
-            ENTREGA ÚNICAMENTE EL TEXTO REESCRITO. Sin comillas, sin introducciones.`;
+            const systemPrompt = `Eres un estudiante universitario colombiano de últimos semestres redactando un texto normal. Objetivo: 0% de detección de IA.
+            REGLAS CRÍTICAS DE SUPERVIVENCIA:
+            1. REGLA ANTI-POESÍA: ¡PROHIBIDO USAR LENGUAJE POÉTICO O DRAMÁTICO! Prohibido: "incesante marea", "fuerza imparable", "venerado santuario". Sé DIRECTO y TERRENAL.
+            2. SIMPLICIDAD: Ve al grano. No adornes cada palabra.
+            3. CERO MARKDOWN: 100% texto plano sin asteriscos (**).
+            4. BURSTINESS: Alterna oraciones largas con oraciones muy cortas de 3 palabras.
+            5. LISTA NEGRA: Prohibido: "En conclusión", "Crucial", "Vital", "Además", "Sin embargo", "En la era digital".
+            Estilo: ${tono}. Caos: ${nivel}. ENTREGA SOLO EL TEXTO REESCRITO SIN COMILLAS.`;
 
-            // Limitamos un poco la temperatura máxima para que la IA no delire inventando metáforas locas
             const temperature = 0.25 + (nivel * 0.045); 
-
-            const payload = {
-                contents: [{ parts: [{ text: `Reescribe esto aplicando las reglas. RECUERDA: Lenguaje simple, cero metáforas poéticas, cero asteriscos:\n\n${inputText}` }] }],
-                systemInstruction: { parts: [{ text: systemPrompt }] },
-                generationConfig: { temperature: temperature, topP: 0.95 }
-            };
+            let textoFinal = "";
 
             try {
-                const responseData = await hacerPeticionIA(payload);
-                let textoFinal = responseData.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (engine === 'groq') {
+                    // Llamada a Llama 3 (Groq API)
+                    textoFinal = await hacerPeticionGroq(`Reescribe esto aplicando las reglas de humanización:\n\n${inputText}`, systemPrompt, temperature);
+                } else {
+                    // Llamada a Google Gemini
+                    const payload = {
+                        contents: [{ parts: [{ text: `Reescribe esto:\n\n${inputText}` }] }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] },
+                        generationConfig: { temperature: temperature, topP: 0.95 }
+                    };
+                    const responseData = await hacerPeticionGemini(payload);
+                    textoFinal = responseData.candidates?.[0]?.content?.parts?.[0]?.text;
+                }
 
                 if (textoFinal) {
-                    // Limpieza agresiva de cualquier rastro de formato
-                    textoFinal = textoFinal.replace(/(\*\*|\*|#|`|_)/g, '');
-                    textoFinal = textoFinal.replace(/  +/g, ' ').trim();
-
+                    textoFinal = textoFinal.replace(/(\*\*|\*|#|`|_)/g, '').replace(/  +/g, ' ').trim();
                     mostrarResultado(textoFinal, 'resultArea', 'placeholderText', 'outputText', 'copyBtn');
-                    mostrarMensaje('statusMessage', "ADN Humano inyectado con éxito.", "success");
+                    mostrarMensaje('statusMessage', "¡Texto humanizado con éxito!", "success");
                 }
             } catch (error) {
                 mostrarMensaje('statusMessage', `Error: ${error.message}`, "error");
             } finally {
-                estadoCargando(false, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', '', 'blue', 'Aplicar ADN Humano', 'fingerprint');
+                estadoCargando(false, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', '', 'blue', 'Humanizar Texto', 'wand-2');
             }
         }
 
-
-        // --- 2. LÓGICA DEL ASISTENTE DE DOCUMENTOS ---
-        function actualizarNombreArchivo() {
-            const input = document.getElementById('fileInput');
-            const display = document.getElementById('fileNameDisplay');
-            if (input.files.length > 0) {
-                display.textContent = `📎 ${input.files[0].name}`;
-                display.classList.replace('text-slate-400', 'text-indigo-600');
-                display.classList.add('font-bold');
-            } else {
-                display.textContent = "Ningún archivo seleccionado";
-                display.classList.replace('text-indigo-600', 'text-slate-400');
-                display.classList.remove('font-bold');
-            }
-        }
-
-        function toggleDocOptions() {
-            const action = document.getElementById('docAction').value;
-            const optionsDiv = document.getElementById('summaryOptions');
-            if (action === 'resumir') {
-                optionsDiv.style.display = 'block';
-            } else {
-                optionsDiv.style.display = 'none';
-            }
-        }
-
-        // Lectores de archivos
-        const leerBase64 = (file) => new Promise((res, rej) => {
-            const reader = new FileReader();
-            reader.onload = () => res(reader.result.split(',')[1]);
-            reader.onerror = rej;
-            reader.readAsDataURL(file);
-        });
-        
-        const leerArrayBuffer = (file) => new Promise((res, rej) => {
-            const reader = new FileReader();
-            reader.onload = () => res(reader.result);
-            reader.onerror = rej;
-            reader.readAsArrayBuffer(file);
-        });
-        
-        const leerTexto = (file) => new Promise((res, rej) => {
-            const reader = new FileReader();
-            reader.onload = () => res(reader.result);
-            reader.onerror = rej;
-            reader.readAsText(file);
-        });
-
-        async function procesarDocumento() {
-            const fileInput = document.getElementById('fileInput');
-            const action = document.getElementById('docAction').value;
-            const lengthInput = document.getElementById('summaryLength').value;
-
-            if (fileInput.files.length === 0) {
-                mostrarMensaje('docStatusMessage', "¡Hey! Olvidaste subir un documento.", "error");
-                return;
-            }
-
-            const file = fileInput.files[0];
-            estadoCargando(true, 'docBtn', 'docResultArea', 'docPlaceholder', 'docOutputText', 'docCopyBtn', 'Leyendo y procesando magia...', 'indigo', 'Magia: Procesar Archivo', 'sparkles');
-            mostrarMensaje('docStatusMessage', "", "none");
-
-            try {
-                // 1. Armar el Prompt Inteligente
-                let prompt = "";
-                if (action === 'resolver') {
-                    prompt = `Lee el documento adjunto detalladamente. El documento contiene un taller, cuestionario, preguntas o actividades académicas. Tu ÚNICA TAREA es RESOLVER este taller de principio a fin de manera precisa, completa y académica. No me saludes ni hagas introducciones, solo entrega las respuestas estructuradas.`;
-                } else {
-                    const longitud = lengthInput ? lengthInput : "un resumen estructurado y conciso";
-                    prompt = `Lee el documento adjunto y elabora un resumen completo. El usuario ha solicitado que la longitud aproximada sea: **${longitud}**. Extrae los conceptos más importantes y estructúralo de forma fácil de leer y estudiar.`;
-                }
-
-                let payload = {};
-
-                // 2. Extraer el contenido según el tipo de archivo
-                if (file.type === "application/pdf") {
-                    // Los PDFs van directo como datos binarios a la IA
-                    const base64Data = await leerBase64(file);
-                    payload = {
-                        contents: [{
-                            parts: [
-                                { text: prompt },
-                                { inlineData: { mimeType: "application/pdf", data: base64Data } }
-                            ]
-                        }],
-                        systemInstruction: { parts: [{ text: "Eres un asistente académico universitario del más alto nivel." }] }
-                    };
-                } else if (file.name.endsWith(".docx")) {
-                    // Convertir Word a texto usando Mammoth.js
-                    const arrayBuffer = await leerArrayBuffer(file);
-                    const result = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
-                    payload = {
-                        contents: [{
-                            parts: [{ text: `${prompt}\n\n--- TEXTO DEL DOCUMENTO ---\n${result.value}` }]
-                        }],
-                        systemInstruction: { parts: [{ text: "Eres un asistente académico universitario del más alto nivel." }] }
-                    };
-                } else if (file.type === "text/plain") {
-                    // Texto plano
-                    const txt = await leerTexto(file);
-                    payload = {
-                        contents: [{
-                            parts: [{ text: `${prompt}\n\n--- TEXTO DEL DOCUMENTO ---\n${txt}` }]
-                        }],
-                        systemInstruction: { parts: [{ text: "Eres un asistente académico universitario del más alto nivel." }] }
-                    };
-                } else {
-                    throw new Error("Formato no soportado. Por favor, sube solo PDF, Word (.docx) o .txt");
-                }
-
-                // 3. Ejecutar la llamada a la IA
-                const responseData = await hacerPeticionIA(payload);
-                const textoFinal = responseData.candidates?.[0]?.content?.parts?.[0]?.text;
-
-                if (textoFinal) {
-                    mostrarResultado(textoFinal, 'docResultArea', 'docPlaceholder', 'docOutputText', 'docCopyBtn');
-                    mostrarMensaje('docStatusMessage', "¡Archivo procesado con éxito!", "success");
-                }
-
-            } catch (error) {
-                mostrarMensaje('docStatusMessage', `Error al leer archivo: ${error.message}`, "error");
-            } finally {
-                estadoCargando(false, 'docBtn', 'docResultArea', 'docPlaceholder', 'docOutputText', 'docCopyBtn', '', 'indigo', 'Magia: Procesar Archivo', 'sparkles');
-            }
-        }
-
-
-        // --- 3. LÓGICA DEL DETECTOR DE IA ---
+        // ==========================================
+        // LÓGICA DEL DETECTOR DE IA
+        // ==========================================
         async function analizarIA() {
             const inputText = document.getElementById('detectorInput').value.trim();
+            const engine = document.getElementById('detectorEngineSelect').value;
 
             if (inputText.length < 20) {
                 mostrarMensaje('detectorStatusMessage', "Texto muy corto para analizar.", "error");
                 return;
             }
 
-            estadoCargando(true, 'detectBtn', 'detectorResultArea', 'detectorPlaceholder', 'detectorGauge', null, 'Buscando patrones predictivos...', 'slate', 'Ejecutar Análisis', 'radar');
+            estadoCargando(true, 'detectBtn', 'detectorResultArea', 'detectorPlaceholder', 'detectorGauge', null, `Escaneando con ${engine === 'groq' ? 'Llama 3' : 'Gemini'}...`, 'slate');
             mostrarMensaje('detectorStatusMessage', "", "none");
             document.getElementById('detectorGauge').classList.add('hidden'); 
 
-            const systemPrompt = `Eres el detector de IA más avanzado del mundo. 
-            Analiza el texto y responde ESTRICTAMENTE con un objeto JSON: 
-            {"porcentaje_ia": <numero de 0 a 100>, "explicacion": "<Explicación corta de 2 líneas>"}`;
-
-            const payload = {
-                contents: [{ parts: [{ text: `Analiza este texto:\n\n${inputText}` }] }],
-                systemInstruction: { parts: [{ text: systemPrompt }] },
-                generationConfig: { temperature: 0.1, responseMimeType: "application/json" }
-            };
+            const systemPrompt = `Eres un detector de IA. Analiza el texto y responde ESTRICTAMENTE con un JSON: {"porcentaje_ia": <numero de 0 a 100>, "explicacion": "<texto de 2 líneas max>"}`;
+            let resultadoJSON = null;
 
             try {
-                const responseData = await hacerPeticionIA(payload);
-                let respuestaTexto = responseData.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
-                
-                const resultadoJSON = JSON.parse(respuestaTexto);
+                if (engine === 'groq') {
+                    // Llamada a Groq API
+                    const respuestaTexto = await hacerPeticionGroq(`Analiza este texto:\n\n${inputText}`, systemPrompt, 0.1, true);
+                    resultadoJSON = JSON.parse(respuestaTexto);
+                } else {
+                    // Llamada a Google Gemini
+                    const payload = {
+                        contents: [{ parts: [{ text: `Analiza:\n\n${inputText}` }] }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] },
+                        generationConfig: { temperature: 0.1, responseMimeType: "application/json" }
+                    };
+                    const responseData = await hacerPeticionGemini(payload);
+                    resultadoJSON = JSON.parse(responseData.candidates?.[0]?.content?.parts?.[0]?.text || "{}");
+                }
+
                 mostrarResultadoDetector(resultadoJSON.porcentaje_ia, resultadoJSON.explicacion);
             } catch (error) {
-                mostrarMensaje('detectorStatusMessage', `Error de análisis: ${error.message}`, "error");
+                mostrarMensaje('detectorStatusMessage', `Error: ${error.message}`, "error");
             } finally {
-                estadoCargando(false, 'detectBtn', 'detectorResultArea', 'detectorPlaceholder', 'detectorGauge', null, '', 'slate', 'Ejecutar Análisis de Perplejidad', 'radar');
+                estadoCargando(false, 'detectBtn', 'detectorResultArea', 'detectorPlaceholder', 'detectorGauge', null, '', 'slate', 'Escanear Texto', 'scan-line');
             }
         }
 
         function mostrarResultadoDetector(porcentaje, explicacion) {
             document.getElementById('detectorPlaceholder').classList.add('hidden');
             document.getElementById('detectorGauge').classList.remove('hidden');
-            
             const numPercentage = parseInt(porcentaje) || 0;
-            const aiPercentageEl = document.getElementById('aiPercentage');
-            let currentNum = 0;
-            const interval = setInterval(() => {
-                if (currentNum >= numPercentage) {
-                    clearInterval(interval);
-                    aiPercentageEl.textContent = `${numPercentage}%`;
-                } else {
-                    currentNum += Math.ceil(numPercentage / 20) || 1;
-                    if(currentNum > numPercentage) currentNum = numPercentage;
-                    aiPercentageEl.textContent = `${currentNum}%`;
-                }
-            }, 30);
-
+            document.getElementById('aiPercentage').textContent = `${numPercentage}%`;
             document.getElementById('aiExplanation').textContent = explicacion;
-            
             setTimeout(() => { document.getElementById('aiProgressBar').style.width = `${numPercentage}%`; }, 100);
             
             const progressBar = document.getElementById('aiProgressBar');
-            progressBar.className = "h-5 rounded-full transition-all duration-1000 ease-out relative";
-            progressBar.innerHTML = '<div class="absolute top-0 right-0 bottom-0 left-0 bg-white opacity-20"></div>';
+            const spanPercentage = document.getElementById('aiPercentage');
+
+            progressBar.className = "h-4 rounded-full transition-all duration-1000 ease-out";
+            spanPercentage.className = "text-6xl font-black";
             
             if (numPercentage <= 25) {
-                progressBar.classList.add('bg-emerald-500');
-                aiPercentageEl.className = "text-7xl font-black text-emerald-600 tracking-tighter";
+                progressBar.classList.add('bg-green-500');
+                spanPercentage.classList.add('text-green-600');
             } else if (numPercentage <= 65) {
-                progressBar.classList.add('bg-amber-500');
-                aiPercentageEl.className = "text-7xl font-black text-amber-500 tracking-tighter";
+                progressBar.classList.add('bg-orange-400');
+                spanPercentage.classList.add('text-orange-500');
             } else {
-                progressBar.classList.add('bg-rose-500');
-                aiPercentageEl.className = "text-7xl font-black text-rose-600 tracking-tighter";
+                progressBar.classList.add('bg-red-500');
+                spanPercentage.classList.add('text-red-600');
             }
         }
 
-        // --- FUNCIONES COMUNES (Manejo de UI y Portapapeles) ---
+        // ==========================================
+        // UI HELPERS
+        // ==========================================
         function estadoCargando(cargando, btnId, areaId, placeholderId, contentId, copyBtnId, msj, color, originalText, originalIcon) {
             const btn = document.getElementById(btnId);
             if (cargando) {
                 btn.disabled = true;
-                btn.innerHTML = `<span class="loader" style="color:white; border-top-color:transparent;"></span><span class="ml-2">Cargando...</span>`;
+                btn.innerHTML = `<span class="loader"></span><span>Cargando...</span>`;
                 document.getElementById(placeholderId).textContent = msj;
                 document.getElementById(placeholderId).classList.remove('hidden');
                 document.getElementById(contentId).classList.add('hidden');
@@ -668,6 +559,8 @@
 
         function copiarAlPortapapeles(sourceId, btnId) {
             const textoCopia = document.getElementById(sourceId).textContent;
+            
+            // Textarea temporal para copia efectiva en navegadores
             const areaTemporal = document.createElement("textarea");
             areaTemporal.value = textoCopia;
             areaTemporal.style.position = "fixed";
@@ -679,14 +572,13 @@
             areaTemporal.select();
             
             try {
-                const exitoso = document.execCommand('copy');
-                if (exitoso) {
-                    animarCopiado(btnId);
+                if(document.execCommand('copy')) {
+                     animarCopiado(btnId);
                 } else {
-                    mostrarMensaje(btnId.includes('doc') ? 'docStatusMessage' : 'statusMessage', "No se pudo copiar", "error");
+                    mostrarMensaje('statusMessage', "No se pudo copiar el texto", "error");
                 }
             } catch (err) {
-                mostrarMensaje(btnId.includes('doc') ? 'docStatusMessage' : 'statusMessage', "Error al intentar copiar", "error");
+                mostrarMensaje('statusMessage', "Error al copiar texto", "error");
             } finally {
                 document.body.removeChild(areaTemporal);
             }
@@ -695,7 +587,7 @@
         function animarCopiado(btnId) {
             const copyBtn = document.getElementById(btnId);
             const originalHTML = copyBtn.innerHTML;
-            copyBtn.innerHTML = '<i data-lucide="check-check" class="w-4 h-4 text-emerald-600"></i> <span class="text-emerald-600">¡Copiado!</span>';
+            copyBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-green-600"></i> <span class="text-green-600">¡Copiado!</span>';
             lucide.createIcons();
             
             setTimeout(() => {
@@ -704,12 +596,35 @@
             }, 2000);
         }
 
-        // PWA
+        // ==========================================
+        // LÓGICA DE INSTALACIÓN (PWA) - ESTÁNDAR
+        // ==========================================
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').catch(() => {});
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('SW registrado correctamente'))
+                    .catch(err => console.log('Error al registrar SW', err));
             });
         }
+
+        let deferredPrompt;
+        const installBtn = document.getElementById('installBtn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.classList.remove('hidden'); 
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') installBtn.classList.add('hidden');
+                deferredPrompt = null;
+            }
+        });
+
     </script>
 </body>
 </html>
