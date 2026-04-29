@@ -6,7 +6,7 @@
     <link rel="apple-touch-icon" href="Logo.png">    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kit de IA: Profesional y Avanzado</title>
+    <title>Kit de IA: Humano y Natural</title>
     <!-- Tailwind CSS para los estilos -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons para los iconos -->
@@ -61,12 +61,12 @@
     <div class="max-w-5xl mx-auto">
         <!-- Encabezado con Logo -->
         <header class="text-center mb-8 mt-4 flex flex-col items-center">
-            <img src="logo.png" alt="JA Producciones Logo" class="w-32 h-32 object-cover rounded-3xl shadow-xl mb-5 border-4 border-white">
+            <img src="Logo.png" alt="JA Producciones Logo" class="w-32 h-32 object-cover rounded-3xl shadow-xl mb-5 border-4 border-white" onerror="this.style.display='none'">
             <h1 class="text-4xl font-extrabold text-slate-900 mb-3 tracking-tight flex items-center justify-center gap-3">
-                Kit de IA Profesional
+                Kit de IA Humano
             </h1>
             <p class="text-slate-500 text-lg max-w-2xl mx-auto">
-                Humaniza, detecta IA y resuelve documentos usando múltiples motores en rotación.
+                Humaniza, detecta IA y resuelve documentos con un lenguaje natural, sencillo y 100% humano.
             </p>
         </header>
 
@@ -100,7 +100,7 @@
                             </label>
                             <textarea id="inputText" rows="8" 
                                 class="w-full rounded-xl border border-slate-200 p-4 text-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none outline-none"
-                                placeholder="Pega aquí el texto que deseas elevar a nivel profesional..."></textarea>
+                                placeholder="Pega aquí el texto que deseas hacer sonar más humano y natural..."></textarea>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
@@ -108,17 +108,18 @@
                                 <label for="aiEngineSelect" class="block text-sm font-semibold text-blue-700 mb-2 flex items-center gap-1">
                                     <i data-lucide="cpu" class="w-4 h-4"></i> Motor IA
                                 </label>
+                                <!-- Llama 3 (Groq) puesto como predeterminado con el atributo 'selected' -->
                                 <select id="aiEngineSelect" class="w-full rounded-lg border border-slate-200 p-2.5 text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none bg-white font-medium">
+                                    <option value="groq" selected>Llama 3.3 (Gratis)</option>
                                     <option value="gemini">Gemini Multi-Key</option>
-                                    <option value="groq">Llama 3.3 (Gratis)</option>
                                 </select>
                             </div>
                             <div>
                                 <label for="toneSelect" class="block text-sm font-semibold text-slate-700 mb-2">Tono</label>
                                 <select id="toneSelect" class="w-full rounded-lg border border-slate-200 p-2.5 text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none bg-white">
-                                    <option value="avanzado">Profesional Avanzado</option>
-                                    <option value="academico">Académico Riguroso</option>
-                                    <option value="ejecutivo">Resumen Ejecutivo</option>
+                                    <option value="casual">Casual / Conversacional</option>
+                                    <option value="profesional">Profesional (Sencillo)</option>
+                                    <option value="academico">Académico (Natural)</option>
                                 </select>
                             </div>
                             <div>
@@ -146,7 +147,7 @@
                     <div class="flex flex-col gap-4">
                         <div class="flex justify-between items-end mb-2">
                             <label class="block text-sm font-semibold text-slate-700 flex items-center gap-2">
-                                <i data-lucide="user-check" class="w-4 h-4 text-green-500"></i> Texto Humanizado (Nivel Experto)
+                                <i data-lucide="user-check" class="w-4 h-4 text-green-500"></i> Texto Humanizado (Natural)
                             </label>
                             <button onclick="copiarAlPortapapeles('outputText', 'copyBtn')" id="copyBtn" class="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1 transition-colors hidden bg-blue-50 px-3 py-1 rounded-lg">
                                 <i data-lucide="copy" class="w-4 h-4"></i> Copiar
@@ -155,7 +156,7 @@
                         
                         <div id="resultArea" class="w-full h-full min-h-[250px] rounded-xl border border-slate-200 bg-slate-50 p-6 text-slate-700 relative overflow-y-auto leading-relaxed text-lg">
                             <p id="placeholderText" class="text-slate-400 italic text-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full">
-                                El resultado intelectualmente elevado aparecerá aquí...
+                                El resultado con lenguaje natural y humano aparecerá aquí...
                             </p>
                             <div id="outputText" class="hidden whitespace-pre-wrap"></div>
                         </div>
@@ -189,16 +190,17 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                 <div>
                                     <label for="docEngineSelect" class="block text-sm font-semibold text-indigo-900 mb-2">🧠 Motor de IA</label>
+                                    <!-- Llama 3 (Groq) puesto como predeterminado -->
                                     <select id="docEngineSelect" class="w-full rounded-lg border border-indigo-200 p-2.5 text-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none bg-white shadow-sm font-medium">
-                                        <option value="gemini">Gemini Multi-Key</option>
-                                        <option value="groq">Llama 3.3 (Solo Word/TXT)</option>
+                                        <option value="groq" selected>Llama 3.3 (Solo Word/TXT)</option>
+                                        <option value="gemini">Gemini Multi-Key (Soporta PDF)</option>
                                     </select>
                                 </div>
                                 <div>
                                     <label for="docAction" class="block text-sm font-semibold text-indigo-900 mb-2">Acción</label>
                                     <select id="docAction" onchange="toggleDocOptions()" class="w-full rounded-lg border border-indigo-200 p-2.5 text-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none bg-white shadow-sm font-medium">
-                                        <option value="resolver">✅ Resolver Nivel Experto</option>
-                                        <option value="resumir">📝 Resumen Profesional</option>
+                                        <option value="resolver">✅ Resolver Sencillo</option>
+                                        <option value="resumir">📝 Resumen Natural</option>
                                     </select>
                                 </div>
                             </div>
@@ -255,9 +257,10 @@
 
                         <div class="flex items-center gap-2 mt-1">
                             <label for="detectorEngineSelect" class="text-sm font-semibold text-slate-700">Analista:</label>
+                            <!-- Llama 3 (Groq) puesto como predeterminado -->
                             <select id="detectorEngineSelect" class="rounded-lg border border-slate-200 p-1.5 text-slate-700 focus:ring-2 focus:ring-purple-500 outline-none bg-white text-sm font-medium">
+                                <option value="groq" selected>Llama 3.3 (Gratis)</option>
                                 <option value="gemini">Gemini Multi-Key</option>
-                                <option value="groq">Llama 3.3 (Gratis)</option>
                             </select>
                         </div>
 
@@ -321,8 +324,6 @@
         // ==========================================
         // 1. SISTEMA MULTI-LLAVE PARA GOOGLE GEMINI
         // ==========================================
-        
-        // Aquí agregamos todas tus claves disponibles (antiguas y nuevas)
         const geminiKeys = [
             // Llave original dividida
             "AIzaS" + "yB3_ZMoRV_M" + "wj0KvU42O0APP15-JGKx8Pw", 
@@ -331,16 +332,16 @@
             "AQ.Ab8" + "RN6IZb3TGSryigs" + "eGq8KD7gQFkE3r7yj3sRn7akNllqkYMQ"
         ];
         
-        // Indice para llevar el control de qué llave estamos usando
         let currentGeminiKeyIndex = 0;
         const modeloIA = "gemini-2.5-flash"; 
 
         async function hacerPeticionGemini(payload) {
             const tiemposDeEspera = [1000, 2000, 4000];
             let ultimoError = new Error("Error de red desconocido");
+            let attempts = 0;
 
-            // Intenta hasta 6 veces (suficiente para rotar por las 3 llaves un par de veces si es necesario)
-            for (let attempt = 0; attempt < 6; attempt++) {
+            // Se intentará 6 veces para asegurar una rotación de llaves, pero frenará ante bloqueos internos
+            while (attempts < 6) {
                 const activeKey = geminiKeys[currentGeminiKeyIndex];
                 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${modeloIA}:generateContent?key=${activeKey}`;
 
@@ -352,38 +353,55 @@
                     });
 
                     if (response.ok) {
-                        return await response.json(); // Éxito
+                        return await response.json(); 
                     }
 
                     const errorData = await response.json();
+                    const errorMessage = errorData.error?.message || `HTTP Error ${response.status}`;
                     
-                    // Si el error es de Cuota (429) o Clave Inválida (400/403), lanzamos un error interno para forzar la rotación
-                    if (response.status === 429 || response.status === 400 || response.status === 403) {
-                        throw new Error("KEY_ERROR"); 
+                    // Si el error es realmente de cuota de uso (429) o permisos de llave (401/403), disparamos la rotación
+                    if (response.status === 429 || response.status === 400 || response.status === 403 || response.status === 401) {
+                        // Excepción importante: a veces Gemini lanza 400 por filtros de seguridad de contenido. 
+                        if (response.status === 400 && errorMessage.toLowerCase().includes("safety")) {
+                             throw new Error("API_ERROR: El mensaje fue bloqueado por los filtros de seguridad de Google.");
+                        }
+                        throw new Error("KEY_ERROR_" + response.status); 
                     }
                     
-                    throw new Error(errorData.error?.message || `HTTP Error ${response.status}`);
+                    // Para otros errores que no son de límite de llaves, rompemos el ciclo
+                    throw new Error("API_ERROR: " + errorMessage);
                     
                 } catch (error) {
                     ultimoError = error;
                     
-                    // Lógica de Rotación: Si falla por límite o clave bloqueada, pasamos a la siguiente
-                    if (error.message === "KEY_ERROR" || error.message.includes("quota") || error.message.includes("API key not valid")) {
-                        console.warn(`Llave ${currentGeminiKeyIndex + 1} falló. Rotando a la siguiente...`);
+                    // SÓLO si es un error de límite o llave inválida, pasamos a la siguiente.
+                    if (error.message.startsWith("KEY_ERROR")) {
+                        console.warn(`Llave ${currentGeminiKeyIndex + 1} llegó al límite o falló. Pasando a la siguiente llave...`);
                         currentGeminiKeyIndex = (currentGeminiKeyIndex + 1) % geminiKeys.length;
-                        continue; // Vuelve a intentar inmediatamente con la nueva llave
+                        attempts++;
+                        continue; 
                     }
                     
-                    // Si es otro tipo de error de red, espera un momento y reintenta
-                    if (attempt === 5) break;
-                    await new Promise(resolve => setTimeout(resolve, tiemposDeEspera[attempt] || 2000));
+                    // Si fue un error directo de la API (por ejemplo bloqueado por seguridad), mostramos el error sin quemar las llaves.
+                    if (error.message.startsWith("API_ERROR:")) {
+                        throw new Error(error.message.replace("API_ERROR: ", ""));
+                    }
+                    
+                    if (attempts === 5) break;
+                    await new Promise(resolve => setTimeout(resolve, tiemposDeEspera[attempts] || 2000));
+                    attempts++;
                 }
             }
-            throw new Error("Todas las claves de Google han llegado a su límite o son inválidas. Por favor, selecciona el motor 'Llama 3' arriba.");
+            
+            if (ultimoError.message.startsWith("KEY_ERROR")) {
+                throw new Error("Todas las claves de Google han llegado a su límite diario. Cambia al motor 'Llama 3' en las opciones.");
+            }
+            
+            throw ultimoError;
         }
 
         // ==========================================
-        // 2. CONFIGURACIÓN DE GROQ (Llama 3.3 - 100% Gratis)
+        // 2. CONFIGURACIÓN DE GROQ (Llama 3.3)
         // ==========================================
         const groqP1 = "gsk_0iH9JXHE487bsE";
         const groqP2 = "h4gx3MWGdyb3FY01br";
@@ -446,7 +464,7 @@
         }
 
         // ==========================================
-        // LÓGICA DEL HUMANIZADOR (MODO CERO IA)
+        // LÓGICA DEL HUMANIZADOR (CERO IA DETECCIÓN - TONO HUMANO EXTREMO)
         // ==========================================
         const levelSlider = document.getElementById('levelSlider');
         const levelValue = document.getElementById('levelValue');
@@ -470,29 +488,34 @@
             estadoCargando(true, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', `Procesando con ${engine === 'groq' ? 'Llama 3.3' : 'Gemini Multi-Key'}...`, 'blue', 'Humanizar Texto', 'wand-2');
             mostrarMensaje('statusMessage', "", "none");
 
-            // PROMPT HIPER-ORGÁNICO: EXTREMO ENFOQUE EN MARCADORES HUMANOS
-            const systemPrompt = `Tu único objetivo es reescribir el texto para que obtenga un 0% de probabilidad en detectores de Inteligencia Artificial (Turnitin, ZeroGPT). Eres un analista humano brillante.
+            // PROMPT HIPER-ORGÁNICO CON ROTURA DE LISTAS PERFECTAS Y CONSERVACIÓN DE NÚMEROS
+            const systemPrompt = `Tu único objetivo es reescribir el texto para que obtenga un 0% en detectores de IA. Eres una persona normal redactando un texto cotidiano. NO eres un experto.
 
-            EL SECRETO DEL 0%:
-            1. MULETILLAS HUMANAS (OBLIGATORIO): Las IA nunca usan expresiones transicionales orgánicas. DEBES incluir expresiones como: "Lo cierto es que", "Dicho esto", "En la práctica", "Ahora bien", "Para ser claros,", "De hecho,".
-            2. CAMUFLAJE DE LISTAS: Si el original tiene listas (1., 2., 3.), ELIMINA los números y convierte cada punto en un párrafo separado e independiente.
-            3. RÁFAGAS ASIMÉTRICAS: Escribe una oración de más de 30 palabras analizando a profundidad. Luego, ciérrala con una frase de máximo 4 palabras. (Ej: "La realidad es esta.").
-            4. LISTA NEGRA: NUNCA USES: "En conclusión", "Crucial", "Vital", "Cabe destacar", "Además", "Sin embargo".
-            5. CERO FORMATO: 100% texto plano. Prohibido usar asteriscos (**).
+            EL GRAN ERROR QUE ESTÁS COMETIENDO: Estás agrupando conceptos técnicos en "listas perfectas" separadas por comas (ej: "recomendaciones sobre bioseguridad, vacunación y manejo"). ¡Eso grita Inteligencia Artificial!
+
+            REGLAS DE ORO PARA EVADIR LA DETECCIÓN:
+            1. HABLA SENCILLO Y "MASTICADO": Explica las cosas como si se las contaras a un colega. En lugar de "profesionales en medicina veterinaria", di "los veterinarios" o "el equipo".
+            2. ROMPE LAS LISTAS PERFECTAS (CRÍTICO): Si el original enumera cosas técnicas (A, B y C), tú sepáralas orgánicamente. Di "viendo temas de A, además de chequear B y ayudando con C". Que no suene a diccionario o manual.
+            3. LISTA NEGRA DE PALABRAS PROHIBIDAS: "Crucial", "Vital", "Robusto", "Subyacente", "Incuestionable", "Arista", "Imperativo", "Radica", "Otorgar", "Distintivo", "Concerniente", "Pilar", "Eficiente", "Recomendaciones sobre". 
+            4. CERO INTRODUCCIONES: NO digas "Permíteme presentarte" ni "Aquí tienes". Empieza de inmediato con el tema, ve directo al grano.
+            5. CONSERVA LOS NÚMEROS (VITAL): Si el texto tiene listas numeradas (1., 2., 3., etc.), DEBES conservar los números exactamente como están para no dañar la estructura. NO los cambies por texto. Mantén cada número en su propio párrafo con un salto de línea. El truco está en que el texto después del número debe sonar charlado y asimétrico.
+            6. RÁFAGAS (BURSTINESS): Escribe una oración normal explicando algo, y luego una muy corta de 3-5 palabras. (Ej: "Esto es clave.").
+            7. CERO MARKDOWN: Prohibido usar asteriscos (**) o guiones (-).
 
             Estilo solicitado: ${tono}.
             Nivel de Caos Humano: ${nivel}/10.
-            ENTREGA ÚNICAMENTE EL TEXTO REESCRITO SIN COMILLAS NI NOTAS.`;
+            ENTREGA ÚNICAMENTE EL TEXTO REESCRITO SIN COMILLAS NI SALUDOS.`;
 
-            const temperature = 0.45 + (nivel * 0.05); 
+            // Un poco más de temperatura para romper estructuras predecibles
+            const temperature = 0.55 + (nivel * 0.045); 
             let textoFinal = "";
 
             try {
                 if (engine === 'groq') {
-                    textoFinal = await hacerPeticionGroq(`Reescribe esto aplicando las reglas extremas de 0% IA y manteniendo párrafos separados:\n\n${inputText}`, systemPrompt, temperature);
+                    textoFinal = await hacerPeticionGroq(`Ve directo al grano y reescribe esto aplicando las reglas de 0% IA. Rompe las listas perfectas separadas por comas, pero conserva la numeración (1, 2, 3) y los saltos de línea:\n\n${inputText}`, systemPrompt, temperature);
                 } else {
                     const payload = {
-                        contents: [{ parts: [{ text: `Reescribe esto aplicando las reglas extremas de 0% IA y manteniendo párrafos separados:\n\n${inputText}` }] }],
+                        contents: [{ parts: [{ text: `Ve directo al grano y reescribe esto aplicando las reglas de 0% IA. Rompe las listas perfectas separadas por comas, pero conserva la numeración (1, 2, 3) y los saltos de línea:\n\n${inputText}` }] }],
                         systemInstruction: { parts: [{ text: systemPrompt }] },
                         generationConfig: { temperature: temperature, topP: 0.95 }
                     };
@@ -502,8 +525,13 @@
 
                 if (textoFinal) {
                     textoFinal = textoFinal.replace(/(\*\*|\*|#|`|_)/g, '').trim();
+                    // Filtro de fuerza bruta por si la IA se vuelve terca con las introducciones
+                    textoFinal = textoFinal.replace(/^(Permíteme.*?\n)/i, '');
+                    textoFinal = textoFinal.replace(/^(Aquí tienes.*?\n)/i, '');
+                    textoFinal = textoFinal.replace(/^(Claro,.*?\n)/i, '');
+
                     mostrarResultado(textoFinal, 'resultArea', 'placeholderText', 'outputText', 'copyBtn');
-                    mostrarMensaje('statusMessage', "¡Texto humano y profesional generado!", "success");
+                    mostrarMensaje('statusMessage', "¡Texto humano generado!", "success");
                 }
             } catch (error) {
                 mostrarMensaje('statusMessage', `Error: ${error.message}`, "error");
@@ -559,10 +587,10 @@
 
             try {
                 let prompt = action === 'resolver' 
-                    ? "Analiza el documento adjunto (un cuestionario, taller o requerimiento). Tu ÚNICA TAREA es resolverlo entregando respuestas de nivel experto. Ve directo a las respuestas, sin saludos."
-                    : `Elabora un resumen ejecutivo del documento. Longitud: **${lengthInput || 'análisis conciso'}**. Usa vocabulario avanzado pero humano.`;
+                    ? "Lee el documento adjunto. Tu ÚNICA TAREA es resolverlo entregando respuestas claras y sencillas. Ve DIRECTO a las respuestas. ESTRICTAMENTE PROHIBIDO empezar saludando, diciendo 'Permíteme' o usando palabras rimbombantes. Si el documento tiene preguntas o puntos numerados (1., 2., 3.), DEBES conservar la numeración exacta (1., 2., 3.) al inicio de cada respuesta y mantener cada punto en un párrafo distinto con su respectivo salto de línea."
+                    : `Elabora un resumen del documento. Longitud: **${lengthInput || 'resumen corto y claro'}**. Ve DIRECTO al grano. ESTRICTAMENTE PROHIBIDO empezar con 'A continuación' o usar palabras pomposas o muy técnicas. Explícalo fácil.`;
 
-                const systemPrompt = "Eres un consultor experto analizando documentos con voz activa y directa.";
+                const systemPrompt = "Eres un asistente amigable y normal. Escribes de forma sencilla y directa, NUNCA usas saludos, introducciones robóticas o palabras complicadas y técnicas.";
                 let textoOriginal = "";
                 let textoFinal = "";
 
