@@ -487,32 +487,31 @@
             estadoCargando(true, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', `Invocando a ${engine === 'groq' ? 'Llama 3.3' : 'Gemini'}...`, 'blue', 'Humanizar Texto', 'wand-2');
             mostrarMensaje('statusMessage', "", "none");
 
-            // PROMPT HIPER-HUMANIZADOR (ENFOCADO EN 0%)
-            const systemPrompt = `Eres un profesional humano altamente capacitado, pero escribes con un estilo 100% orgánico, impredecible y natural. Tu ÚNICA misión es que el texto resultante registre 0% en detectores de IA como ZeroGPT o Turnitin.
+            // PROMPT ACTUALIZADO: CAMUFLAJE NARRATIVO PARA LISTAS
+            const systemPrompt = `Tu único objetivo es burlar los detectores de IA (0% de detección), actuando como un analista experto humano.
 
-            EL SECRETO PARA EL 0%: Los detectores buscan "baja perplejidad" (palabras predecibles) y "baja ráfaga" (oraciones de la misma longitud). DEBES ROMPER ESTO.
+            EL GRAN PROBLEMA: Los detectores marcan las listas numeradas (1., 2., 3.) y los viñeteados perfectos como 100% IA. 
 
-            REGLAS DE ORO PARA EVADIR LA DETECCIÓN:
-            1. RÁFAGAS EXTREMAS (Burstiness): Intercala oraciones larguísimas y complejas (que casi divagan explicando un punto) con oraciones extremadamente cortas y tajantes de 2 a 5 palabras. Rompe el ritmo constantemente.
-            2. VOCABULARIO IMPREDECIBLE (Perplejidad): No uses la palabra más obvia. Si ibas a decir "es importante", di "resulta determinante". Huye de la redacción corporativa de plantilla.
-            3. CERO CLICHÉS DE IA: ESTÁ TOTALMENTE PROHIBIDO usar: "En conclusión", "Crucial", "Vital", "Cabe destacar", "Además", "Sin embargo", "Es imperativo", "En el vertiginoso mundo". Usa conectores humanos: "Ahora bien", "Dicho esto", "Lo cierto es que", "Básicamente".
-            4. IMPERFECCIÓN COGNITIVA: Los humanos hacen pausas. Usa incisos explicativos entre paréntesis o comas largas para aclarar un punto en medio de una frase.
-            5. ESTRUCTURA INTACTA: DEBES CONSERVAR los párrafos y listas numeradas (1., 2., 3.) del texto original. Respeta los saltos de línea. PERO PROHIBIDO USAR MARKDOWN (ni asteriscos ** ni guiones -).
-            
+            REGLAS DE ORO DE SUPERVIVENCIA:
+            1. CAMUFLAJE DE LISTAS (VITAL): Si el texto original tiene puntos o listas, ELIMINA LOS NÚMEROS Y VIÑETAS. Convierte cada punto de la lista en su propio párrafo de texto normal. Inicia esos párrafos narrativos con conectores humanos ("Para empezar,", "Otro aspecto importante a considerar es,", "Finalmente,"). Así conservas la separación exacta de ideas que quiere el usuario, pero escondes el patrón robótico de IA.
+            2. RÁFAGAS EXTREMAS: Intercala oraciones inusualmente largas y descriptivas, con oraciones directas de tres palabras. Rómpeles el ritmo perfecto.
+            3. CERO CLICHÉS: Prohibido usar: "En conclusión", "Crucial", "Vital", "Cabe destacar", "Es imperativo". Usa: "Pero", "Ahora bien", "La realidad es que", "Dicho esto".
+            4. CERO MARKDOWN: 100% texto plano. Ningún asterisco (**), ni guiones (-).
+
             Estilo solicitado: ${tono}.
-            Nivel de Imprevisibilidad humana: ${nivel}/10.
-            ENTREGA ÚNICAMENTE EL TEXTO REESCRITO SIN COMILLAS NI INTRODUCCIONES.`;
+            Nivel de Caos y Humanización: ${nivel}/10.
+            ENTREGA ÚNICAMENTE EL TEXTO REESCRITO. Sin comillas ni notas extras.`;
 
-            // Subimos la temperatura base para forzar mayor creatividad y aleatoriedad
-            const temperature = 0.5 + (nivel * 0.05); 
+            // Limitamos ligeramente la temperatura máxima para que mantenga coherencia técnica
+            const temperature = 0.35 + (nivel * 0.05); 
             let textoFinal = "";
 
             try {
                 if (engine === 'groq') {
-                    textoFinal = await hacerPeticionGroq(`Reescribe esto aplicando las reglas orgánicas extremas pero CONSERVA LOS PÁRRAFOS Y LISTAS:\n\n${inputText}`, systemPrompt, temperature);
+                    textoFinal = await hacerPeticionGroq(`Reescribe este texto camuflando cualquier lista en párrafos narrativos y aplicando ráfagas extremas:\n\n${inputText}`, systemPrompt, temperature);
                 } else {
                     const payload = {
-                        contents: [{ parts: [{ text: `Reescribe esto aplicando las reglas orgánicas extremas pero CONSERVA LOS PÁRRAFOS Y LISTAS:\n\n${inputText}` }] }],
+                        contents: [{ parts: [{ text: `Reescribe este texto camuflando cualquier lista en párrafos narrativos y aplicando ráfagas extremas:\n\n${inputText}` }] }],
                         systemInstruction: { parts: [{ text: systemPrompt }] },
                         generationConfig: { temperature: temperature, topP: 0.95 }
                     };
