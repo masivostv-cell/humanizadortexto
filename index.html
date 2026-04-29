@@ -7,12 +7,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kit de IA: Humanizador y Detector</title>
-    <!-- Tailwind CSS para los estilos -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons para los iconos -->
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* Estilos personalizados sutiles */
         body {
             background-color: #f8fafc;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -22,7 +21,6 @@
             backdrop-filter: blur(10px);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
-        /* Animación de carga */
         .loader {
             border: 3px solid #f3f3f3;
             border-radius: 50%;
@@ -38,7 +36,6 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        /* Transiciones suaves para las pestañas */
         .tab-content {
             display: none;
             animation: fadeIn 0.3s ease-in-out;
@@ -54,103 +51,95 @@
 </head>
 <body class="min-h-screen text-slate-800 p-4 md:p-8">
 
-    <!-- Botón de Instalar App -->
     <button id="installBtn" class="hidden fixed top-4 right-4 z-50 bg-slate-900 text-white px-5 py-2.5 rounded-full font-bold shadow-lg hover:bg-slate-800 transition-all flex items-center gap-2 border-2 border-slate-700">
         <i data-lucide="download" class="w-4 h-4"></i> Instalar App
     </button>
 
-    <div class="max-w-4xl mx-auto">
-        <!-- Encabezado con Logo -->
+    <div class="max-w-5xl mx-auto">
         <header class="text-center mb-8 mt-4 flex flex-col items-center">
-            
-            <!-- Logo de la empresa -->
-            <img src="Logo.png" alt="JA Producciones Logo" class="w-32 h-32 object-cover rounded-3xl shadow-xl mb-5 border-4 border-white" onerror="this.style.display='none'">
+            <!-- Logo (opcional si lo tienes localmente) -->
+            <div class="w-24 h-24 bg-blue-600 rounded-3xl shadow-xl mb-5 border-4 border-white flex items-center justify-center text-white overflow-hidden">
+                <i data-lucide="brain-circuit" class="w-12 h-12"></i>
+            </div>
 
-            <h1 class="text-4xl font-extrabold text-slate-900 mb-3 tracking-tight flex items-center justify-center gap-3">
-                Kit de Texto con IA
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-3 tracking-tight">
+                Kit de Texto Antidetectores
             </h1>
             <p class="text-slate-500 text-lg max-w-2xl mx-auto">
-                Analiza textos para detectar Inteligencia Artificial y transfórmalos para que suenen 100% humanos.
+                Transforma textos generados por IA aplicando variabilidad humana (Burstiness) y vocabulario impredecible (Perplexity) para evadir detectores.
             </p>
         </header>
 
-        <!-- Navegación de Pestañas -->
+        <!-- Navegación -->
         <div class="flex justify-center gap-4 mb-6">
             <button onclick="switchTab('humanizer')" id="btnHumanizer" class="flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-blue-600 text-white shadow-md transition-all">
-                <i data-lucide="wand-2" class="w-4 h-4"></i> Humanizador
+                <i data-lucide="wand-2" class="w-4 h-4"></i> Humanizador Stealth
             </button>
             <button onclick="switchTab('detector')" id="btnDetector" class="flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">
                 <i data-lucide="search" class="w-4 h-4"></i> Detector de IA
             </button>
         </div>
 
-        <!-- Contenedor Principal -->
-        <main class="glass-panel rounded-2xl p-6 md:p-8 border border-slate-100">
+        <main class="glass-panel rounded-2xl p-6 md:p-8 border border-slate-100 shadow-xl">
             
-            <!-- ========================================== -->
-            <!-- PESTAÑA 1: HUMANIZADOR DE TEXTO            -->
-            <!-- ========================================== -->
+            <!-- PESTAÑA 1: HUMANIZADOR -->
             <div id="humanizerTab" class="tab-content active">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     
-                    <!-- Columna Izquierda -->
                     <div class="flex flex-col gap-4">
                         <div>
                             <label for="inputText" class="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
-                                <i data-lucide="file-text" class="w-4 h-4"></i> Texto Original (IA)
+                                <i data-lucide="bot" class="w-4 h-4 text-slate-500"></i> Texto Original (IA)
                             </label>
-                            <textarea id="inputText" rows="8" 
-                                class="w-full rounded-xl border border-slate-200 p-4 text-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none outline-none"
-                                placeholder="Pega aquí el texto que deseas humanizar..."></textarea>
+                            <textarea id="inputText" rows="10" 
+                                class="w-full rounded-xl border border-slate-200 p-4 text-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none outline-none shadow-inner"
+                                placeholder="Pega aquí el texto robótico y perfecto que deseas humanizar..."></textarea>
                         </div>
 
-                        <!-- Controles -->
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
                             <div>
-                                <label for="toneSelect" class="block text-sm font-semibold text-slate-700 mb-2">Tono</label>
-                                <select id="toneSelect" class="w-full rounded-lg border border-slate-200 p-2.5 text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none bg-white">
-                                    <option value="casual">Casual / Relajado</option>
-                                    <option value="profesional">Profesional</option>
-                                    <option value="blog">Estilo Blog / Artículo</option>
-                                    <option value="academico">Académico (Pero natural)</option>
+                                <label for="toneSelect" class="block text-sm font-semibold text-slate-700 mb-2">Estilo de Redacción</label>
+                                <select id="toneSelect" class="w-full rounded-lg border border-slate-200 p-2.5 text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none bg-white shadow-sm">
+                                    <option value="Universitario">Universitario (Ensayo)</option>
+                                    <option value="Blogger">Blog / Artículo de opinión</option>
+                                    <option value="Profesional">Profesional Corporativo</option>
+                                    <option value="Narrativo">Narrativo / Storytelling</option>
                                 </select>
                             </div>
                             <div>
                                 <label for="levelSlider" class="block text-sm font-semibold text-slate-700 mb-2">
-                                    Nivel de Humanización: <span id="levelValue" class="text-blue-600 font-bold">10</span>
+                                    Caos Humano: <span id="levelValue" class="text-blue-600 font-bold">8</span>
                                 </label>
-                                <input type="range" id="levelSlider" min="1" max="10" value="10" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer mt-2">
-                                <div class="flex justify-between text-xs text-slate-400 mt-1">
-                                    <span>Ligero</span>
-                                    <span>Extremo</span>
+                                <input type="range" id="levelSlider" min="1" max="10" value="8" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer mt-2 accent-blue-600">
+                                <div class="flex justify-between text-xs text-slate-400 mt-1 font-medium">
+                                    <span>Seguro</span>
+                                    <span>Impredecible</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Botón -->
                         <button id="humanizeBtn" onclick="procesarTexto()" 
-                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-xl transition-colors shadow-sm flex justify-center items-center gap-2 mt-2">
-                            <i data-lucide="wand-2" class="w-5 h-5"></i>
-                            <span>Humanizar Texto</span>
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-md hover:shadow-lg flex justify-center items-center gap-2 mt-2 transform hover:-translate-y-0.5">
+                            <i data-lucide="fingerprint" class="w-5 h-5"></i>
+                            <span>Aplicar ADN Humano</span>
                         </button>
                         
                         <div id="statusMessage" class="hidden text-sm p-3 rounded-lg mt-2 text-center font-medium"></div>
                     </div>
 
-                    <!-- Columna Derecha -->
                     <div class="flex flex-col gap-4">
                         <div class="flex justify-between items-end mb-2">
                             <label class="block text-sm font-semibold text-slate-700 flex items-center gap-2">
-                                <i data-lucide="user-check" class="w-4 h-4 text-green-500"></i> Texto Humanizado
+                                <i data-lucide="user-check" class="w-4 h-4 text-green-500"></i> Resultado Indetectable
                             </label>
-                            <button onclick="copiarAlPortapapeles('outputText', 'copyBtn')" id="copyBtn" class="text-sm text-slate-500 hover:text-blue-600 flex items-center gap-1 transition-colors hidden">
+                            <button onclick="copiarAlPortapapeles('outputText', 'copyBtn')" id="copyBtn" class="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1 transition-colors hidden bg-blue-50 px-3 py-1 rounded-lg">
                                 <i data-lucide="copy" class="w-4 h-4"></i> Copiar
                             </button>
                         </div>
                         
-                        <div id="resultArea" class="w-full h-full min-h-[250px] rounded-xl border border-slate-200 bg-slate-50 p-4 text-slate-700 relative overflow-y-auto">
+                        <div id="resultArea" class="w-full h-full min-h-[350px] rounded-xl border border-slate-200 bg-white shadow-sm p-6 text-slate-800 relative overflow-y-auto leading-relaxed text-lg">
                             <p id="placeholderText" class="text-slate-400 italic text-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full">
-                                El resultado aparecerá aquí...
+                                El texto final con fluctuaciones orgánicas aparecerá aquí...
                             </p>
                             <div id="outputText" class="hidden whitespace-pre-wrap"></div>
                         </div>
@@ -158,66 +147,63 @@
                 </div>
             </div>
 
-            <!-- ========================================== -->
-            <!-- PESTAÑA 2: DETECTOR DE IA                  -->
-            <!-- ========================================== -->
+            <!-- PESTAÑA 2: DETECTOR DE IA -->
             <div id="detectorTab" class="tab-content">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     
-                    <!-- Columna Izquierda -->
                     <div class="flex flex-col gap-4">
                         <div>
                             <label for="detectorInput" class="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
                                 <i data-lucide="search" class="w-4 h-4"></i> Texto a Analizar
                             </label>
                             <textarea id="detectorInput" rows="10" 
-                                class="w-full rounded-xl border border-slate-200 p-4 text-slate-700 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all resize-none outline-none"
-                                placeholder="Pega el texto aquí para saber si fue escrito por IA o por un humano..."></textarea>
+                                class="w-full rounded-xl border border-slate-200 p-4 text-slate-700 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all resize-none outline-none shadow-inner"
+                                placeholder="Pega el texto aquí para escanear patrones predictivos (IA)..."></textarea>
                         </div>
 
-                        <!-- Botón -->
                         <button id="detectBtn" onclick="analizarIA()" 
-                            class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3.5 px-6 rounded-xl transition-colors shadow-sm flex justify-center items-center gap-2 mt-2">
-                            <i data-lucide="scan-line" class="w-5 h-5"></i>
-                            <span>Escanear Texto</span>
+                            class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-md hover:shadow-lg flex justify-center items-center gap-2 mt-2 transform hover:-translate-y-0.5">
+                            <i data-lucide="radar" class="w-5 h-5"></i>
+                            <span>Ejecutar Análisis de Perplejidad</span>
                         </button>
                         
                         <div id="detectorStatusMessage" class="hidden text-sm p-3 rounded-lg mt-2 text-center font-medium"></div>
                     </div>
 
-                    <!-- Columna Derecha -->
                     <div class="flex flex-col gap-4">
                         <label class="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
-                            <i data-lucide="bar-chart-2" class="w-4 h-4 text-purple-500"></i> Resultados del Análisis
+                            <i data-lucide="bar-chart-2" class="w-4 h-4 text-purple-500"></i> Resultados del Escáner
                         </label>
                         
-                        <div id="detectorResultArea" class="w-full h-full min-h-[250px] rounded-xl border border-slate-200 bg-slate-50 p-6 flex flex-col justify-center items-center relative">
+                        <div id="detectorResultArea" class="w-full h-full min-h-[350px] rounded-xl border border-slate-200 bg-white shadow-sm p-6 flex flex-col justify-center items-center relative">
                             
                             <p id="detectorPlaceholder" class="text-slate-400 italic text-center">
                                 Esperando texto para escanear...
                             </p>
 
-                            <!-- Medidor -->
                             <div id="detectorGauge" class="hidden w-full flex flex-col items-center">
-                                <div class="text-center mb-4">
-                                    <span id="aiPercentage" class="text-6xl font-black text-slate-800">0%</span>
-                                    <p class="text-slate-500 font-medium uppercase tracking-wider text-sm mt-1">Probabilidad de IA</p>
+                                <div class="text-center mb-6 relative">
+                                    <!-- Círculo animado de fondo -->
+                                    <div class="absolute inset-0 bg-slate-100 rounded-full scale-150 -z-10 animate-pulse"></div>
+                                    <span id="aiPercentage" class="text-7xl font-black text-slate-800 tracking-tighter">0%</span>
+                                    <p class="text-slate-500 font-bold uppercase tracking-widest text-xs mt-2">Probabilidad de IA</p>
                                 </div>
 
-                                <!-- Barra -->
-                                <div class="w-full bg-slate-200 rounded-full h-4 mb-2 overflow-hidden">
-                                    <div id="aiProgressBar" class="bg-red-500 h-4 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                                <div class="w-full bg-slate-100 rounded-full h-5 mb-2 overflow-hidden shadow-inner border border-slate-200">
+                                    <div id="aiProgressBar" class="bg-red-500 h-5 rounded-full transition-all duration-1000 ease-out relative" style="width: 0%">
+                                        <!-- Brillo en la barra -->
+                                        <div class="absolute top-0 right-0 bottom-0 left-0 bg-white opacity-20"></div>
+                                    </div>
                                 </div>
-                                <div class="w-full flex justify-between text-xs text-slate-400 font-medium mb-6">
+                                <div class="w-full flex justify-between text-xs text-slate-400 font-bold mb-8 uppercase tracking-wider">
                                     <span>Humano</span>
                                     <span>Mixto</span>
-                                    <span>IA</span>
+                                    <span>Sintético</span>
                                 </div>
 
-                                <!-- Explicación -->
-                                <div class="w-full bg-white p-4 rounded-lg border border-slate-100 shadow-sm">
-                                    <h4 class="text-sm font-bold text-slate-700 mb-1 flex items-center gap-1">
-                                        <i data-lucide="info" class="w-4 h-4"></i> Veredicto:
+                                <div class="w-full bg-slate-50 p-5 rounded-xl border border-slate-200 shadow-sm">
+                                    <h4 class="text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
+                                        <i data-lucide="activity" class="w-4 h-4 text-blue-500"></i> Veredicto del Analista:
                                     </h4>
                                     <p id="aiExplanation" class="text-slate-600 text-sm leading-relaxed"></p>
                                 </div>
@@ -229,48 +215,25 @@
             </div>
 
         </main>
-        
-        <footer class="text-center mt-8 text-slate-400 text-sm font-medium">
-            <p>Impulsado por Gemini AI | JA Producciones</p>
-        </footer>
     </div>
 
     <script>
-        // Inicializar iconos
         lucide.createIcons();
 
-     // ==========================================
-        // CONFIGURACIÓN DE LA API (MÉTODO ANTI-BLOQUEO GITHUB)
-        // ==========================================
-        // Los robots de Google escanean GitHub buscando textos que empiecen con "AIza...".
-        // Para evitar que la detecten y te la bloqueen, dividimos la clave en 3 pedazos.
-        // El robot no sabe sumar, así que no la verá, pero el navegador sí.
+        // En entornos controlados (como este Canvas de desarrollo), la clave se inyecta automáticamente.
+        // Si lo subes a tu servidor o Github, reemplaza "" por tu clave dividida como la tenías.
+        const apiKey = ""; 
+        const modeloIA = "gemini-2.5-flash-preview-09-2025";
         
-        // EJEMPLO: Si tu nueva clave es "AIzaSy_ABC123_XYZ890"
-        // Colocarás: parte1 = "AIzaSy", parte2 = "_ABC123", parte3 = "_XYZ890"
-
-        const parte1 = "AIzaS"; // Pon aquí los primeros caracteres (ej. AIzaSy)
-        const parte2 = "yB3_ZMoRV_M"; // Pon aquí los del medio
-        const parte3 = "wj0KvU42O0APP15-JGKx8Pw"; // Pon aquí los últimos caracteres
-        
-        // El navegador unirá las partes automáticamente al cargar la página
-        const apiKey = parte1 + parte2 + parte3; 
-        
-        const modeloIA = "gemini-2.5-flash"; // Volvemos a la versión 2.5 flash acordada
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${modeloIA}:generateContent?key=${apiKey}`;
-
-        // Función con reintentos exponenciales para mayor estabilidad
         async function hacerPeticionIA(payload) {
-            if (!apiKey) {
-                throw new Error("⚠️ Falta la API Key. Por favor, genera una nueva en Google AI Studio y pégala en el código.");
-            }
-
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modeloIA}:generateContent?key=${apiKey}`;
+            
             const tiemposDeEspera = [1000, 2000, 4000, 8000, 16000];
             let ultimoError = new Error("Error de red");
 
             for (let i = 0; i < 5; i++) {
                 try {
-                    const response = await fetch(API_URL, {
+                    const response = await fetch(endpoint, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
@@ -284,8 +247,8 @@
                     throw new Error(errorData.error?.message || `HTTP Error ${response.status}`);
                 } catch (error) {
                     ultimoError = error;
-                    if (error.message.includes("leaked")) {
-                        throw new Error("❌ Esta clave de API ha sido bloqueada por Google. Debes generar una NUEVA.");
+                    if (error.message.includes("leaked") || error.message.includes("API key not valid")) {
+                        throw new Error("❌ Error con la clave de API. Verifica la configuración.");
                     }
                     if (i === 4) break;
                     await new Promise(resolve => setTimeout(resolve, tiemposDeEspera[i]));
@@ -294,9 +257,7 @@
             throw ultimoError;
         }
 
-        // ==========================================
-        // LÓGICA DE PESTAÑAS
-        // ==========================================
+        // --- NAVEGACIÓN ---
         function switchTab(tabName) {
             document.getElementById('humanizerTab').classList.remove('active');
             document.getElementById('detectorTab').classList.remove('active');
@@ -316,9 +277,7 @@
             }
         }
 
-        // ==========================================
-        // LÓGICA DEL HUMANIZADOR
-        // ==========================================
+        // --- HUMANIZADOR AVANZADO ---
         const levelSlider = document.getElementById('levelSlider');
         const levelValue = document.getElementById('levelValue');
         
@@ -330,54 +289,64 @@
             const inputText = document.getElementById('inputText').value.trim();
             const toneSelect = document.getElementById('toneSelect');
             const tono = toneSelect.options[toneSelect.selectedIndex].text;
-            const nivel = document.getElementById('levelSlider').value;
+            const nivel = parseInt(document.getElementById('levelSlider').value);
 
             if (inputText.length < 10) {
-                mostrarMensaje('statusMessage', "El texto es demasiado corto. Por favor, escribe un poco más.", "error");
+                mostrarMensaje('statusMessage', "El texto es demasiado corto.", "error");
                 return;
             }
 
-            estadoCargando(true, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', 'Analizando y humanizando tu texto...', 'blue');
+            estadoCargando(true, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', 'Desestructurando patrones sintéticos...', 'blue');
             mostrarMensaje('statusMessage', "", "none");
 
-            const systemPrompt = `Eres un estudiante universitario colombiano de últimos semestres redactando un ensayo. Tu objetivo es reescribir este texto evadiendo al 100% los detectores de IA (debes sacar 5% o menos).
+            // PROMPT ANTIDETECTOR NUCLEAR (Actualizado)
+            const systemPrompt = `Eres un escritor humano experto intentando pasar por un detector de IA con 0% de probabilidad. 
 
-            Para lograrlo, DEBES usar el mismo estilo conversacional y asimétrico que engaña a los detectores, pero manteniendo un vocabulario apto para un trabajo universitario.
-
-            Reglas CRÍTICAS para lograr el 5%:
-            1. CONVERSACIONAL PERO ACADÉMICO: Usa el tono didáctico y directo ("uno como profesional", "la realidad práctica es que", "hay que tener en cuenta que"). SIN EMBARGO, están PROHIBIDAS las analogías infantiles o de comida (nada de "tortas") y la jerga informal (nada de "lío", "ojo", "chévere"). Usa un tono de exposición universitaria.
-            2. IMPERFECCIÓN ESTILÍSTICA (EL SECRETO): El detector te atrapa si tu flujo es impecable. Escribe de forma un poco más "atropellada" o natural. Haz una oración un poco más larga de lo normal donde divagues un poco explicando el punto, y luego córtala de golpe con una frase corta. Los humanos damos rodeos.
-            3. PREGUNTAS RETÓRICAS: Hazte al menos una o dos preguntas en el texto y respóndelas tú mismo (Ej: "¿Qué implica esto realmente en la auditoría? Básicamente que..."). 
-            4. ESTRUCTURA CAÓTICA: Nada de listas ordenadas. Nada de un párrafo perfecto por concepto. Mezcla dos ideas en un párrafo largo, y si es necesario usa frases de transición como "Volviendo al punto anterior..." o "Para entender esto mejor...".
-            5. CERO FORMATO: Solo prosa fluida. Cero asteriscos, cero viñetas, cero títulos como "Conclusión" o numerales (##). 
+            REGLAS DE SUPERVIVENCIA ABSOLUTAS:
+            1. CERO MARKDOWN: ESTÁ ESTRICTAMENTE PROHIBIDO usar asteriscos (** o *), numerales (#), o guiones para listas. El texto debe ser 100% texto plano sin formato. Si usas negritas, fallarás la misión.
+            2. BURSTINESS EXTREMO: Rompe la monotonía. Escribe una oración larguísima y compleja dando rodeos. Luego córtala con una oración de 3 a 5 palabras. (Ejemplo: "Punto final. Así de simple.").
+            3. PERPLEXITY (Imprevisibilidad): Huye de las estructuras predecibles. No empieces las oraciones con participios o gerundios. 
+            4. LISTA NEGRA DE PALABRAS IA: NUNCA USES: "En conclusión", "Crucial", "Vital", "Tapiz", "En última instancia", "Además", "Sin embargo", "Por ende", "Profundizar", "Es importante destacar". Sustituye con conectores humanos: "Pero", "Ahora bien", "La verdad es que", "Básicamente", "Si miramos de cerca".
+            5. IMPERFECCIÓN HUMANA: Los humanos divagamos un poco. Inserta incisos usando comas o paréntesis para aclarar algo en medio de la idea principal.
             
-            Nivel de humanización: ${nivel}/10.
+            Estilo y Contexto: ${tono}. Mantén el texto coherente con este estilo, pero las reglas antidetector tienen prioridad absoluta.
+            Nivel de Caos/Variabilidad (1 al 10): ${nivel}.
 
-            Devuelve ÚNICAMENTE el texto reescrito, sin comillas, introducciones ni comentarios.`;
+            ENTREGA ÚNICAMENTE EL TEXTO REESCRITO. Sin comillas, sin introducciones ("Aquí tienes el texto").`;
+
+            // Ajustamos un poco la temperatura para que no se "rompa" el sentido de textos legales o muy técnicos
+            const temperature = 0.35 + (nivel * 0.05);
 
             const payload = {
-                contents: [{ parts: [{ text: `Reescribe esto:\n\n${inputText}` }] }],
-                systemInstruction: { parts: [{ text: systemPrompt }] }
+                contents: [{ parts: [{ text: `Reescribe esto aplicando las reglas de Burstiness y Perplexity. IMPORTANTE: DEVUELVE SOLO TEXTO PLANO, SIN NINGÚN ASTERISCO:\n\n${inputText}` }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                generationConfig: {
+                    temperature: temperature,
+                    topP: 0.95
+                }
             };
 
             try {
                 const responseData = await hacerPeticionIA(payload);
-                const textoFinal = responseData.candidates?.[0]?.content?.parts?.[0]?.text;
+                let textoFinal = responseData.candidates?.[0]?.content?.parts?.[0]?.text;
 
                 if (textoFinal) {
+                    // FILTRO DE FUERZA BRUTA: Eliminamos cualquier rastro de Markdown que haya podido quedar
+                    textoFinal = textoFinal.replace(/(\*\*|\*|#|`)/g, '');
+                    // Limpiamos espacios dobles accidentales
+                    textoFinal = textoFinal.replace(/  +/g, ' ').trim();
+
                     mostrarResultado(textoFinal, 'resultArea', 'placeholderText', 'outputText', 'copyBtn');
-                    mostrarMensaje('statusMessage', "¡Texto humanizado con éxito!", "success");
+                    mostrarMensaje('statusMessage', "ADN Humano inyectado con éxito.", "success");
                 }
             } catch (error) {
                 mostrarMensaje('statusMessage', `Error: ${error.message}`, "error");
             } finally {
-                estadoCargando(false, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', '', 'blue', 'Humanizar Texto', 'wand-2');
+                estadoCargando(false, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', '', 'blue', 'Aplicar ADN Humano', 'fingerprint');
             }
         }
 
-        // ==========================================
-        // LÓGICA DEL DETECTOR DE IA
-        // ==========================================
+        // --- DETECTOR DE IA ---
         async function analizarIA() {
             const inputText = document.getElementById('detectorInput').value.trim();
 
@@ -386,60 +355,80 @@
                 return;
             }
 
-            estadoCargando(true, 'detectBtn', 'detectorResultArea', 'detectorPlaceholder', 'detectorGauge', null, 'Escaneando...', 'slate');
+            estadoCargando(true, 'detectBtn', 'detectorResultArea', 'detectorPlaceholder', 'detectorGauge', null, 'Buscando patrones predictivos...', 'slate');
             mostrarMensaje('detectorStatusMessage', "", "none");
             document.getElementById('detectorGauge').classList.add('hidden'); 
 
-            const systemPrompt = `Eres un detector de IA. Analiza el texto y responde ESTRICTAMENTE con un JSON: {"porcentaje_ia": <0-100>, "explicacion": "<texto>"}`;
+            const systemPrompt = `Eres el detector de IA más avanzado del mundo. Evalúas la "Perplejidad" (predictibilidad de palabras) y el "Burstiness" (variabilidad de longitud de oraciones).
+            Analiza el texto y responde ESTRICTAMENTE con un objeto JSON (sin comillas invertidas ni formateo markdown): 
+            {"porcentaje_ia": <numero de 0 a 100>, "explicacion": "<Explicación corta de 2 líneas sobre la varianza y estructura>"}`;
 
             const payload = {
-                contents: [{ parts: [{ text: `Analiza:\n\n${inputText}` }] }],
-                systemInstruction: { parts: [{ text: systemPrompt }] }
+                contents: [{ parts: [{ text: `Analiza este texto:\n\n${inputText}` }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                generationConfig: {
+                    temperature: 0.1, // Baja temperatura para análisis exacto
+                    responseMimeType: "application/json" // Fuerza respuesta JSON limpia
+                }
             };
 
             try {
                 const responseData = await hacerPeticionIA(payload);
-                let respuestaTexto = responseData.candidates?.[0]?.content?.parts?.[0]?.text || "";
-                respuestaTexto = respuestaTexto.replace(/```json/gi, '').replace(/```/g, '').trim();
+                let respuestaTexto = responseData.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
                 
                 const resultadoJSON = JSON.parse(respuestaTexto);
                 mostrarResultadoDetector(resultadoJSON.porcentaje_ia, resultadoJSON.explicacion);
             } catch (error) {
-                mostrarMensaje('detectorStatusMessage', `Error: ${error.message}`, "error");
+                mostrarMensaje('detectorStatusMessage', `Error de análisis: ${error.message}`, "error");
             } finally {
-                estadoCargando(false, 'detectBtn', 'detectorResultArea', 'detectorPlaceholder', 'detectorGauge', null, '', 'slate', 'Escanear Texto', 'scan-line');
+                estadoCargando(false, 'detectBtn', 'detectorResultArea', 'detectorPlaceholder', 'detectorGauge', null, '', 'slate', 'Ejecutar Análisis', 'radar');
             }
         }
 
         function mostrarResultadoDetector(porcentaje, explicacion) {
             document.getElementById('detectorPlaceholder').classList.add('hidden');
             document.getElementById('detectorGauge').classList.remove('hidden');
-            const numPercentage = parseInt(porcentaje);
-            document.getElementById('aiPercentage').textContent = `${numPercentage}%`;
+            
+            const numPercentage = parseInt(porcentaje) || 0;
+            
+            // Animación del número
+            const aiPercentageEl = document.getElementById('aiPercentage');
+            let currentNum = 0;
+            const interval = setInterval(() => {
+                if (currentNum >= numPercentage) {
+                    clearInterval(interval);
+                    aiPercentageEl.textContent = `${numPercentage}%`;
+                } else {
+                    currentNum += Math.ceil(numPercentage / 20) || 1;
+                    if(currentNum > numPercentage) currentNum = numPercentage;
+                    aiPercentageEl.textContent = `${currentNum}%`;
+                }
+            }, 30);
+
             document.getElementById('aiExplanation').textContent = explicacion;
-            setTimeout(() => { document.getElementById('aiProgressBar').style.width = `${numPercentage}%`; }, 100);
+            
+            setTimeout(() => { 
+                document.getElementById('aiProgressBar').style.width = `${numPercentage}%`; 
+            }, 100);
             
             const progressBar = document.getElementById('aiProgressBar');
-            const spanPercentage = document.getElementById('aiPercentage');
-
-            progressBar.className = "h-4 rounded-full transition-all duration-1000 ease-out";
-            spanPercentage.className = "text-6xl font-black";
             
-            if (numPercentage <= 20) {
-                progressBar.classList.add('bg-green-500');
-                spanPercentage.classList.add('text-green-600');
-            } else if (numPercentage <= 60) {
-                progressBar.classList.add('bg-orange-400');
-                spanPercentage.classList.add('text-orange-500');
+            progressBar.className = "h-5 rounded-full transition-all duration-1000 ease-out relative";
+            progressBar.innerHTML = '<div class="absolute top-0 right-0 bottom-0 left-0 bg-white opacity-20"></div>';
+            
+            if (numPercentage <= 25) {
+                progressBar.classList.add('bg-emerald-500');
+                aiPercentageEl.className = "text-7xl font-black text-emerald-600 tracking-tighter";
+            } else if (numPercentage <= 65) {
+                progressBar.classList.add('bg-amber-500');
+                aiPercentageEl.className = "text-7xl font-black text-amber-500 tracking-tighter";
             } else {
-                progressBar.classList.add('bg-red-500');
-                spanPercentage.classList.add('text-red-600');
+                progressBar.classList.add('bg-rose-500');
+                aiPercentageEl.className = "text-7xl font-black text-rose-600 tracking-tighter";
             }
         }
 
-        // ==========================================
-        // UI HELPERS
-        // ==========================================
+        // --- HELPERS UI ---
         function estadoCargando(cargando, btnId, areaId, placeholderId, contentId, copyBtnId, msj, color, originalText, originalIcon) {
             const btn = document.getElementById(btnId);
             if (cargando) {
@@ -480,19 +469,29 @@
         function copiarAlPortapapeles(sourceId, btnId) {
             const textoCopia = document.getElementById(sourceId).textContent;
             
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(textoCopia).then(() => animarCopiado(btnId));
-            } else {
-                const areaTemporal = document.createElement("textarea");
-                areaTemporal.value = textoCopia;
-                document.body.appendChild(areaTemporal);
-                areaTemporal.select();
-                try {
-                    document.execCommand('copy');
+            // Usamos un textarea temporal y execCommand que es universalmente compatible en iframes
+            const areaTemporal = document.createElement("textarea");
+            areaTemporal.value = textoCopia;
+            
+            // Evitar que la pantalla se mueva
+            areaTemporal.style.position = "fixed";
+            areaTemporal.style.left = "-9999px";
+            areaTemporal.style.top = "0";
+            
+            document.body.appendChild(areaTemporal);
+            areaTemporal.focus();
+            areaTemporal.select();
+            
+            try {
+                const exitoso = document.execCommand('copy');
+                if (exitoso) {
                     animarCopiado(btnId);
-                } catch (err) {
-                    mostrarMensaje('statusMessage', "No se pudo copiar el texto", "error");
+                } else {
+                    mostrarMensaje('statusMessage', "No se pudo copiar", "error");
                 }
+            } catch (err) {
+                mostrarMensaje('statusMessage', "Error al intentar copiar", "error");
+            } finally {
                 document.body.removeChild(areaTemporal);
             }
         }
@@ -500,7 +499,7 @@
         function animarCopiado(btnId) {
             const copyBtn = document.getElementById(btnId);
             const originalHTML = copyBtn.innerHTML;
-            copyBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-green-600"></i> <span class="text-green-600">¡Copiado!</span>';
+            copyBtn.innerHTML = '<i data-lucide="check-check" class="w-4 h-4 text-emerald-600"></i> <span class="text-emerald-600">¡Copiado!</span>';
             lucide.createIcons();
             
             setTimeout(() => {
@@ -509,35 +508,12 @@
             }, 2000);
         }
 
-        // ==========================================
-        // LÓGICA DE INSTALACIÓN (PWA) - ESTÁNDAR
-        // ==========================================
+        // PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('SW registrado correctamente'))
-                    .catch(err => console.log('Error al registrar SW', err));
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
             });
         }
-
-        let deferredPrompt;
-        const installBtn = document.getElementById('installBtn');
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            installBtn.classList.remove('hidden'); 
-        });
-
-        installBtn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') installBtn.classList.add('hidden');
-                deferredPrompt = null;
-            }
-        });
-
     </script>
 </body>
 </html>
