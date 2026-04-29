@@ -488,34 +488,33 @@
             estadoCargando(true, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', `Procesando con ${engine === 'groq' ? 'Llama 3.3' : 'Gemini Multi-Key'}...`, 'blue', 'Humanizar Texto', 'wand-2');
             mostrarMensaje('statusMessage', "", "none");
 
-            // PROMPT HIPER-ORGÁNICO CON ROTURA DE LISTAS PERFECTAS Y CONSERVACIÓN DE NÚMEROS
+            // PROMPT HIPER-ORGÁNICO CON CONSERVACIÓN DE TÍTULOS Y NÚMEROS
             const systemPrompt = `Tu único objetivo es reescribir el texto para que obtenga un 0% en detectores de IA. Eres una persona normal redactando un texto cotidiano. NO eres un experto.
 
-            EL GRAN ERROR QUE ESTÁS COMETIENDO: Estás agrupando conceptos técnicos en "listas perfectas" separadas por comas (ej: "recomendaciones sobre bioseguridad, vacunación y manejo"). ¡Eso grita Inteligencia Artificial!
+            EL GRAN ERROR QUE ESTÁS COMETIENDO: Estás agrupando conceptos técnicos en "listas perfectas" separadas por comas. ¡Eso grita Inteligencia Artificial!
 
             REGLAS DE ORO PARA EVADIR LA DETECCIÓN:
             1. HABLA SENCILLO Y "MASTICADO": Explica las cosas como si se las contaras a un colega. En lugar de "profesionales en medicina veterinaria", di "los veterinarios" o "el equipo".
-            2. ROMPE LAS LISTAS PERFECTAS (CRÍTICO): Si el original enumera cosas técnicas (A, B y C), tú sepáralas orgánicamente. Di "viendo temas de A, además de chequear B y ayudando con C". Que no suene a diccionario o manual.
+            2. ROMPE LAS LISTAS PERFECTAS (CRÍTICO): Si el original enumera cosas técnicas (A, B y C), tú sepáralas orgánicamente. Di "viendo temas de A, además de chequear B y ayudando con C".
             3. LISTA NEGRA DE PALABRAS PROHIBIDAS: "Crucial", "Vital", "Robusto", "Subyacente", "Incuestionable", "Arista", "Imperativo", "Radica", "Otorgar", "Distintivo", "Concerniente", "Pilar", "Eficiente", "Recomendaciones sobre". 
             4. CERO INTRODUCCIONES: NO digas "Permíteme presentarte" ni "Aquí tienes". Empieza de inmediato con el tema, ve directo al grano.
-            5. CONSERVA LOS NÚMEROS (VITAL): Si el texto tiene listas numeradas (1., 2., 3., etc.), DEBES conservar los números exactamente como están para no dañar la estructura. NO los cambies por texto. Mantén cada número en su propio párrafo con un salto de línea. El truco está en que el texto después del número debe sonar charlado y asimétrico.
+            5. CONSERVA TÍTULOS Y NÚMEROS (VITAL): Si el texto original tiene TÍTULOS, SUBTÍTULOS o listas numeradas (1., 2., 3.), DEBES conservarlos en su propia línea para no dañar la estructura. NO los cambies por un bloque de texto. Mantén cada título y cada número en su propio párrafo con un salto de línea para mantener el contexto. El truco está en que el texto que viene después del título o número debe sonar charlado y asimétrico.
             6. RÁFAGAS (BURSTINESS): Escribe una oración normal explicando algo, y luego una muy corta de 3-5 palabras. (Ej: "Esto es clave.").
-            7. CERO MARKDOWN: Prohibido usar asteriscos (**) o guiones (-).
+            7. CERO MARKDOWN: Prohibido usar asteriscos (**) o guiones (-). Escribe los títulos en texto normal pero separados por saltos de línea.
 
             Estilo solicitado: ${tono}.
             Nivel de Caos Humano: ${nivel}/10.
             ENTREGA ÚNICAMENTE EL TEXTO REESCRITO SIN COMILLAS NI SALUDOS.`;
 
-            // Un poco más de temperatura para romper estructuras predecibles
             const temperature = 0.55 + (nivel * 0.045); 
             let textoFinal = "";
 
             try {
                 if (engine === 'groq') {
-                    textoFinal = await hacerPeticionGroq(`Ve directo al grano y reescribe esto aplicando las reglas de 0% IA. Rompe las listas perfectas separadas por comas, pero conserva la numeración (1, 2, 3) y los saltos de línea:\n\n${inputText}`, systemPrompt, temperature);
+                    textoFinal = await hacerPeticionGroq(`Ve directo al grano y reescribe esto aplicando las reglas de 0% IA. Conserva la estructura de títulos y la numeración (1, 2, 3), manteniendo los saltos de línea:\n\n${inputText}`, systemPrompt, temperature);
                 } else {
                     const payload = {
-                        contents: [{ parts: [{ text: `Ve directo al grano y reescribe esto aplicando las reglas de 0% IA. Rompe las listas perfectas separadas por comas, pero conserva la numeración (1, 2, 3) y los saltos de línea:\n\n${inputText}` }] }],
+                        contents: [{ parts: [{ text: `Ve directo al grano y reescribe esto aplicando las reglas de 0% IA. Conserva la estructura de títulos y la numeración (1, 2, 3), manteniendo los saltos de línea:\n\n${inputText}` }] }],
                         systemInstruction: { parts: [{ text: systemPrompt }] },
                         generationConfig: { temperature: temperature, topP: 0.95 }
                     };
@@ -525,7 +524,6 @@
 
                 if (textoFinal) {
                     textoFinal = textoFinal.replace(/(\*\*|\*|#|`|_)/g, '').trim();
-                    // Filtro de fuerza bruta por si la IA se vuelve terca con las introducciones
                     textoFinal = textoFinal.replace(/^(Permíteme.*?\n)/i, '');
                     textoFinal = textoFinal.replace(/^(Aquí tienes.*?\n)/i, '');
                     textoFinal = textoFinal.replace(/^(Claro,.*?\n)/i, '');
@@ -587,8 +585,8 @@
 
             try {
                 let prompt = action === 'resolver' 
-                    ? "Lee el documento adjunto. Tu ÚNICA TAREA es resolverlo entregando respuestas claras y sencillas. Ve DIRECTO a las respuestas. ESTRICTAMENTE PROHIBIDO empezar saludando, diciendo 'Permíteme' o usando palabras rimbombantes. Si el documento tiene preguntas o puntos numerados (1., 2., 3.), DEBES conservar la numeración exacta (1., 2., 3.) al inicio de cada respuesta y mantener cada punto en un párrafo distinto con su respectivo salto de línea."
-                    : `Elabora un resumen del documento. Longitud: **${lengthInput || 'resumen corto y claro'}**. Ve DIRECTO al grano. ESTRICTAMENTE PROHIBIDO empezar con 'A continuación' o usar palabras pomposas o muy técnicas. Explícalo fácil.`;
+                    ? "Lee el documento adjunto. Tu ÚNICA TAREA es resolverlo entregando respuestas claras y sencillas. Ve DIRECTO a las respuestas. ESTRICTAMENTE PROHIBIDO empezar saludando o diciendo 'Permíteme'. Si el documento tiene títulos, preguntas o puntos numerados (1., 2., 3.), DEBES conservar esa estructura (títulos y números exactos) para separar tus respuestas, manteniendo los saltos de línea para el contexto."
+                    : `Elabora un resumen del documento. Longitud: **${lengthInput || 'resumen corto y claro'}**. Ve DIRECTO al grano. ESTRICTAMENTE PROHIBIDO empezar con 'A continuación'. Si hay títulos principales, mantenlos para dar contexto. Explícalo fácil.`;
 
                 const systemPrompt = "Eres un asistente amigable y normal. Escribes de forma sencilla y directa, NUNCA usas saludos, introducciones robóticas o palabras complicadas y técnicas.";
                 let textoOriginal = "";
