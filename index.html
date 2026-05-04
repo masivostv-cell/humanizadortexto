@@ -58,7 +58,7 @@
         <i data-lucide="download" class="w-4 h-4"></i> Instalar App
     </button>
 
-    <div class="max-w-5xl mx-auto">
+    <div class="max-w-6xl mx-auto">
         <!-- Encabezado con Logo -->
         <header class="text-center mb-8 mt-4 flex flex-col items-center">
             <img src="Logo.png" alt="JA Producciones Logo" class="w-32 h-32 object-cover rounded-3xl shadow-xl mb-5 border-4 border-white" onerror="this.style.display='none'">
@@ -90,46 +90,61 @@
             <!-- PESTAÑA 1: HUMANIZADOR DE TEXTO            -->
             <!-- ========================================== -->
             <div id="humanizerTab" class="tab-content active">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     
                     <!-- Columna Izquierda -->
                     <div class="flex flex-col gap-4">
                         <div>
                             <label for="inputText" class="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
-                                <i data-lucide="file-text" class="w-4 h-4"></i> Texto Original (IA)
+                                <i data-lucide="file-text" class="w-4 h-4"></i> Texto Original (IA / Investigación)
                             </label>
                             <textarea id="inputText" rows="8" 
                                 class="w-full rounded-xl border border-slate-200 p-4 text-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none outline-none"
-                                placeholder="Pega aquí el texto que deseas hacer sonar más humano y natural..."></textarea>
+                                placeholder="Pega aquí el texto investigado que deseas humanizar sin perder los datos importantes..."></textarea>
+                            <p class="text-xs text-slate-500 mt-2 bg-yellow-50 p-2 rounded-lg border border-yellow-100">
+                                <i data-lucide="alert-triangle" class="w-3 h-3 inline text-yellow-600"></i> 
+                                <b>Evita recortes:</b> Las IAs tienen un límite físico de memoria de salida. Si pegas 50,000 caracteres de golpe, la IA se verá <b>obligada a resumirlo</b> para que quepa en su respuesta. Procesa máximo 2-3 páginas a la vez para conservar el 100% del tamaño.
+                            </p>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <!-- NUEVA CUADRÍCULA DE OPCIONES -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
                             <div>
                                 <label for="aiEngineSelect" class="block text-sm font-semibold text-blue-700 mb-2 flex items-center gap-1">
                                     <i data-lucide="cpu" class="w-4 h-4"></i> Motor IA
                                 </label>
-                                <!-- Llama 3 (Groq) puesto como predeterminado con el atributo 'selected' -->
                                 <select id="aiEngineSelect" class="w-full rounded-lg border border-slate-200 p-2.5 text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none bg-white font-medium">
                                     <option value="groq" selected>Llama 3.3 (Gratis)</option>
                                     <option value="gemini">Gemini Multi-Key</option>
                                 </select>
                             </div>
+                            
+                            <div>
+                                <label for="perspectiveSelect" class="block text-sm font-semibold text-slate-700 mb-2">Perspectiva</label>
+                                <select id="perspectiveSelect" class="w-full rounded-lg border border-slate-200 p-2.5 text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                                    <option value="Primera Persona (Yo)">1ra Persona (Yo)</option>
+                                    <option value="Equipo (Nosotros)">Equipo (Nosotros)</option>
+                                    <option value="Análisis Técnico (Tercera persona)">Técnico (3ra Persona)</option>
+                                </select>
+                            </div>
+
                             <div>
                                 <label for="toneSelect" class="block text-sm font-semibold text-slate-700 mb-2">Tono</label>
                                 <select id="toneSelect" class="w-full rounded-lg border border-slate-200 p-2.5 text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none bg-white">
-                                    <option value="casual">Casual / Conversacional</option>
-                                    <option value="profesional">Profesional (Sencillo)</option>
-                                    <option value="academico">Académico (Natural)</option>
+                                    <option value="Profesional y Claro">Profesional y Claro</option>
+                                    <option value="Académico Natural">Académico (Natural)</option>
+                                    <option value="Conversacional Serio">Conversacional</option>
                                 </select>
                             </div>
+
                             <div>
                                 <label for="levelSlider" class="block text-sm font-semibold text-slate-700 mb-2">
-                                    Caos: <span id="levelValue" class="text-blue-600 font-bold">10</span>
+                                    Variación de Vocabulario: <span id="levelValue" class="text-blue-600 font-bold">10</span>
                                 </label>
                                 <input type="range" id="levelSlider" min="1" max="10" value="10" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer mt-2">
                                 <div class="flex justify-between text-xs text-slate-400 mt-1 font-medium">
-                                    <span>Seguro</span>
-                                    <span>Extremo</span>
+                                    <span>Bajo</span>
+                                    <span>Alto</span>
                                 </div>
                             </div>
                         </div>
@@ -137,7 +152,7 @@
                         <button id="humanizeBtn" onclick="procesarTexto()" 
                             class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-xl transition-colors shadow-sm flex justify-center items-center gap-2 mt-2">
                             <i data-lucide="wand-2" class="w-5 h-5"></i>
-                            <span>Humanizar Texto</span>
+                            <span>Humanizar Mapeando Línea por Línea</span>
                         </button>
                         
                         <div id="statusMessage" class="hidden text-sm p-3 rounded-lg mt-2 text-center font-medium"></div>
@@ -147,16 +162,16 @@
                     <div class="flex flex-col gap-4">
                         <div class="flex justify-between items-end mb-2">
                             <label class="block text-sm font-semibold text-slate-700 flex items-center gap-2">
-                                <i data-lucide="user-check" class="w-4 h-4 text-green-500"></i> Texto Humanizado (Natural)
+                                <i data-lucide="user-check" class="w-4 h-4 text-green-500"></i> Texto Humanizado (Datos Exactos)
                             </label>
                             <button onclick="copiarAlPortapapeles('outputText', 'copyBtn')" id="copyBtn" class="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1 transition-colors hidden bg-blue-50 px-3 py-1 rounded-lg">
                                 <i data-lucide="copy" class="w-4 h-4"></i> Copiar
                             </button>
                         </div>
                         
-                        <div id="resultArea" class="w-full h-full min-h-[250px] rounded-xl border border-slate-200 bg-slate-50 p-6 text-slate-700 relative overflow-y-auto leading-relaxed text-lg">
+                        <div id="resultArea" class="w-full h-full min-h-[300px] rounded-xl border border-slate-200 bg-slate-50 p-6 text-slate-700 relative overflow-y-auto leading-relaxed text-lg">
                             <p id="placeholderText" class="text-slate-400 italic text-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full">
-                                El resultado con lenguaje natural y humano aparecerá aquí...
+                                El resultado 100% humano, con longitud idéntica, manteniendo títulos y usando jerga profesional colombiana, aparecerá aquí...
                             </p>
                             <div id="outputText" class="hidden whitespace-pre-wrap"></div>
                         </div>
@@ -190,7 +205,6 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                 <div>
                                     <label for="docEngineSelect" class="block text-sm font-semibold text-indigo-900 mb-2">🧠 Motor de IA</label>
-                                    <!-- Llama 3 (Groq) puesto como predeterminado -->
                                     <select id="docEngineSelect" class="w-full rounded-lg border border-indigo-200 p-2.5 text-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none bg-white shadow-sm font-medium">
                                         <option value="groq" selected>Llama 3.3 (Solo Word/TXT)</option>
                                         <option value="gemini">Gemini Multi-Key (Soporta PDF)</option>
@@ -257,7 +271,6 @@
 
                         <div class="flex items-center gap-2 mt-1">
                             <label for="detectorEngineSelect" class="text-sm font-semibold text-slate-700">Analista:</label>
-                            <!-- Llama 3 (Groq) puesto como predeterminado -->
                             <select id="detectorEngineSelect" class="rounded-lg border border-slate-200 p-1.5 text-slate-700 focus:ring-2 focus:ring-purple-500 outline-none bg-white text-sm font-medium">
                                 <option value="groq" selected>Llama 3.3 (Gratis)</option>
                                 <option value="gemini">Gemini Multi-Key</option>
@@ -325,9 +338,7 @@
         // 1. SISTEMA MULTI-LLAVE PARA GOOGLE GEMINI
         // ==========================================
         const geminiKeys = [
-            // Llave original dividida
             "AIzaS" + "yB3_ZMoRV_M" + "wj0KvU42O0APP15-JGKx8Pw", 
-            // Nuevas llaves divididas para evadir GitHub
             "AQ.Ab8" + "RN6IN9MciQbVVlr" + "6BBMCUIb40YNqbQwWZw9ZyB9RLkdtP7w",
             "AQ.Ab8" + "RN6IZb3TGSryigs" + "eGq8KD7gQFkE3r7yj3sRn7akNllqkYMQ"
         ];
@@ -340,7 +351,6 @@
             let ultimoError = new Error("Error de red desconocido");
             let attempts = 0;
 
-            // Se intentará 6 veces para asegurar una rotación de llaves, pero frenará ante bloqueos internos
             while (attempts < 6) {
                 const activeKey = geminiKeys[currentGeminiKeyIndex];
                 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${modeloIA}:generateContent?key=${activeKey}`;
@@ -359,22 +369,18 @@
                     const errorData = await response.json();
                     const errorMessage = errorData.error?.message || `HTTP Error ${response.status}`;
                     
-                    // Si el error es realmente de cuota de uso (429) o permisos de llave (401/403), disparamos la rotación
                     if (response.status === 429 || response.status === 400 || response.status === 403 || response.status === 401) {
-                        // Excepción importante: a veces Gemini lanza 400 por filtros de seguridad de contenido. 
                         if (response.status === 400 && errorMessage.toLowerCase().includes("safety")) {
                              throw new Error("API_ERROR: El mensaje fue bloqueado por los filtros de seguridad de Google.");
                         }
                         throw new Error("KEY_ERROR_" + response.status); 
                     }
                     
-                    // Para otros errores que no son de límite de llaves, rompemos el ciclo
                     throw new Error("API_ERROR: " + errorMessage);
                     
                 } catch (error) {
                     ultimoError = error;
                     
-                    // SÓLO si es un error de límite o llave inválida, pasamos a la siguiente.
                     if (error.message.startsWith("KEY_ERROR")) {
                         console.warn(`Llave ${currentGeminiKeyIndex + 1} llegó al límite o falló. Pasando a la siguiente llave...`);
                         currentGeminiKeyIndex = (currentGeminiKeyIndex + 1) % geminiKeys.length;
@@ -382,7 +388,6 @@
                         continue; 
                     }
                     
-                    // Si fue un error directo de la API (por ejemplo bloqueado por seguridad), mostramos el error sin quemar las llaves.
                     if (error.message.startsWith("API_ERROR:")) {
                         throw new Error(error.message.replace("API_ERROR: ", ""));
                     }
@@ -464,7 +469,7 @@
         }
 
         // ==========================================
-        // LÓGICA DEL HUMANIZADOR (CERO IA DETECCIÓN - TONO HUMANO EXTREMO)
+        // LÓGICA DEL HUMANIZADOR (NUEVA ESTRATEGIA: MAPEO LÍNEA POR LÍNEA)
         // ==========================================
         const levelSlider = document.getElementById('levelSlider');
         const levelValue = document.getElementById('levelValue');
@@ -475,8 +480,13 @@
 
         async function procesarTexto() {
             const inputText = document.getElementById('inputText').value.trim();
+            
             const toneSelect = document.getElementById('toneSelect');
             const tono = toneSelect.options[toneSelect.selectedIndex].text;
+            
+            const perspSelect = document.getElementById('perspectiveSelect');
+            const perspectiva = perspSelect.options[perspSelect.selectedIndex].text;
+
             const nivel = parseInt(document.getElementById('levelSlider').value);
             const engine = document.getElementById('aiEngineSelect').value;
 
@@ -485,36 +495,47 @@
                 return;
             }
 
-            estadoCargando(true, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', `Procesando con ${engine === 'groq' ? 'Llama 3.3' : 'Gemini Multi-Key'}...`, 'blue', 'Humanizar Texto', 'wand-2');
+            estadoCargando(true, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', `Traduciendo y mapeando con ${engine === 'groq' ? 'Llama 3.3' : 'Gemini'}...`, 'blue', 'Humanizar Mapeando Línea por Línea', 'wand-2');
             mostrarMensaje('statusMessage', "", "none");
 
-            // PROMPT HIPER-ORGÁNICO CON CONSERVACIÓN DE TÍTULOS Y NÚMEROS
-            const systemPrompt = `Tu único objetivo es reescribir el texto para que obtenga un 0% en detectores de IA. Eres una persona normal redactando un texto cotidiano. NO eres un experto.
+            // PROMPT DEFINITIVO V5: MAPEO ESTRUCTURAL Y LENGUAJE COLOMBIANO
+            const systemPrompt = `Actúa como un perito, auditor o investigador profesional colombiano. Tu tarea es "TRADUCIR" el texto de entrada a un lenguaje 100% humano y natural, propio de un entorno laboral en Colombia, para evadir detectores de IA.
 
-            EL GRAN ERROR QUE ESTÁS COMETIENDO: Estás agrupando conceptos técnicos en "listas perfectas" separadas por comas. ¡Eso grita Inteligencia Artificial!
+            REGLA DE ORO 1 - MAPEO 1 A 1 (PROHIBIDO RESUMIR O RECORTAR):
+            - Debes procesar el texto PÁRRAFO POR PÁRRAFO.
+            - Por CADA párrafo, título o línea del texto original, debes generar una réplica exacta en longitud.
+            - Si el original tiene 5 párrafos, tu respuesta DEBE tener 5 párrafos.
+            - Mantén INTACTOS todos los saltos de línea, numeraciones (1., 2., 3.) y títulos. NO agrupes ideas ni condenses el texto.
 
-            REGLAS DE ORO PARA EVADIR LA DETECCIÓN:
-            1. HABLA SENCILLO Y "MASTICADO": Explica las cosas como si se las contaras a un colega. En lugar de "profesionales en medicina veterinaria", di "los veterinarios" o "el equipo".
-            2. ROMPE LAS LISTAS PERFECTAS (CRÍTICO): Si el original enumera cosas técnicas (A, B y C), tú sepáralas orgánicamente. Di "viendo temas de A, además de chequear B y ayudando con C".
-            3. LISTA NEGRA DE PALABRAS PROHIBIDAS: "Crucial", "Vital", "Robusto", "Subyacente", "Incuestionable", "Arista", "Imperativo", "Radica", "Otorgar", "Distintivo", "Concerniente", "Pilar", "Eficiente", "Recomendaciones sobre". 
-            4. CERO INTRODUCCIONES: NO digas "Permíteme presentarte" ni "Aquí tienes". Empieza de inmediato con el tema, ve directo al grano.
-            5. CONSERVA TÍTULOS Y NÚMEROS (VITAL): Si el texto original tiene TÍTULOS, SUBTÍTULOS o listas numeradas (1., 2., 3.), DEBES conservarlos en su propia línea para no dañar la estructura. NO los cambies por un bloque de texto. Mantén cada título y cada número en su propio párrafo con un salto de línea para mantener el contexto. El truco está en que el texto que viene después del título o número debe sonar charlado y asimétrico.
-            6. RÁFAGAS (BURSTINESS): Escribe una oración normal explicando algo, y luego una muy corta de 3-5 palabras. (Ej: "Esto es clave.").
-            7. CERO MARKDOWN: Prohibido usar asteriscos (**) o guiones (-). Escribe los títulos en texto normal pero separados por saltos de línea.
+            REGLA DE ORO 2 - CERO DETECCIÓN IA (SIN ASIMETRÍAS FORZADAS):
+            - NO uses frases excesivamente cortas o caóticas de manera artificial. Simplemente escribe fluido y claro.
+            - ELIMINA conectores típicos de IA: "Cabe destacar", "Es importante señalar", "Además", "Sin embargo", "En resumen", "Crucial", "Vital", "Fundamental".
+            - Reemplázalos por jerga profesional colombiana natural: "Frente a este tema", "Puntualmente", "Si revisamos bien", "Lo que evidenciamos", "Para rematar".
+            - Usa voz activa siempre: En lugar de "El informe fue analizado", escribe "Revisamos el informe" o "El equipo verificó el informe".
 
-            Estilo solicitado: ${tono}.
-            Nivel de Caos Humano: ${nivel}/10.
-            ENTREGA ÚNICAMENTE EL TEXTO REESCRITO SIN COMILLAS NI SALUDOS.`;
+            Estilo: ${tono}.
+            Perspectiva: ${perspectiva}.
+            Nivel de Variación: ${nivel}/10.`;
 
-            const temperature = 0.55 + (nivel * 0.045); 
+            const userPromptContent = `Reescribe el siguiente texto haciendo un MAPEO LÍNEA POR LÍNEA.
+            
+            NO RESUMAS. NO RECORTES NADA. Mantén el 100% de la longitud original. Respeta absolutamente cada salto de línea y título.
+            
+            Usa voz activa y lenguaje profesional colombiano para evadir detectores. Perspectiva: "${perspectiva}".
+            
+            TEXTO ORIGINAL:
+            ${inputText}`;
+
+            // Temperatura controlada: Muy alta produce resúmenes. Un nivel equilibrado respeta la longitud.
+            const temperature = 0.40 + (nivel * 0.02); 
             let textoFinal = "";
 
             try {
                 if (engine === 'groq') {
-                    textoFinal = await hacerPeticionGroq(`Ve directo al grano y reescribe esto aplicando las reglas de 0% IA. Conserva la estructura de títulos y la numeración (1, 2, 3), manteniendo los saltos de línea:\n\n${inputText}`, systemPrompt, temperature);
+                    textoFinal = await hacerPeticionGroq(userPromptContent, systemPrompt, temperature);
                 } else {
                     const payload = {
-                        contents: [{ parts: [{ text: `Ve directo al grano y reescribe esto aplicando las reglas de 0% IA. Conserva la estructura de títulos y la numeración (1, 2, 3), manteniendo los saltos de línea:\n\n${inputText}` }] }],
+                        contents: [{ parts: [{ text: userPromptContent }] }],
                         systemInstruction: { parts: [{ text: systemPrompt }] },
                         generationConfig: { temperature: temperature, topP: 0.95 }
                     };
@@ -529,12 +550,12 @@
                     textoFinal = textoFinal.replace(/^(Claro,.*?\n)/i, '');
 
                     mostrarResultado(textoFinal, 'resultArea', 'placeholderText', 'outputText', 'copyBtn');
-                    mostrarMensaje('statusMessage', "¡Texto humano generado!", "success");
+                    mostrarMensaje('statusMessage', "¡Texto mapeado con éxito, estructura y longitud conservadas!", "success");
                 }
             } catch (error) {
                 mostrarMensaje('statusMessage', `Error: ${error.message}`, "error");
             } finally {
-                estadoCargando(false, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', '', 'blue', 'Humanizar Texto', 'wand-2');
+                estadoCargando(false, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', '', 'blue', 'Humanizar Mapeando Línea por Línea', 'wand-2');
             }
         }
 
