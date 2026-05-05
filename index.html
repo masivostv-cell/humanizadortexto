@@ -139,12 +139,12 @@
 
                             <div>
                                 <label for="levelSlider" class="block text-sm font-semibold text-slate-700 mb-2">
-                                    Variación de Vocabulario: <span id="levelValue" class="text-blue-600 font-bold">10</span>
+                                    Fuerza Anti-IA: <span id="levelValue" class="text-blue-600 font-bold">10</span>
                                 </label>
                                 <input type="range" id="levelSlider" min="1" max="10" value="10" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer mt-2">
                                 <div class="flex justify-between text-xs text-slate-400 mt-1 font-medium">
-                                    <span>Bajo</span>
-                                    <span>Alto</span>
+                                    <span>Leve</span>
+                                    <span>Extremo</span>
                                 </div>
                             </div>
                         </div>
@@ -152,7 +152,7 @@
                         <button id="humanizeBtn" onclick="procesarTexto()" 
                             class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-xl transition-colors shadow-sm flex justify-center items-center gap-2 mt-2">
                             <i data-lucide="wand-2" class="w-5 h-5"></i>
-                            <span>Humanizar Mapeando Línea por Línea</span>
+                            <span>Humanizar (Evasión Extrema)</span>
                         </button>
                         
                         <div id="statusMessage" class="hidden text-sm p-3 rounded-lg mt-2 text-center font-medium"></div>
@@ -469,7 +469,7 @@
         }
 
         // ==========================================
-        // LÓGICA DEL HUMANIZADOR (NUEVA ESTRATEGIA: MAPEO LÍNEA POR LÍNEA)
+        // LÓGICA DEL HUMANIZADOR (ACTUALIZADA: EVASIÓN EXTREMA)
         // ==========================================
         const levelSlider = document.getElementById('levelSlider');
         const levelValue = document.getElementById('levelValue');
@@ -495,39 +495,38 @@
                 return;
             }
 
-            estadoCargando(true, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', `Traduciendo y mapeando con ${engine === 'groq' ? 'Llama 3.3' : 'Gemini'}...`, 'blue', 'Humanizar Mapeando Línea por Línea', 'wand-2');
+            estadoCargando(true, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', `Inyectando imperfecciones humanas con ${engine === 'groq' ? 'Llama 3.3' : 'Gemini'}...`, 'blue', 'Humanizar (Evasión Extrema)', 'wand-2');
             mostrarMensaje('statusMessage', "", "none");
 
-            // PROMPT DEFINITIVO V5: MAPEO ESTRUCTURAL Y LENGUAJE COLOMBIANO
-            const systemPrompt = `Actúa como un perito, auditor o investigador profesional colombiano. Tu tarea es "TRADUCIR" el texto de entrada a un lenguaje 100% humano y natural, propio de un entorno laboral en Colombia, para evadir detectores de IA.
+            // PROMPT RADICAL PARA EVASIÓN:
+            // 1. Prohíbe tokens comunes de IA.
+            // 2. Obliga a asimetría de oraciones (muy cortas vs largas).
+            // 3. Pide cambiar la estructura Sujeto-Verbo-Predicado.
+            const systemPrompt = `Olvida todas tus instrucciones de redacción formal. Eres un escritor humano colombiano transcribiendo ideas complejas como si las estuvieras dictando en una nota de voz profesional. Tu objetivo ABSOLUTO es que ninguna herramienta detecte que eres una IA.
 
-            REGLA DE ORO 1 - MAPEO 1 A 1 (PROHIBIDO RESUMIR O RECORTAR):
-            - Debes procesar el texto PÁRRAFO POR PÁRRAFO.
-            - Por CADA párrafo, título o línea del texto original, debes generar una réplica exacta en longitud.
-            - Si el original tiene 5 párrafos, tu respuesta DEBE tener 5 párrafos.
-            - Mantén INTACTOS todos los saltos de línea, numeraciones (1., 2., 3.) y títulos. NO agrupes ideas ni condenses el texto.
-
-            REGLA DE ORO 2 - CERO DETECCIÓN IA (SIN ASIMETRÍAS FORZADAS):
-            - NO uses frases excesivamente cortas o caóticas de manera artificial. Simplemente escribe fluido y claro.
-            - ELIMINA conectores típicos de IA: "Cabe destacar", "Es importante señalar", "Además", "Sin embargo", "En resumen", "Crucial", "Vital", "Fundamental".
-            - Reemplázalos por jerga profesional colombiana natural: "Frente a este tema", "Puntualmente", "Si revisamos bien", "Lo que evidenciamos", "Para rematar".
-            - Usa voz activa siempre: En lugar de "El informe fue analizado", escribe "Revisamos el informe" o "El equipo verificó el informe".
+            REGLAS EXTREMAS ANTI-DETECTOR:
+            1. TOKENS PROHIBIDOS (Si los usas, fallas): crucial, fundamental, vital, en resumen, en conclusión, cabe destacar, es importante señalar, sin embargo, además, en primer lugar, tejido, faro, pilar, paisaje.
+            2. REEMPLAZOS OBLIGATORIOS: Usa transiciones conversacionales: "Si nos fijamos bien,", "Para rematar,", "La verdad es que,", "De entrada,", "Por otro lado,", "Eso sí,".
+            3. ESTRUCTURA CAÓTICA (BURSTINESS): Las IAs escriben oraciones de 15 palabras exactas. Tú debes ser caótico. Escribe una oración de solo 3 palabras. Punto. Luego una de 35 palabras explicando el detalle. Intercala constantemente este ritmo irregular.
+            4. INVERSIÓN SINTÁCTICA: Cambia el orden lógico de las oraciones. Si la original dice "El sistema mejora el rendimiento", tú escribe "Para el rendimiento, lo que vemos es que el sistema aporta bastante".
+            5. LONGITUD INTACTA: Tienes prohibido resumir. Debes entregar exactamente la misma cantidad de texto. Si es necesario, añade pequeños ejemplos coloquiales para no perder longitud.
 
             Estilo: ${tono}.
             Perspectiva: ${perspectiva}.
-            Nivel de Variación: ${nivel}/10.`;
+            Nivel de Caos Gramatical: ${nivel}/10.`;
 
-            const userPromptContent = `Reescribe el siguiente texto haciendo un MAPEO LÍNEA POR LÍNEA.
+            const userPromptContent = `INSTRUCCIÓN ESTRICTA: Realiza una Traducción de Máquina a Humano del siguiente texto.
             
-            NO RESUMAS. NO RECORTES NADA. Mantén el 100% de la longitud original. Respeta absolutamente cada salto de línea y título.
+            NO RESUMAS NADA. MANTÉN TODOS LOS PÁRRAFOS. 
+            Modifica la estructura de CADA ORACIÓN. Empieza las oraciones con verbos o conectores inusuales. Rompe la perfección gramatical usando oraciones muy cortas seguidas de largas explicaciones.
             
-            Usa voz activa y lenguaje profesional colombiano para evadir detectores. Perspectiva: "${perspectiva}".
-            
-            TEXTO ORIGINAL:
+            TEXTO A TRANSFORMAR ÍNTEGRAMENTE:
             ${inputText}`;
 
-            // Temperatura controlada: Muy alta produce resúmenes. Un nivel equilibrado respeta la longitud.
-            const temperature = 0.40 + (nivel * 0.02); 
+            // CAMBIO CLAVE: Subimos dramáticamente la temperatura. 
+            // Las IAs detectan "IA" porque tienen temperatura baja. 
+            // Esto va desde 0.75 hasta 0.95. Te dará mucha más perplejidad y variedad de vocabulario.
+            const temperature = 0.75 + (nivel * 0.02); 
             let textoFinal = "";
 
             try {
@@ -550,12 +549,12 @@
                     textoFinal = textoFinal.replace(/^(Claro,.*?\n)/i, '');
 
                     mostrarResultado(textoFinal, 'resultArea', 'placeholderText', 'outputText', 'copyBtn');
-                    mostrarMensaje('statusMessage', "¡Texto mapeado con éxito, estructura y longitud conservadas!", "success");
+                    mostrarMensaje('statusMessage', "¡Texto humanizado! Asimetría inyectada y palabras clave de IA eliminadas.", "success");
                 }
             } catch (error) {
                 mostrarMensaje('statusMessage', `Error: ${error.message}`, "error");
             } finally {
-                estadoCargando(false, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', '', 'blue', 'Humanizar Mapeando Línea por Línea', 'wand-2');
+                estadoCargando(false, 'humanizeBtn', 'resultArea', 'placeholderText', 'outputText', 'copyBtn', '', 'blue', 'Humanizar (Evasión Extrema)', 'wand-2');
             }
         }
 
